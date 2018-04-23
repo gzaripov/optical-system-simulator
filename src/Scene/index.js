@@ -1,13 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
+import windowSize from "react-window-size";
 import Graphics from "./Graphics";
 
 const Canvas = styled.canvas``;
 
-class Scene extends React.Component {
+class Scene extends Component {
   state = {
-    tantalum: null
+    tantalum: null,
+    width: 0,
+    height: 0
   };
+
+  componentWillMount() {
+    const width = window.innerWidth;
+    const height = Math.floor(width / 16 * 9);
+    this.setState({ width, height });
+  }
 
   componentDidMount() {
     this.setState({
@@ -16,7 +25,14 @@ class Scene extends React.Component {
   }
 
   render() {
-    return <div />;
+    const { width, height } = this.state;
+    return (
+      <Canvas
+        innerRef={c => (this.canvas = c)}
+        width={width + "px"}
+        height={height + "px"}
+      />
+    );
   }
 }
 

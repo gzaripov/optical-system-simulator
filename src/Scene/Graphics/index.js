@@ -12,9 +12,8 @@ import Shaders from "./Shaders";
 import GasDischargeLines from "./gasspectra";
 
 class Graphics {
-  constructor() {
-    this.canvas = document.getElementById("render-canvas");
-    this.overlay = document.getElementById("render-overlay");
+  constructor(canvas) {
+    this.canvas = canvas;
     this.content = document.getElementById("content");
     this.controls = document.getElementById("controls");
     this.spectrumCanvas = document.getElementById("spectrum-canvas");
@@ -299,15 +298,6 @@ class Graphics {
     );
 
     selectScene(0);
-
-    this.overlay.className = "render-help";
-    this.overlay.offsetHeight; /* Flush CSS changes */
-    this.overlay.className += " render-help-transition";
-    this.overlay.textContent = "Click and drag!";
-    this.overlay.addEventListener("mousedown", function(event) {
-      this.parentNode.removeChild(this);
-      mouseListener.mouseDown(event);
-    });
   }
 
   fail(message) {
@@ -328,9 +318,6 @@ class Graphics {
     failureDiv.appendChild(sorryP);
     failureDiv.appendChild(errorImg);
     failureDiv.appendChild(failureP);
-
-    document.getElementById("content").appendChild(failureDiv);
-    this.overlay.style.display = this.canvas.style.display = "none";
   }
 
   renderLoop(timestamp) {
