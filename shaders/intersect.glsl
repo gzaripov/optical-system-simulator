@@ -18,6 +18,7 @@ void bboxIntersect(Ray ray, vec2 center, vec2 radius, float matId, inout Interse
         isect.mat = matId;
     }
 }
+
 void sphereIntersect(Ray ray, vec2 center, float radius, float matId, inout Intersection isect) {
     vec2 p = ray.pos - center;
     float B = dot(p, ray.dir);
@@ -35,6 +36,7 @@ void sphereIntersect(Ray ray, vec2 center, float radius, float matId, inout Inte
         }
     }
 }
+
 void lineIntersect(Ray ray, vec2 a, vec2 b, float matId, inout Intersection isect) {
     vec2 sT = b - a;
     vec2 sN = vec2(-sT.y, sT.x);
@@ -47,6 +49,7 @@ void lineIntersect(Ray ray, vec2 a, vec2 b, float matId, inout Intersection isec
     isect.n = normalize(sN);
     isect.mat = matId;
 }
+
 void prismIntersect(Ray ray, vec2 center, float radius, float matId, inout Intersection isect) {
     lineIntersect(ray, center + vec2(   0.0,  1.0)*radius, center + vec2( 0.866, -0.5)*radius, matId, isect);
     lineIntersect(ray, center + vec2( 0.866, -0.5)*radius, center + vec2(-0.866, -0.5)*radius, matId, isect);

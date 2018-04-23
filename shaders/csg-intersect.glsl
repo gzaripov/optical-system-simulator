@@ -11,6 +11,7 @@ Segment segmentIntersection(Segment a, Segment b) {
         (a.tFar  < b.tFar)  ? a.nFar  : b.nFar
     );
 }
+
 Segment segmentSubtraction(Segment a, Segment b, float tMin) {
     if (a.tNear >= a.tFar || b.tNear >= b.tFar || a.tFar <= b.tNear || a.tNear >= b.tFar)
         return a;
@@ -26,6 +27,7 @@ Segment segmentSubtraction(Segment a, Segment b, float tMin) {
         if (valid1) return s1; else return s2;
     }
 }
+
 void segmentCollapse(Segment segment, float matId, inout Intersection isect) {
     segment.tNear = max(segment.tNear, isect.tMin);
     segment.tFar  = min(segment.tFar,  isect.tMax);
@@ -48,17 +50,20 @@ Segment horzSpanIntersect(Ray ray, float y, float radius) {
     float dt = ray.dirSign.y*radius*ray.invDir.y;
     return Segment(dc - dt, dc + dt, vec2(0.0, -ray.dirSign.y), vec2(0.0, ray.dirSign.y));
 }
+
 Segment vertSpanIntersect(Ray ray, float x, float radius) {
     float dc = (x - ray.pos.x)*ray.invDir.x;
     float dt = ray.dirSign.x*radius*ray.invDir.x;
     return Segment(dc - dt, dc + dt, vec2(-ray.dirSign.x, 0.0), vec2(ray.dirSign.x, 0.0));
 }
+
 Segment boxSegmentIntersect(Ray ray, vec2 center, vec2 radius) {
     return segmentIntersection(
         horzSpanIntersect(ray, center.y, radius.y),
         vertSpanIntersect(ray, center.x, radius.x)
     );
 }
+
 Segment sphereSegmentIntersect(Ray ray, vec2 center, float radius) {
     Segment result;
     
@@ -87,6 +92,7 @@ void biconvexLensIntersect(Ray ray, vec2 center, float h, float d, float r1, flo
         sphereSegmentIntersect(ray, center - vec2(r2 - d, 0.0), r2)
     ), matId, isect);
 }
+
 void biconcaveLensIntersect(Ray ray, vec2 center, float h, float d, float r1, float r2, float matId, inout Intersection isect) {
     segmentCollapse(segmentSubtraction(segmentSubtraction(segmentIntersection(
         horzSpanIntersect(ray, center.y, h),
@@ -95,6 +101,7 @@ void biconcaveLensIntersect(Ray ray, vec2 center, float h, float d, float r1, fl
         sphereSegmentIntersect(ray, center - vec2(r1 + d, 0.0), r1), isect.tMin
     ), matId, isect);
 }
+
 void meniscusLensIntersect(Ray ray, vec2 center, float h, float d, float r1, float r2, float matId, inout Intersection isect) {
     segmentCollapse(segmentSubtraction(segmentIntersection(segmentIntersection(
         horzSpanIntersect(ray, center.y, h),
@@ -103,12 +110,14 @@ void meniscusLensIntersect(Ray ray, vec2 center, float h, float d, float r1, flo
         sphereSegmentIntersect(ray, center + vec2(r2 + sign(r2)*d, 0.0), abs(r2)), isect.tMin
     ), matId, isect);
 }
+
 void planoConvexLensIntersect(Ray ray, vec2 center, float h, float d, float r, float matId, inout Intersection isect) {
     segmentCollapse(segmentIntersection(
         boxSegmentIntersect(ray, center, vec2(d, h)),
         sphereSegmentIntersect(ray, center + vec2(r - d, 0.0), abs(r))
     ), matId, isect);
 }
+
 void planoConcaveLensIntersect(Ray ray, vec2 center, float h, float d, float r, float matId, inout Intersection isect) {
     segmentCollapse(segmentSubtraction(segmentIntersection(
         horzSpanIntersect(ray, center.y, h),

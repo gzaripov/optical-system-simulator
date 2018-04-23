@@ -7,7 +7,7 @@
 void intersect(Ray ray, inout Intersection isect) {
     bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);
     biconvexLensIntersect   (ray, vec2(-0.4, 0.0), 0.375, 0.15,   0.75, 0.75, 1.0, isect);
-    biconcaveLensIntersect  (ray, vec2( 0.4, 0.0), 0.375, 0.0375, 0.75, 0.75, 1.0, isect);
+    biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75, 1.0, isect);
     planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,       1.0, isect);
     meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75, 1.0, isect);
 }

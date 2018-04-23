@@ -32,9 +32,11 @@ vec2 sampleDiffuse(inout vec4 state, vec2 wi) {
     float y = sqrt(1.0 - x*x);
     return vec2(x, y*sign(wi.y));
 }
+
 vec2 sampleMirror(vec2 wi) {
     return vec2(-wi.x, wi.y);
 }
+
 vec2 sampleDielectric(inout vec4 state, vec2 wi, float ior) {
     float cosThetaT;
     float eta = wi.y < 0.0 ? ior : 1.0/ior;
@@ -54,6 +56,7 @@ float sampleVisibleNormal(float sigma, float xi, float theta0, float theta1) {
 
     return 2.0*sigmaSq*atanh(cdf0 + (cdf1 - cdf0)*xi);
 }
+
 vec2 sampleRoughMirror(inout vec4 state, vec2 wi, inout vec3 throughput, float sigma) {
     float theta = asin(clamp(wi.x, -1.0, 1.0));
     float theta0 = max(theta - PI_HALF, -PI_HALF);
@@ -66,6 +69,7 @@ vec2 sampleRoughMirror(inout vec4 state, vec2 wi, inout vec3 throughput, float s
         throughput = vec3(0.0);
     return wo;
 }
+
 vec2 sampleRoughDielectric(inout vec4 state, vec2 wi, float sigma, float ior)
 {
     float theta = asin(min(abs(wi.x), 1.0));

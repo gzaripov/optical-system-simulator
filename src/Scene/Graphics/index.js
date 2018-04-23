@@ -20,7 +20,7 @@ class Graphics {
     this.spectrumCanvas = document.getElementById("spectrum-canvas");
 
     this.boundRenderLoop = this.renderLoop.bind(this);
-
+    this.ratio = window.devicePixelRatio;
     try {
       this.setupGL();
     } catch (e) {
@@ -198,6 +198,7 @@ class Graphics {
     var renderer = this.renderer;
     var content = this.content;
     var canvas = this.canvas;
+    var ratio = this.ratio;
 
     this.progressBar = new ProgressBar("render-progress", true);
 
@@ -212,10 +213,14 @@ class Graphics {
     ) {
       var width = config.resolutions[idx][0];
       var height = config.resolutions[idx][1];
-      content.style.width = width + "px";
-      content.style.height = height + "px";
+      content.style.width = width / ratio + "px";
+      content.style.height = height / ratio + "px";
       canvas.width = width;
       canvas.height = height;
+
+      canvas.style.width = width / ratio + "px";
+      canvas.style.height = height / ratio + "px";
+
       renderer.changeResolution(width, height);
     });
     var spreadSelector = new ButtonGroup(
