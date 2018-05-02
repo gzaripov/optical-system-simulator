@@ -14,16 +14,20 @@ class RayState {
     var rngData = new Float32Array(size * size * 4);
     var rgbData = new Float32Array(size * size * 4);
 
-    for (var i = 0; i < size * size; ++i) {
+    for (let i = 0; i < size * size; ++i) {
       var theta = Math.random() * Math.PI * 2.0;
       posData[i * 4 + 0] = 0.0;
       posData[i * 4 + 1] = 0.0;
       posData[i * 4 + 2] = Math.cos(theta);
       posData[i * 4 + 3] = Math.sin(theta);
 
-      for (var t = 0; t < 4; ++t)
+      for (let t = 0; t < 4; ++t) {
         rngData[i * 4 + t] = Math.random() * 4194167.0;
-      for (var t = 0; t < 4; ++t) rgbData[i * 4 + t] = 0.0;
+      }
+
+      for (let t = 0; t < 4; ++t) {
+        rgbData[i * 4 + t] = 0.0;
+      }
     }
 
     this.posTex = new Texture(gl, size, size, 4, true, false, true, posData);
@@ -91,7 +95,7 @@ class Renderer {
     this.initProgram = new Shader(gl, Shaders, "init-vert", "init-frag");
     this.rayProgram = new Shader(gl, Shaders, "ray-vert", "ray-frag");
     this.tracePrograms = [];
-    for (var i = 0; i < scenes.length; ++i)
+    for (let i = 0; i < scenes.length; ++i)
       this.tracePrograms.push(new Shader(gl, Shaders, "trace-vert", scenes[i]));
 
     this.maxPathLength = 12;
@@ -152,7 +156,7 @@ class Renderer {
     this.rayVbo.init(this.rayCount * 2);
 
     var vboData = new Float32Array(this.rayCount * 2 * 3);
-    for (var i = 0; i < this.rayCount; ++i) {
+    for (let i = 0; i < this.rayCount; ++i) {
       var u = (i % this.raySize + 0.5) / this.raySize;
       var v = (Math.floor(i / this.raySize) + 0.5) / this.raySize;
       vboData[i * 6 + 0] = vboData[i * 6 + 3] = u;
@@ -183,13 +187,13 @@ class Renderer {
 
   setEmitterTemperature(temperature) {
     this.emitterTemperature = temperature;
-    if (this.emissionSpectrumType == Renderer.SPECTRUM_INCANDESCENT)
+    if (this.emissionSpectrumType === Renderer.SPECTRUM_INCANDESCENT)
       this.computeEmissionSpectrum();
   }
 
   setEmitterGas(gasId) {
     this.emitterGas = gasId;
-    if (this.emissionSpectrumType == Renderer.SPECTRUM_GAS_DISCHARGE)
+    if (this.emissionSpectrumType === Renderer.SPECTRUM_GAS_DISCHARGE)
       this.computeEmissionSpectrum();
   }
 
@@ -199,7 +203,7 @@ class Renderer {
 
     switch (this.emissionSpectrumType) {
       case Renderer.SPECTRUM_WHITE:
-        for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
+        for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
           this.emissionSpectrum[i] = 1.0;
         break;
       case Renderer.SPECTRUM_INCANDESCENT:
@@ -208,7 +212,7 @@ class Renderer {
         var kB = 1.3806488e-23;
         var T = this.emitterTemperature;
 
-        for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
+        for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
           var l =
             (LAMBDA_MIN +
               (LAMBDA_MAX - LAMBDA_MIN) *
@@ -227,10 +231,10 @@ class Renderer {
         var wavelengths = GasDischargeLines[this.emitterGas].wavelengths;
         var strengths = GasDischargeLines[this.emitterGas].strengths;
 
-        for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
+        for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
           this.emissionSpectrum[i] = 0.0;
 
-        for (var i = 0; i < wavelengths.length; ++i) {
+        for (let i = 0; i < wavelengths.length; ++i) {
           var idx = Math.floor(
             (wavelengths[i] - LAMBDA_MIN) /
               (LAMBDA_MAX - LAMBDA_MIN) *
@@ -240,6 +244,9 @@ class Renderer {
 
           this.emissionSpectrum[idx] += strengths[i];
         }
+        break;
+      default:
+        throw new Error("Unknown Renderer");
     }
 
     this.computeSpectrumIcdf();
@@ -257,7 +264,7 @@ class Renderer {
     }
 
     var sum = 0.0;
-    for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
+    for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i)
       sum += this.emissionSpectrum[i];
 
     /* Mix in 10% of a uniform sample distribution to stay on the safe side.
@@ -268,7 +275,7 @@ class Renderer {
 
     /* Precompute cdf and pdf (unnormalized for now) */
     this.cdf[0] = 0.0;
-    for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
+    for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
       this.emissionSpectrum[i] *= normalization;
 
       /* Also take into account the observer response when distributing samples.
@@ -289,7 +296,7 @@ class Renderer {
 
     /* All done! Time to normalize */
     var cdfSum = this.cdf[Renderer.SPECTRUM_SAMPLES];
-    for (var i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
+    for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
       this.pdf[i] *= Renderer.SPECTRUM_SAMPLES / cdfSum;
       this.cdf[i + 1] /= cdfSum;
     }
@@ -301,7 +308,7 @@ class Renderer {
            on the GPU, so this will have to do. For our purposes a small
            amount of bias is tolerable anyway. */
     var cdfIdx = 0;
-    for (var i = 0; i < Renderer.ICDF_SAMPLES; ++i) {
+    for (let i = 0; i < Renderer.ICDF_SAMPLES; ++i) {
       var target = Math.min((i + 1) / Renderer.ICDF_SAMPLES, 1.0);
       while (this.cdf[cdfIdx] < target) cdfIdx++;
       this.icdf[i] = (cdfIdx - 1.0) / Renderer.SPECTRUM_SAMPLES;
@@ -403,9 +410,9 @@ class Renderer {
   }
 
   setEmitterPos(posA, posB) {
-    this.emitterPos = this.spreadType == Renderer.SPREAD_POINT ? posB : posA;
+    this.emitterPos = this.spreadType === Renderer.SPREAD_POINT ? posB : posA;
     this.emitterAngle =
-      this.spreadType == Renderer.SPREAD_POINT
+      this.spreadType === Renderer.SPREAD_POINT
         ? 0.0
         : Math.atan2(posB[1] - posA[1], posB[0] - posA[0]);
     this.computeSpread();
@@ -439,6 +446,8 @@ class Renderer {
         this.spatialSpread = 0.4;
         this.angularSpread = [this.emitterAngle, Math.PI];
         break;
+      default:
+        throw new Error("Unknwown Spread type: " + this.spreadType);
     }
   }
 
@@ -523,7 +532,7 @@ class Renderer {
     this.rayStates[next].attach(this.fbo);
     this.quadVbo.bind();
 
-    if (this.pathLength == 0) {
+    if (this.pathLength === 0) {
       this.initProgram.bind();
       this.rayStates[current].rngTex.bind(0);
       this.spectrum.bind(1);
@@ -575,7 +584,7 @@ class Renderer {
     this.fbo.drawBuffers(1);
     this.fbo.attachTexture(this.waveBuffer, 0);
 
-    if (this.pathLength == 0 || this.wavesTraced == 0)
+    if (this.pathLength === 0 || this.wavesTraced === 0)
       gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.enable(gl.BLEND);
@@ -600,7 +609,7 @@ class Renderer {
 
     this.quadVbo.bind();
 
-    if (this.pathLength == this.maxPathLength || this.wavesTraced == 0) {
+    if (this.pathLength === this.maxPathLength || this.wavesTraced === 0) {
       this.fbo.attachTexture(this.screenBuffer, 0);
 
       this.waveBuffer.bind(0);
@@ -608,14 +617,14 @@ class Renderer {
       this.passProgram.uniformTexture("Frame", this.waveBuffer);
       this.quadVbo.draw(this.passProgram, gl.TRIANGLE_FAN);
 
-      if (this.pathLength == this.maxPathLength) {
+      if (this.pathLength === this.maxPathLength) {
         this.samplesTraced += this.raySize * this.activeBlock;
         this.wavesTraced += 1;
         this.pathLength = 0;
 
         if (this.elapsedTimes.length > 5) {
           var avgTime = 0;
-          for (var i = 1; i < this.elapsedTimes.length; ++i)
+          for (let i = 1; i < this.elapsedTimes.length; ++i)
             avgTime += this.elapsedTimes[i] - this.elapsedTimes[i - 1];
           avgTime /= this.elapsedTimes.length - 1;
 
@@ -671,7 +680,9 @@ class SpectrumRenderer {
 
   drawLine(p) {
     this.context.moveTo(p[0], p[1]);
-    for (var i = 2; i < p.length; i += 2) this.context.lineTo(p[i], p[i + 1]);
+    for (let i = 2; i < p.length; i += 2) {
+      this.context.lineTo(p[i], p[i + 1]);
+    }
   }
 
   setSmooth(smooth) {
@@ -720,7 +731,7 @@ class SpectrumRenderer {
     ctx.setLineDash([]);
 
     var max = 0.0;
-    for (var i = 0; i < this.spectrum.length; ++i)
+    for (let i = 0; i < this.spectrum.length; ++i)
       max = Math.max(this.spectrum[i], max);
     max *= 1.1;
 
@@ -737,7 +748,7 @@ class SpectrumRenderer {
           spectrum[Math.max(Math.min(Math.floor(sx), spectrum.length - 1), 0)] /
             max
         );
-        if (gx == axisX0) path.moveTo(x, y);
+        if (gx === axisX0) path.moveTo(x, y);
         else path.lineTo(x, y);
       }
       return path;
@@ -774,16 +785,21 @@ class SpectrumRenderer {
 
     ctx.beginPath();
     ctx.lineWidth = 2;
-    for (var gx = axisX0 - 10 + xTicks; gx < axisX1; gx += xTicks)
+    for (let gx = axisX0 - 10 + xTicks; gx < axisX1; gx += xTicks) {
       this.drawLine([mapX(gx), graphY, mapX(gx), graphY - tickSize]);
-    for (var gy = axisY0 + yTicks; gy < axisY1; gy += yTicks)
+    }
+
+    for (let gy = axisY0 + yTicks; gy < axisY1; gy += yTicks) {
       this.drawLine([graphX, mapY(gy), graphX + tickSize, mapY(gy)]);
+    }
+
     ctx.stroke();
 
     ctx.font = "15px serif";
     ctx.textAlign = "center";
-    for (var gx = axisX0 - 10 + xTicks; gx < axisX1; gx += xTicks)
+    for (let gx = axisX0 - 10 + xTicks; gx < axisX1; gx += xTicks) {
       ctx.fillText(gx, mapX(gx), graphY + 15);
+    }
     ctx.fillText("λ", graphX + graphW, graphY + 16);
   }
 }

@@ -5,7 +5,7 @@ function stripClass(node, className) {
   );
 }
 function addClass(node, className) {
-  if (node.className.indexOf(className) == -1)
+  if (node.className.indexOf(className) === -1)
     node.className += " " + className;
 }
 
@@ -23,7 +23,7 @@ class ButtonGroup {
     this.group.className = vertical ? "button-group-vert" : "button-group-horz";
     this.buttons = [];
 
-    for (var i = 0; i < labels.length; ++i) {
+    for (let i = 0; i < labels.length; ++i) {
       var button = document.createElement(vertical ? "li" : "div");
       button.className = vertical ? "button-vert" : "button-horz";
       button.appendChild(document.createTextNode(labels[i]));
@@ -49,7 +49,7 @@ class ButtonGroup {
     stripClass(this.buttons[this.selectedButton], "active");
     addClass(this.buttons[idx], "active");
 
-    if (this.selectedButton != idx && this.selectionCallback)
+    if (this.selectedButton !== idx && this.selectionCallback)
       this.selectionCallback(idx);
     this.selectedButton = idx;
   }
@@ -95,7 +95,6 @@ class ProgressBar {
   setProgressWithoutTransition(progressFraction) {
     addClass(this.progressBar, "notransition");
     this.setProgress(progressFraction);
-    this.progressBar.offsetHeight; /* Flush CSS changes */
     stripClass(this.progressBar, "notransition");
   }
 
@@ -163,7 +162,7 @@ class Slider {
 
   setValue(value) {
     value = Math.min(this.maxValue, Math.max(this.minValue, value));
-    if (value != this.value) {
+    if (value !== this.value) {
       this.value = value;
       var percentage = Math.max(
         Math.min(
@@ -207,8 +206,8 @@ class ButtonGrid {
     this.container.className = "button-grid";
 
     this.columns = [];
-    for (var i = 0; i < this.cols; ++i) {
-      var column = document.createElement("div");
+    for (let i = 0; i < this.cols; ++i) {
+      let column = document.createElement("div");
       column.className = "button-grid-column";
 
       this.container.appendChild(column);
@@ -216,17 +215,17 @@ class ButtonGrid {
     }
 
     this.cells = [];
-    for (var i = 0; i < labels.length; ++i) {
-      var column = i % this.cols;
+    for (let i = 0; i < labels.length; ++i) {
+      let column = i % this.cols;
       var cell = document.createElement("div");
       cell.className = "button stretch-button button-grid-button";
       cell.appendChild(document.createTextNode(labels[i]));
 
-      if (i == 0) addClass(cell, "button-grid-tl");
-      if (i == this.cols - 1) addClass(cell, "button-grid-tr");
+      if (i === 0) addClass(cell, "button-grid-tl");
+      if (i === this.cols - 1) addClass(cell, "button-grid-tr");
       if (i + this.cols >= labels.length) {
-        if (column == 0) addClass(cell, "button-grid-bl");
-        if (column == this.cols - 1 || i == labels.length - 1)
+        if (column === 0) addClass(cell, "button-grid-bl");
+        if (column === this.cols - 1 || i === labels.length - 1)
           addClass(cell, "button-grid-br");
       }
 
@@ -252,7 +251,7 @@ class ButtonGrid {
     stripClass(this.cells[this.selectedButton], "active");
     addClass(this.cells[idx], "active");
 
-    if (this.selectedButton != idx && this.selectionCallback)
+    if (this.selectedButton !== idx && this.selectionCallback)
       this.selectionCallback(idx);
     this.selectedButton = idx;
   }

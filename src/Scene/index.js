@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import windowSize from "react-window-size";
 import Graphics from "./Graphics";
 
 const Canvas = styled.canvas``;

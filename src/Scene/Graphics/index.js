@@ -1,6 +1,6 @@
 import config from "./config.js";
-import { glTypeSize, Texture, RenderTarget, Shader, VertexBuffer } from "./gl";
-import { RayState, Renderer, SpectrumRenderer } from "./core";
+import { Texture, RenderTarget, Shader, VertexBuffer } from "./gl";
+import { Renderer, SpectrumRenderer } from "./core";
 import {
   ButtonGroup,
   ProgressBar,
@@ -154,10 +154,10 @@ class Graphics {
     gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
     if (
-      pixels[0] != 8 ||
-      pixels[1] != 128 ||
-      pixels[2] != 16 ||
-      pixels[3] != 4
+      pixels[0] !== 8 ||
+      pixels[1] !== 128 ||
+      pixels[2] !== 16 ||
+      pixels[3] !== 4
     ) {
       console.log(
         "Floating point blending test failed. Result was " +
@@ -174,7 +174,7 @@ class Graphics {
   setupUI() {
     var sceneShaders = [],
       sceneNames = [];
-    for (var i = 0; i < config.scenes.length; ++i) {
+    for (let i = 0; i < config.scenes.length; ++i) {
       sceneShaders.push(config.scenes[i].shader);
       sceneNames.push(config.scenes[i].name);
     }
@@ -202,7 +202,7 @@ class Graphics {
     this.progressBar = new ProgressBar("render-progress", true);
 
     var resolutionLabels = [];
-    for (var i = 0; i < config.resolutions.length; ++i)
+    for (let i = 0; i < config.resolutions.length; ++i)
       resolutionLabels.push(
         config.resolutions[i][0] + "x" + config.resolutions[i][1]
       );
@@ -239,10 +239,7 @@ class Graphics {
     }
     new ButtonGroup("scene-selector", true, sceneNames, selectScene);
 
-    var mouseListener = new MouseListener(
-      canvas,
-      renderer.setEmitterPos.bind(renderer)
-    );
+    new MouseListener(canvas, renderer.setEmitterPos.bind(renderer));
 
     var temperatureSlider = new Slider(
       "emission-temperature",
@@ -272,7 +269,7 @@ class Graphics {
     sampleSlider.setValue(600);
 
     var gasOptions = [];
-    for (var i = 0; i < GasDischargeLines.length; ++i)
+    for (let i = 0; i < GasDischargeLines.length; ++i)
       gasOptions.push(GasDischargeLines[i].name);
     var gasGrid = new ButtonGrid("gas-selection", 4, gasOptions, function(
       gasId
@@ -290,10 +287,10 @@ class Graphics {
       ["White", "Incandescent", "Gas Discharge"],
       function(type) {
         renderer.setEmissionSpectrumType(type);
-        spectrumRenderer.setSmooth(type != Renderer.SPECTRUM_GAS_DISCHARGE);
+        spectrumRenderer.setSmooth(type !== Renderer.SPECTRUM_GAS_DISCHARGE);
         spectrumRenderer.setSpectrum(renderer.getEmissionSpectrum());
-        temperatureSlider.show(type == Renderer.SPECTRUM_INCANDESCENT);
-        gasGrid.show(type == Renderer.SPECTRUM_GAS_DISCHARGE);
+        temperatureSlider.show(type === Renderer.SPECTRUM_INCANDESCENT);
+        gasGrid.show(type === Renderer.SPECTRUM_GAS_DISCHARGE);
       }
     );
 

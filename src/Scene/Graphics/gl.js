@@ -55,7 +55,7 @@ class Texture {
 
   setSmooth(smooth) {
     const { gl } = this;
-    var interpMode = smooth ? gl.LINEAR : gl.NEAREST;
+    let interpMode = smooth ? gl.LINEAR : gl.NEAREST;
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, interpMode);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, interpMode);
   }
@@ -124,8 +124,9 @@ class RenderTarget {
 
   drawBuffers(numBufs) {
     var buffers = [];
-    for (var i = 0; i < numBufs; ++i)
+    for (let i = 0; i < numBufs; ++i) {
       buffers.push(this.gl.COLOR_ATTACHMENT0 + i);
+    }
     this.multiBufExt.drawBuffersWEBGL(buffers);
   }
 }
@@ -184,7 +185,6 @@ class Shader {
   }
 
   resolveShaderSource(shaderDict, name) {
-    const { gl } = this;
     if (!(name in shaderDict))
       throw new Error("Unable to find shader source for '" + name + "'");
     var shaderSource = shaderDict[name];
@@ -212,20 +212,20 @@ class Shader {
 
   uniformTexture(name, texture) {
     const { gl } = this;
-    var id = this.uniformIndex(name);
-    if (id != -1) gl.uniform1i(id, texture.boundUnit);
+    let id = this.uniformIndex(name);
+    if (id !== -1) gl.uniform1i(id, texture.boundUnit);
   }
 
   uniformF(name, f) {
     const { gl } = this;
-    var id = this.uniformIndex(name);
-    if (id != -1) gl.uniform1f(id, f);
+    let id = this.uniformIndex(name);
+    if (id !== -1) gl.uniform1f(id, f);
   }
 
   uniform2F(name, f1, f2) {
     const { gl } = this;
-    var id = this.uniformIndex(name);
-    if (id != -1) gl.uniform2f(id, f1, f2);
+    let id = this.uniformIndex(name);
+    if (id !== -1) gl.uniform2f(id, f1, f2);
   }
 }
 
@@ -267,14 +267,14 @@ class VertexBuffer {
 
   copy(data) {
     const { gl } = this;
-    if (data.byteLength != this.length * this.elementSize)
+    if (data.byteLength !== this.length * this.elementSize)
       throw new Error("Resizing VBO during copy strongly discouraged");
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   }
 
   draw(shader, mode, length) {
     const { gl } = this;
-    for (var i = 0; i < this.attributes.length; ++i) {
+    for (let i = 0; i < this.attributes.length; ++i) {
       this.attributes[i].index = gl.getAttribLocation(
         shader.program,
         this.attributes[i].name
@@ -295,7 +295,7 @@ class VertexBuffer {
 
     gl.drawArrays(mode, 0, length ? length : this.length);
 
-    for (var i = 0; i < this.attributes.length; ++i) {
+    for (let i = 0; i < this.attributes.length; ++i) {
       if (this.attributes[i].index >= 0) {
         gl.disableVertexAttribArray(this.attributes[i].index);
         this.attributes[i].index = -1;
