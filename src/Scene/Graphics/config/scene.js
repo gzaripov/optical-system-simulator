@@ -1,4 +1,4 @@
-import { Renderer } from "./core";
+import { Renderer } from "../core";
 
 const map = (a, b) => [a * 0.5 / 1.78 + 0.5, -b * 0.5 + 0.5];
 

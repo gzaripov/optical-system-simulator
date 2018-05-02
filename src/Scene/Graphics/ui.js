@@ -4,6 +4,7 @@ function stripClass(node, className) {
     ""
   );
 }
+
 function addClass(node, className) {
   if (node.className.indexOf(className) === -1)
     node.className += " " + className;

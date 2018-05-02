@@ -1,4 +1,4 @@
-import config from "./config.js";
+import { scene as config, gasDischargeLines } from "./config";
 import { Texture, RenderTarget, Shader, VertexBuffer } from "./gl";
 import { Renderer, SpectrumRenderer } from "./core";
 import {
@@ -8,8 +8,7 @@ import {
   ButtonGrid,
   MouseListener
 } from "./ui";
-import Shaders from "./Shaders";
-import GasDischargeLines from "./gasspectra";
+import shaders from "./shaders";
 
 class Graphics {
   constructor(canvas) {
@@ -86,10 +85,10 @@ class Graphics {
        and see whether the results come out correct.
        Hurray WebGL! */
 
-    var shader = new Shader(gl, Shaders, "blend-test-vert", "blend-test-frag");
+    var shader = new Shader(gl, shaders, "blend-test-vert", "blend-test-frag");
     var packShader = new Shader(
       gl,
-      Shaders,
+      shaders,
       "blend-test-vert",
       "blend-test-pack-frag"
     );
@@ -269,8 +268,8 @@ class Graphics {
     sampleSlider.setValue(600);
 
     var gasOptions = [];
-    for (let i = 0; i < GasDischargeLines.length; ++i)
-      gasOptions.push(GasDischargeLines[i].name);
+    for (let i = 0; i < gasDischargeLines.length; ++i)
+      gasOptions.push(gasDischargeLines[i].name);
     var gasGrid = new ButtonGrid("gas-selection", 4, gasOptions, function(
       gasId
     ) {

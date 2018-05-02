@@ -43,5 +43,5 @@ for file in os.listdir(ShaderDir):
                                           .replace('.fs', '')
                                           .replace('.vs', ''), source))
 
-open("src/Scene/Graphics/Shaders.js",
+open("src/Scene/Graphics/shaders.js",
      'w').write("export default {\n" + ",\n\n".join(entries) + "\n}")
