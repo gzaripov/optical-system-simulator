@@ -3,7 +3,7 @@
 #include "bsdf"
 #include "intersect"
 
-void intersect(Ray ray, inout Intersection isect) {
+void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {
     bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);
     sphereIntersect(ray, vec2(-0.95,   0.25),    0.4, 1.0, isect);
     sphereIntersect(ray, vec2(-0.15,  -0.25),    0.2, 1.0, isect);

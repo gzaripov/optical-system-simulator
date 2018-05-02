@@ -13,34 +13,32 @@ export default {
         '}\n',
 
     'scene1':
-        '#include "trace-frag"\n\n'                                                        +
+        '#include "trace-frag"\n'                                                           +
+        '#include "bsdf"\n'                                                                 +
+        '#include "intersect"\n'                                                            +
+        '#include "csg-intersect"\n\n'                                                      +
 
-        '#include "bsdf"\n'                                                                +
-        '#include "intersect"\n'                                                           +
-        '#include "csg-intersect"\n\n'                                                     +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'               +
+        '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                 +
+        '    biconvexLensIntersect(ray, lensPos, 0.375, 0.15,   0.75, 0.75, 1.0, isect);\n' +
+        '    // biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75,'  +
+                                                                       ' 1.0, isect);\n'    +
+        '    // planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,      '  +
+                                                                       ' 1.0, isect);\n'    +
+        '    // meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75,'  +
+                                                                       ' 1.0, isect);\n'    +
+        '}\n\n'                                                                             +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
-        '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
-        '    biconvexLensIntersect   (ray, vec2(-0.4, 0.0), 0.375, 0.15,   0.75, 0.75, 1.' +
-                                                                          '0, isect);\n'   +
-        '    biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75, 1.' +
-                                                                          '0, isect);\n'   +
-        '    planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,       1.' +
-                                                                          '0, isect);\n'   +
-        '    meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75, 1.' +
-                                                                          '0, isect);\n'   +
-        '}\n\n'                                                                            +
-
-        'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-                                                              'out vec3 throughput) {\n'   +
-        '    if (isect.mat == 1.0) {\n'                                                    +
-        '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
-                                                         '96, 147.4688), lambda)/1.4;\n'   +
-        '        return sampleDielectric(state, wiLocal, ior);\n'                          +
-        '    } else {\n'                                                                   +
-        '        throughput *= vec3(0.5);\n'                                               +
-        '        return sampleDiffuse(state, wiLocal);\n'                                  +
-        '    }\n'                                                                          +
+        'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in'  +
+                                                              'out vec3 throughput) {\n'    +
+        '    if (isect.mat == 1.0) {\n'                                                     +
+        '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05'  +
+                                                         '96, 147.4688), lambda)/1.4;\n'    +
+        '        return sampleDielectric(state, wiLocal, ior);\n'                           +
+        '    } else {\n'                                                                    +
+        '        throughput *= vec3(0.5);\n'                                                +
+        '        return sampleDiffuse(state, wiLocal);\n'                                   +
+        '    }\n'                                                                           +
         '}\n',
 
     'init-frag':
@@ -272,7 +270,8 @@ export default {
 
         'uniform sampler2D PosData;\n'                                                      +
         'uniform sampler2D RngData;\n'                                                      +
-        'uniform sampler2D RgbData;\n\n'                                                    +
+        'uniform sampler2D RgbData;\n'                                                      +
+        'uniform vec2 lensPos;\n\n'                                                         +
 
         'varying vec2 vTexCoord;\n\n'                                                       +
 
@@ -289,7 +288,7 @@ export default {
         '    float mat;\n'                                                                  +
         '};\n\n'                                                                            +
 
-        'void intersect(Ray ray, inout Intersection isect);\n'                              +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos);\n'                +
         'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in'  +
                                                                'out vec3 throughput);\n\n'  +
 
@@ -311,7 +310,7 @@ export default {
         '    Intersection isect;\n'                                                         +
         '    isect.tMin = 1e-4;\n'                                                          +
         '    isect.tMax = 1e30;\n'                                                          +
-        '    intersect(ray, isect);\n\n'                                                    +
+        '    intersect(ray, isect, lensPos);\n\n'                                           +
 
         '    vec2 t = vec2(-isect.n.y, isect.n.x);\n'                                       +
         '    vec2 wiLocal = -vec2(dot(t, ray.dir), dot(isect.n, ray.dir));\n'               +
@@ -345,7 +344,7 @@ export default {
         '#include "intersect"\n'                                                           +
         '#include "csg-intersect"\n\n'                                                     +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(0.0, 0.0), 0.4, 1.0, isect);\n'                     +
         '    biconvexLensIntersect(ray, vec2(-0.4, -0.65), 0.3, 0.12, 0.5, 0.5, 1.0, isec' +
@@ -376,7 +375,7 @@ export default {
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-0.95,   0.25),    0.4, 1.0, isect);\n'             +
         '    sphereIntersect(ray, vec2(-0.15,  -0.25),    0.2, 1.0, isect);\n'             +
@@ -505,7 +504,7 @@ export default {
         '#include "intersect"\n'                                                           +
         '#include "csg-intersect"\n\n'                                                     +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    planoConcaveLensIntersect(ray, vec2(0.8, 0.0), 0.6, 0.3, 0.6, 1.0, isect);\n' +
         '}\n\n'                                                                            +
@@ -526,7 +525,7 @@ export default {
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    prismIntersect(ray, vec2(0.0, 0.0), 0.6, 1.0, isect);\n'                      +
         '}\n\n'                                                                            +
@@ -549,7 +548,7 @@ export default {
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.2,  0.8), 1.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-0.7, -0.45), 0.35, 3.0, isect);\n'                 +
@@ -729,7 +728,7 @@ export default {
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect) {\n'                            +
+        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-1.424, -0.8), 0.356, 1.0, isect);\n'               +
         '    sphereIntersect(ray, vec2(-0.72,  -0.8), 0.356, 2.0, isect);\n'               +

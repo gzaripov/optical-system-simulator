@@ -4,7 +4,7 @@
 #include "intersect"
 #include "csg-intersect"
 
-void intersect(Ray ray, inout Intersection isect) {
+void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {
     bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);
     sphereIntersect(ray, vec2(0.0, 0.0), 0.4, 1.0, isect);
     biconvexLensIntersect(ray, vec2(-0.4, -0.65), 0.3, 0.12, 0.5, 0.5, 1.0, isect);

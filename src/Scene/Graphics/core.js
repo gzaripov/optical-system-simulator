@@ -515,6 +515,18 @@ class Renderer {
     this.quadVbo.draw(this.compositeProgram, this.gl.TRIANGLE_FAN);
   }
 
+  // use util
+  normalize(p, max) {
+    return p / max * 2.0 - 1.0;
+  }
+
+  normalizeEmitterPos() {
+    return [
+      this.normalize(this.emitterPos[0], this.width) * this.aspect,
+      -this.normalize(this.emitterPos[1], this.height)
+    ];
+  }
+
   render(timestamp) {
     this.needsReset = true;
     this.elapsedTimes.push(timestamp);
@@ -547,11 +559,7 @@ class Renderer {
       this.initProgram.uniformTexture("Emission", this.emission);
       this.initProgram.uniformTexture("ICDF", this.emissionIcdf);
       this.initProgram.uniformTexture("PDF", this.emissionPdf);
-      this.initProgram.uniform2F(
-        "EmitterPos",
-        (this.emitterPos[0] / this.width * 2.0 - 1.0) * this.aspect,
-        1.0 - this.emitterPos[1] / this.height * 2.0
-      );
+      this.initProgram.uniform2F("EmitterPos", 0, 0);
       this.initProgram.uniform2F(
         "EmitterDir",
         Math.cos(this.angularSpread[0]),
@@ -573,6 +581,7 @@ class Renderer {
 
     var traceProgram = this.tracePrograms[this.currentScene];
     traceProgram.bind();
+    traceProgram.uniform2F("lensPos", ...this.normalizeEmitterPos());
     this.rayStates[current].bind(traceProgram);
     this.quadVbo.draw(traceProgram, gl.TRIANGLE_FAN);
 

@@ -5,6 +5,7 @@
 uniform sampler2D PosData;
 uniform sampler2D RngData;
 uniform sampler2D RgbData;
+uniform vec2 lensPos;
 
 varying vec2 vTexCoord;
 
@@ -21,7 +22,7 @@ struct Intersection {
     float mat;
 };
 
-void intersect(Ray ray, inout Intersection isect);
+void intersect(Ray ray, inout Intersection isect, vec2 lensPos);
 vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput);
 
 Ray unpackRay(vec4 posDir) {
@@ -41,7 +42,7 @@ void main() {
     Intersection isect;
     isect.tMin = 1e-4;
     isect.tMax = 1e30;
-    intersect(ray, isect);
+    intersect(ray, isect, lensPos);
     
     vec2 t = vec2(-isect.n.y, isect.n.x);
     vec2 wiLocal = -vec2(dot(t, ray.dir), dot(isect.n, ray.dir));
