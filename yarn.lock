@@ -1041,7 +1041,7 @@ babel-register@^6.26.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
 
-babel-runtime@6.26.0, babel-runtime@6.x, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0, babel-runtime@^6.6.1:
+babel-runtime@6.26.0, babel-runtime@6.x, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -6001,7 +6001,7 @@ rc-pagination@~1.16.1:
     babel-runtime "6.x"
     prop-types "^15.5.7"
 
-rc-progress@~2.2.2:
+rc-progress@^2.2.5, rc-progress@~2.2.2:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/rc-progress/-/rc-progress-2.2.5.tgz#e61d0544bf9d4208e5ba32fc50962159e7f952a3"
   dependencies:
@@ -6286,12 +6286,6 @@ react-slick@~0.23.1:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
-
-react-window-size@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-window-size/-/react-window-size-1.0.1.tgz#c5e0e52602049ae9fb2c230626a8d1ce9ed8e3e4"
-  dependencies:
-    babel-runtime "^6.6.1"
 
 react@^16.2.0:
   version "16.2.0"
