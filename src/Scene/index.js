@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Progress } from "antd";
-import { Line } from "rc-progress";
 import Graphics from "./Graphics";
 
 const ProgressLevel = styled.div`

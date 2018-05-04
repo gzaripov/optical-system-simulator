@@ -56,58 +56,6 @@ class ButtonGroup {
   }
 }
 
-class ProgressBar {
-  constructor(targetId, hasLabel) {
-    var target = document.getElementById(targetId);
-    if (!target) return;
-
-    var progressBackground = document.createElement("div");
-    progressBackground.className = "progress";
-
-    this.progressBar = document.createElement("div");
-    this.progressBar.className = "progress-bar";
-    progressBackground.appendChild(this.progressBar);
-
-    this.setProgress(0.0);
-
-    var parent = target.parentNode;
-    parent.replaceChild(progressBackground, target);
-
-    if (hasLabel) {
-      this.label = document.createElement("p");
-      this.label.className = "progress-label";
-      parent.insertBefore(this.label, progressBackground.nextSibling);
-    }
-  }
-
-  getProgress() {
-    return this.progressFraction;
-  }
-
-  setProgress(progressFraction) {
-    this.progressFraction = progressFraction;
-    this.progressPercentage = Math.min(
-      Math.max(Math.floor(progressFraction * 100.0), 0),
-      100
-    );
-    this.progressBar.style.width = this.progressPercentage.toString() + "%";
-  }
-
-  setProgressWithoutTransition(progressFraction) {
-    addClass(this.progressBar, "notransition");
-    this.setProgress(progressFraction);
-    stripClass(this.progressBar, "notransition");
-  }
-
-  setLabel(text) {
-    if (this.label) this.label.textContent = text;
-  }
-
-  getProgressPercentage() {
-    return this.progressPercentage;
-  }
-}
-
 class Slider {
   constructor(targetId, minValue, maxValue, hasLabel, callback) {
     var target = document.getElementById(targetId);
@@ -295,4 +243,4 @@ class MouseListener {
   }
 }
 
-export { ButtonGroup, ProgressBar, Slider, ButtonGrid, MouseListener };
+export { ButtonGroup, Slider, ButtonGrid, MouseListener };

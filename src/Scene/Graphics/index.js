@@ -1,16 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { scene as config, gasDischargeLines } from "./config";
-import { Texture, RenderTarget, Shader, VertexBuffer } from "./gl";
 import { Renderer, SpectrumRenderer, colorBufferFloatTest } from "./core";
-import {
-  ButtonGroup,
-  ProgressBar,
-  Slider,
-  ButtonGrid,
-  MouseListener
-} from "./ui";
-import shaders from "./shaders";
+import { ButtonGroup, Slider, ButtonGrid, MouseListener } from "./ui";
 
 const Canvas = styled.canvas``;
 
@@ -105,8 +97,6 @@ class Graphics extends Component {
     var content = this.content;
     var canvas = this.canvas;
     var ratio = this.ratio;
-
-    this.progressBar = new ProgressBar("render-progress", true);
 
     var resolutionLabels = [];
     for (let i = 0; i < config.resolutions.length; ++i)
