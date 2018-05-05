@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Progress } from "antd";
 import Graphics from "./Graphics";
+import RaysTracedProgress from "./RaysTracedProgress";
 
 const ProgressLevel = styled.div`
   display: flex;
   justify-content: space-between;
   color: rgba(255, 255, 255, 0.5);
-  margin: 6px 10px;
+  margin: 4px 10px;
   text-align: right;
   font-size: small;
 `;
 
 const SceneStyled = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: colum n;
   position: relative;
 `;
 
@@ -25,12 +25,7 @@ const Info = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-`;
-
-const RayTracedProgress = styled(Progress)`
-  .ant-progress-outer {
-    display: flex;
-  }
+  opacity: ${p => (p.shown ? "1" : "0")};
 `;
 
 class Scene extends Component {
@@ -43,7 +38,7 @@ class Scene extends Component {
 
   componentWillMount() {
     const width = window.innerWidth;
-    const height = Math.floor(width / 16 * 9);
+    const height = window.innerHeight;
     this.setState({ width, height });
   }
 
@@ -62,14 +57,14 @@ class Scene extends Component {
           height={height}
           onProgressChanged={this.onProgressChanged}
         />
-        <Info>
+        <Info shown={progress < 100}>
           <ProgressLevel>
             <span>
               {raysTraced}/{maxRayCount} rays traced
             </span>
             <span>Progress: {percent}%</span>
           </ProgressLevel>
-          <RayTracedProgress
+          <RaysTracedProgress
             percent={progress}
             showInfo={false}
             strokeWidth={2}
