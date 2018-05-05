@@ -27,7 +27,7 @@ const ProgressLevel = styled.div`
 
 const SceneStyled = styled.div`
   display: flex;
-  flex-direction: colum n;
+  flex-direction: column;
   position: relative;
 `;
 

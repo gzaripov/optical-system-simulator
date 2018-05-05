@@ -3,6 +3,7 @@ import { wavelengthToRgbTable, gasDischargeLines } from "../config";
 import { LAMBDA_MIN, LAMBDA_MAX } from "./constants";
 import shaders from "../shaders";
 import RayState from "./RayState";
+// import LightEmitter from "./LightEmitter";
 
 class Renderer {
   static SPECTRUM_WHITE = 0;
@@ -17,6 +18,17 @@ class Renderer {
   static SPREAD_BEAM = 2;
   static SPREAD_LASER = 3;
   static SPREAD_AREA = 4;
+
+  /*
+  static emmiters = [
+    new LightEmitter({
+      pos: [0, 0],
+      power: 0.1,
+      spatialSpread: 0.0,
+      angularSpread: [0.0, Math.PI * 2.0]
+    })
+  ];
+  */
 
   constructor(gl, multiBufExt, width, height, scenes) {
     this.gl = gl;
@@ -519,6 +531,15 @@ class Renderer {
         -this.angularSpread[0],
         this.angularSpread[1]
       );
+      /*
+      this.initProgram.uniformI("EmittersLength", 1);
+      this.initProgram.uniform4fv("EmitterData", [
+        this.emitterPower,
+        this.spatialSpread,
+        -this.angularSpread[0],
+        this.angularSpread[1]
+      ]);
+      */
       this.quadVbo.draw(this.initProgram, gl.TRIANGLE_FAN);
 
       current = 1 - current;

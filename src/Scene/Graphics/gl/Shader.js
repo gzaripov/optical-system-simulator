@@ -94,6 +94,18 @@ class Shader {
     let id = this.uniformIndex(name);
     if (id !== -1) gl.uniform2f(id, f1, f2);
   }
+
+  uniform4fv(name, _4fvArray) {
+    const { gl } = this;
+    let id = this.uniformIndex(name);
+    if (id !== -1) gl.uniform4fv(id, _4fvArray);
+  }
+
+  uniformI(name, f) {
+    const { gl } = this;
+    let id = this.uniformIndex(name);
+    if (id !== -1) gl.uniform1i(id, f);
+  }
 }
 
 export default Shader;
