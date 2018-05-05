@@ -4,17 +4,18 @@ import { scene as config, gasDischargeLines } from "./config";
 import { Renderer, SpectrumRenderer, colorBufferFloatTest } from "./core";
 import { ButtonGroup, Slider, ButtonGrid, MouseListener } from "./ui";
 
-const Canvas = styled.canvas``;
+const Canvas = styled.canvas`
+  width: ${p => p.blockWidth + "px"};
+  height: ${p => p.blockHeight + "px"};
+`;
 
 // onProgreesChanged
 class Graphics extends Component {
   componentDidMount() {
-    this.content = document.getElementById("content");
     this.controls = document.getElementById("controls");
     this.spectrumCanvas = document.getElementById("spectrum-canvas");
 
     this.boundRenderLoop = this.renderLoop.bind(this);
-    this.ratio = window.devicePixelRatio;
     try {
       this.setupGL();
     } catch (e) {
@@ -94,10 +95,7 @@ class Graphics extends Component {
     /* Let's try and make member variables in JS a little less verbose... */
     var spectrumRenderer = this.spectrumRenderer;
     var renderer = this.renderer;
-    var content = this.content;
     var canvas = this.canvas;
-    var ratio = this.ratio;
-
     var resolutionLabels = [];
     for (let i = 0; i < config.resolutions.length; ++i)
       resolutionLabels.push(
@@ -107,17 +105,7 @@ class Graphics extends Component {
     new ButtonGroup("resolution-selector", false, resolutionLabels, function(
       idx
     ) {
-      var width = config.resolutions[idx][0];
-      var height = config.resolutions[idx][1];
-      content.style.width = width / ratio + "px";
-      content.style.height = height / ratio + "px";
-      canvas.width = width;
-      canvas.height = height;
-
-      canvas.style.width = width / ratio + "px";
-      canvas.style.height = height / ratio + "px";
-
-      renderer.changeResolution(width, height);
+      // renderer.changeResolution(width, height);
     });
     var spreadSelector = new ButtonGroup(
       "spread-selector",
@@ -136,7 +124,11 @@ class Graphics extends Component {
     }
     new ButtonGroup("scene-selector", true, sceneNames, selectScene);
 
-    new MouseListener(canvas, renderer.setEmitterPos.bind(renderer));
+    new MouseListener(
+      canvas,
+      renderer.setEmitterPos.bind(renderer),
+      this.props.scale
+    );
 
     var temperatureSlider = new Slider(
       "emission-temperature",
@@ -229,12 +221,16 @@ class Graphics extends Component {
   }
 
   render() {
-    const { width, height } = this.props;
+    const { width, height, scale } = this.props;
+    const canvasWidth = Math.floor(width * scale);
+    const canvasHeight = Math.floor(height * scale);
     return (
       <Canvas
         innerRef={c => (this.canvas = c)}
-        width={width + "px"}
-        height={height + "px"}
+        blockWidth={width}
+        blockHeight={height}
+        width={canvasWidth + "px"}
+        height={canvasHeight + "px"}
       />
     );
   }

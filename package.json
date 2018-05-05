@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.4.3",
     "flexboxgrid2": "^7.2.1",
+    "mdi-react": "^3.3.0",
     "normalize.css": "^8.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

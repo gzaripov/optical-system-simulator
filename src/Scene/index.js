@@ -1,7 +1,20 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import AddIcon from "mdi-react/PlusIcon";
+import Button from "../ui/Button";
 import Graphics from "./Graphics";
 import RaysTracedProgress from "./RaysTracedProgress";
+
+const AddAction = styled(Button)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 16px;
+`;
+
+const Add = styled(AddIcon)`
+  fill: white;
+`;
 
 const ProgressLevel = styled.div`
   display: flex;
@@ -32,6 +45,7 @@ class Scene extends Component {
   state = {
     width: 0,
     height: 0,
+    scale: 1,
     raysTraced: 0,
     maxRayCount: 1
   };
@@ -39,15 +53,20 @@ class Scene extends Component {
   componentWillMount() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    this.setState({ width, height });
+    const scale = 1 / window.devicePixelRatio;
+    this.setState({ width, height, scale });
   }
 
   onProgressChanged = (raysTraced, maxRayCount) => {
     this.setState({ raysTraced, maxRayCount });
   };
 
+  addLens = () => {
+    // update state
+  };
+
   render() {
-    const { width, height, raysTraced, maxRayCount } = this.state;
+    const { width, height, scale, raysTraced, maxRayCount } = this.state;
     const progress = raysTraced / maxRayCount * 100;
     const percent = Math.round(progress);
     return (
@@ -55,6 +74,7 @@ class Scene extends Component {
         <Graphics
           width={width}
           height={height}
+          scale={scale}
           onProgressChanged={this.onProgressChanged}
         />
         <Info shown={progress < 100}>
@@ -70,6 +90,9 @@ class Scene extends Component {
             strokeWidth={2}
           />
         </Info>
+        <AddAction onClick={this.addLens}>
+          <Add />
+        </AddAction>
       </SceneStyled>
     );
   }

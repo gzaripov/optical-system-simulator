@@ -211,9 +211,10 @@ class ButtonGrid {
 }
 
 class MouseListener {
-  constructor(target, callback) {
+  constructor(target, callback, scale) {
     this.target = target;
     this.callback = callback;
+    this.scale = scale;
     this.mouseUpHandler = this.mouseUp.bind(this);
     this.mouseMoveHandler = this.mouseMove.bind(this);
 
@@ -238,8 +239,9 @@ class MouseListener {
   }
 
   mapMouseEvent(evt) {
-    var rect = this.target.getBoundingClientRect();
-    return [evt.clientX - rect.left, evt.clientY - rect.top];
+    const rect = this.target.getBoundingClientRect();
+    const scale = this.scale;
+    return [evt.clientX * scale - rect.left, evt.clientY * scale - rect.top];
   }
 }
 
