@@ -160,5 +160,20 @@ void lensIntersect(Ray ray, inout Intersection isect, Lens lens) {
     float height = lens.height, width = lens.width;
     float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;
 
-    biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+    if (lens.type == LENS_BICONVEX) {
+        biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+    }
+    else if (lens.type == LENS_PLANOCONVEX) {
+        planoConvexLensIntersect(ray, pos, height, width, leftRadius, 1.0, isect);
+    }
+    else if (lens.type == LENS_MENISCUS) {
+        meniscusLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+    }
+    else if (lens.type == LENS_PLANOCONCAVE) {
+        planoConcaveLensIntersect(ray, pos, height, width, rightRadius, 1.0, isect);
+    }
+    else if (lens.type == LENS_BICONCAVE) {
+        biconcaveLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+    }
+    
 }

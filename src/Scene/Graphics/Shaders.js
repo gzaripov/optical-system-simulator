@@ -781,8 +781,27 @@ export default {
         '    float height = lens.height, width = lens.width;\n'                             +
         '    float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;\n\n'       +
 
-        '    biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0,'  +
-                                                                            ' isect);\n'    +
+        '    if (lens.type == LENS_BICONVEX) {\n'                                           +
+        '        biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, '  +
+                                                                        '1.0, isect);\n'    +
+        '    }\n'                                                                           +
+        '    else if (lens.type == LENS_PLANOCONVEX) {\n'                                   +
+        '        planoConvexLensIntersect(ray, pos, height, width, leftRadius, 1.0, isect'  +
+                                                                                  ');\n'    +
+        '    }\n'                                                                           +
+        '    else if (lens.type == LENS_MENISCUS) {\n'                                      +
+        '        meniscusLensIntersect(ray, pos, height, width, leftRadius, rightRadius, '  +
+                                                                        '1.0, isect);\n'    +
+        '    }\n'                                                                           +
+        '    else if (lens.type == LENS_PLANOCONCAVE) {\n'                                  +
+        '        planoConcaveLensIntersect(ray, pos, height, width, rightRadius, 1.0, ise'  +
+                                                                                'ct);\n'    +
+        '    }\n'                                                                           +
+        '    else if (lens.type == LENS_BICONCAVE) {\n'                                     +
+        '        biconcaveLensIntersect(ray, pos, height, width, leftRadius, rightRadius,'  +
+                                                                       ' 1.0, isect);\n'    +
+        '    }\n\n'                                                                         +
+
         '}\n',
 
     'preamble':

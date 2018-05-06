@@ -30,7 +30,7 @@ class Renderer {
       rightRadius: 0.75
     }),
     new Lens({
-      type: Lens.TYPE.BICONVEX,
+      type: Lens.TYPE.BICONCAVE,
       pos: [0.5, 0.0],
       height: 0.375,
       width: 0.15,
