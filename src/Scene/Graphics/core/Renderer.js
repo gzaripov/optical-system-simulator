@@ -3,7 +3,6 @@ import { wavelengthToRgbTable, gasDischargeLines } from "../config";
 import { LAMBDA_MIN, LAMBDA_MAX } from "./constants";
 import shaders from "../shaders";
 import RayState from "./RayState";
-import Lens from "./Lens";
 // import LightEmitter from "./LightEmitter";
 
 class Renderer {
@@ -19,41 +18,6 @@ class Renderer {
   static SPREAD_BEAM = 2;
   static SPREAD_LASER = 3;
   static SPREAD_AREA = 4;
-
-  lenses = [
-    new Lens({
-      type: Lens.TYPE.BICONVEX,
-      pos: [-0.5, 0.0],
-      height: 0.375,
-      width: 0.15,
-      leftRadius: 0.75,
-      rightRadius: 0.75
-    }),
-    new Lens({
-      type: Lens.TYPE.BICONCAVE,
-      pos: [0.5, 0.0],
-      height: 0.375,
-      width: 0.15,
-      leftRadius: 0.75,
-      rightRadius: 0.75
-    }),
-    new Lens({
-      type: Lens.TYPE.BICONVEX,
-      pos: [0.0, 0.5],
-      height: 0.375,
-      width: 0.15,
-      leftRadius: 0.75,
-      rightRadius: 0.75
-    }),
-    new Lens({
-      type: Lens.TYPE.BICONVEX,
-      pos: [0.0, -0.5],
-      height: 0.375,
-      width: 0.15,
-      leftRadius: 0.75,
-      rightRadius: 0.75
-    })
-  ];
 
   /*
   static emmiters = [

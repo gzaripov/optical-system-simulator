@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { scene as config, gasDischargeLines } from "./config";
-import { Renderer, SpectrumRenderer, colorBufferFloatTest } from "./core";
+import {
+  Renderer,
+  SpectrumRenderer,
+  DragObserver,
+  Lens,
+  colorBufferFloatTest
+} from "./core";
 import { ButtonGroup, Slider, ButtonGrid, MouseListener } from "./ui";
 
 const Canvas = styled.canvas`
@@ -9,12 +15,49 @@ const Canvas = styled.canvas`
   height: ${p => p.blockHeight + "px"};
 `;
 
+const lenses = [
+  new Lens({
+    type: Lens.TYPE.BICONVEX,
+    pos: [-0.5, 0.0],
+    height: 0.375,
+    width: 0.15,
+    leftRadius: 0.75,
+    rightRadius: 0.75
+  })
+  /* new Lens({
+    type: Lens.TYPE.BICONCAVE,
+    pos: [0.5, 0.0],
+    height: 0.375,
+    width: 0.15,
+    leftRadius: 0.75,
+    rightRadius: 0.75
+  }),
+  new Lens({
+    type: Lens.TYPE.BICONVEX,
+    pos: [0.0, 0.5],
+    height: 0.375,
+    width: 0.15,
+    leftRadius: 0.75,
+    rightRadius: 0.75
+  }),
+  new Lens({
+    type: Lens.TYPE.BICONVEX,
+    pos: [0.0, -0.5],
+    height: 0.375,
+    width: 0.15,
+    leftRadius: 0.75,
+    rightRadius: 0.75
+  }) */
+];
+
 // onProgreesChanged
 class Graphics extends Component {
+  dragObserver = new DragObserver();
+
   componentDidMount() {
     this.controls = document.getElementById("controls");
     this.spectrumCanvas = document.getElementById("spectrum-canvas");
-
+    this.dragObserver.addMovable(lenses);
     this.boundRenderLoop = this.renderLoop.bind(this);
     try {
       this.setupGL();
@@ -87,6 +130,8 @@ class Graphics extends Component {
       sceneShaders
     );
 
+    this.renderer.lenses = lenses;
+
     this.spectrumRenderer = new SpectrumRenderer(
       this.spectrumCanvas,
       this.renderer.getEmissionSpectrum()
@@ -124,11 +169,13 @@ class Graphics extends Component {
     }
     new ButtonGroup("scene-selector", true, sceneNames, selectScene);
 
-    new MouseListener(
-      canvas,
-      renderer.setEmitterPos.bind(renderer),
-      this.props.scale
-    );
+    new MouseListener({
+      target: canvas,
+      mouseMoveCallback: pos => this.dragObserver.move(pos),
+      mouseDownCallback: pos => this.dragObserver.select(pos),
+      mouseUpCallback: () => this.dragObserver.unselect(),
+      scale: this.props.scale
+    });
 
     var temperatureSlider = new Slider(
       "emission-temperature",

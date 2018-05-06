@@ -1,4 +1,6 @@
-export default class LightEmitter {
+import Draggable from "./Draggable";
+
+export default class LightEmitter extends Draggable {
   /**
    * @constructor
    * @param {[float, float]} pos Emitter position
@@ -7,7 +9,7 @@ export default class LightEmitter {
    * @param {[float, float]} angularSpread Angular spread of emitter
    */
   constructor({ pos, power, spatialSpread, angularSpread }) {
-    this.pos = pos;
+    super(pos);
     this.power = power;
     this.spatialSpread = spatialSpread;
     this.angularSpread = angularSpread;

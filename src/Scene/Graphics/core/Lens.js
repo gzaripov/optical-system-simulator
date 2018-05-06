@@ -1,6 +1,6 @@
-import Shader from "../gl";
+import Draggable from "./Draggable";
 
-export default class Lens {
+export default class Lens extends Draggable {
   static TYPE = {
     BICONVEX: 0,
     PLANOCONVEX: 1,
@@ -18,8 +18,8 @@ export default class Lens {
    * @param {float} rightRadius Right ridius of lens
    */
   constructor({ type, pos, height, width, leftRadius, rightRadius }) {
+    super(pos);
     this.type = type;
-    this.pos = pos;
     this.height = height;
     this.width = width;
     this.leftRadius = leftRadius || 0.0;
@@ -34,6 +34,18 @@ export default class Lens {
     shader.uniformF(`Lenses[${index}].width`, width);
     shader.uniformF(`Lenses[${index}].leftRadius`, leftRadius);
     shader.uniformF(`Lenses[${index}].rightRadius`, rightRadius);
+  }
+
+  contains(pos) {
+    const x = this.pos[0];
+    const y = this.pos[1];
+    const x1 = x - this.width;
+    const y1 = y - this.height;
+    const x2 = x + this.width;
+    const y2 = y + this.height;
+    const px = pos[0];
+    const py = pos[1];
+    return px >= x1 && px <= x2 && py >= y1 && py <= y2;
   }
 
   // to4fvFormat() {
