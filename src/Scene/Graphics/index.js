@@ -171,7 +171,10 @@ class Graphics extends Component {
 
     new MouseListener({
       target: canvas,
-      mouseMoveCallback: pos => this.dragObserver.move(pos),
+      mouseMoveCallback: pos => {
+        this.dragObserver.move(pos);
+        this.renderer.reset();
+      },
       mouseDownCallback: pos => this.dragObserver.select(pos),
       mouseUpCallback: () => this.dragObserver.unselect(),
       scale: this.props.scale
