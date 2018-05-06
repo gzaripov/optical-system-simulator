@@ -15,13 +15,19 @@ export default {
     'scene1':
         '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
-        '#include "intersect"\n'                                                           +
-        '#include "csg-intersect"\n\n'                                                     +
+        '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
-        '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
-        '    biconvexLensIntersect   (ray, lensPos,         0.375, 0.15,   0.75, 0.75, 1.' +
-                                                                          '0, isect);\n'   +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
+        '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n\n'              +
+
+        '    for (int i = 0; i < LENSES_COUNT; i++) {\n'                                   +
+        '        if (i >= lensesLength) {\n'                                               +
+        '            break;\n'                                                             +
+        '        }\n'                                                                      +
+        '        lensIntersect(ray, isect, lenses[i]);\n'                                  +
+        '    }\n\n'                                                                        +
+
         '    // biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75,' +
                                                                        ' 1.0, isect);\n'   +
         '    // planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,      ' +
@@ -298,29 +304,22 @@ export default {
     'trace-frag':
         '#extension GL_EXT_draw_buffers : require\n'                                        +
         '#include "preamble"\n'                                                             +
-        '#include "rand"\n\n'                                                               +
+        '#include "rand"\n'                                                                 +
+        '#include "csg-intersect"\n\n'                                                      +
+
+        'const highp int LENSES_COUNT = 10;\n\n'                                            +
 
         'uniform sampler2D PosData;\n'                                                      +
         'uniform sampler2D RngData;\n'                                                      +
-        'uniform sampler2D RgbData;\n'                                                      +
-        'uniform vec2 lensPos;\n\n'                                                         +
+        'uniform sampler2D RgbData;\n\n'                                                    +
+
+        'uniform int LensLength;\n'                                                         +
+        'uniform Lens Lenses[LENSES_COUNT];\n\n'                                            +
 
         'varying vec2 vTexCoord;\n\n'                                                       +
 
-        'struct Ray {\n'                                                                    +
-        '    vec2 pos;\n'                                                                   +
-        '    vec2 dir;\n'                                                                   +
-        '    vec2 invDir;\n'                                                                +
-        '    vec2 dirSign;\n'                                                               +
-        '};\n'                                                                              +
-        'struct Intersection {\n'                                                           +
-        '    float tMin;\n'                                                                 +
-        '    float tMax;\n'                                                                 +
-        '    vec2 n;\n'                                                                     +
-        '    float mat;\n'                                                                  +
-        '};\n\n'                                                                            +
-
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos);\n'                +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int'  +
+                                                                     ' lensesLength);\n'    +
         'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in'  +
                                                                'out vec3 throughput);\n\n'  +
 
@@ -341,8 +340,9 @@ export default {
         '    Ray ray = unpackRay(posDir);\n'                                                +
         '    Intersection isect;\n'                                                         +
         '    isect.tMin = 1e-4;\n'                                                          +
-        '    isect.tMax = 1e30;\n'                                                          +
-        '    intersect(ray, isect, lensPos);\n\n'                                           +
+        '    isect.tMax = 1e30;\n\n'                                                        +
+
+        '    intersect(ray, isect, Lenses, LensLength);\n\n'                                +
 
         '    vec2 t = vec2(-isect.n.y, isect.n.x);\n'                                       +
         '    vec2 wiLocal = -vec2(dot(t, ray.dir), dot(isect.n, ray.dir));\n'               +
@@ -350,7 +350,8 @@ export default {
 
         '    if (isect.tMax == 1e30) {\n'                                                   +
         '        rgbLambda.rgb = vec3(0.0);\n'                                              +
-        '    } else {\n'                                                                    +
+        '    } \n'                                                                          +
+        '    else {\n'                                                                      +
         '        posDir.xy = ray.pos + ray.dir*isect.tMax;\n'                               +
         '        posDir.zw = woLocal.y*isect.n + woLocal.x*t;\n'                            +
         '    }\n\n'                                                                         +
@@ -370,13 +371,12 @@ export default {
         '}\n',
 
     'scene7':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
-        '#include "intersect"\n'                                                           +
-        '#include "csg-intersect"\n\n'                                                     +
+        '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(0.0, 0.0), 0.4, 1.0, isect);\n'                     +
         '    biconvexLensIntersect(ray, vec2(-0.4, -0.65), 0.3, 0.12, 0.5, 0.5, 1.0, isec' +
@@ -402,12 +402,12 @@ export default {
         '}\n',
 
     'scene6':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-0.95,   0.25),    0.4, 1.0, isect);\n'             +
         '    sphereIntersect(ray, vec2(-0.15,  -0.25),    0.2, 1.0, isect);\n'             +
@@ -530,13 +530,12 @@ export default {
         '}\n',
 
     'scene5':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
-        '#include "intersect"\n'                                                           +
-        '#include "csg-intersect"\n\n'                                                     +
+        '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    planoConcaveLensIntersect(ray, vec2(0.8, 0.0), 0.6, 0.3, 0.6, 1.0, isect);\n' +
         '}\n\n'                                                                            +
@@ -552,12 +551,12 @@ export default {
         '}\n',
 
     'scene4':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    prismIntersect(ray, vec2(0.0, 0.0), 0.6, 1.0, isect);\n'                      +
         '}\n\n'                                                                            +
@@ -575,12 +574,12 @@ export default {
         '}\n',
 
     'scene3':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.2,  0.8), 1.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-0.7, -0.45), 0.35, 3.0, isect);\n'                 +
@@ -607,9 +606,38 @@ export default {
         '}\n',
 
     'csg-intersect':
+        'const highp int LENS_BICONVEX = 0;\n'                                              +
+        'const highp int LENS_PLANOCONVEX = 1;\n'                                           +
+        'const highp int LENS_MENISCUS = 2;\n'                                              +
+        'const highp int LENS_PLANOCONCAVE = 3;\n'                                          +
+        'const highp int LENS_BICONCAVE = 4;\n\n'                                           +
+
         'struct Segment {\n'                                                                +
         '    float tNear, tFar;\n'                                                          +
         '    vec2  nNear, nFar;\n'                                                          +
+        '};\n\n'                                                                            +
+
+        'struct Lens {\n'                                                                   +
+        '    int type;\n'                                                                   +
+        '    vec2 pos;\n'                                                                   +
+        '    float height;\n'                                                               +
+        '    float width;\n'                                                                +
+        '    float leftRadius;\n'                                                           +
+        '    float rightRadius;\n'                                                          +
+        '};\n\n'                                                                            +
+
+        'struct Intersection {\n'                                                           +
+        '    float tMin;\n'                                                                 +
+        '    float tMax;\n'                                                                 +
+        '    vec2 n;\n'                                                                     +
+        '    float mat;\n'                                                                  +
+        '};\n\n'                                                                            +
+
+        'struct Ray {\n'                                                                    +
+        '    vec2 pos;\n'                                                                   +
+        '    vec2 dir;\n'                                                                   +
+        '    vec2 invDir;\n'                                                                +
+        '    vec2 dirSign;\n'                                                               +
         '};\n\n'                                                                            +
 
         'Segment segmentIntersection(Segment a, Segment b) {\n'                             +
@@ -746,6 +774,15 @@ export default {
         '        sphereSegmentIntersect(ray, center - vec2(r + d, 0.0), abs(r)), isect.tM'  +
                                                                                   'in\n'    +
         '    ), matId, isect);\n'                                                           +
+        '}\n\n'                                                                             +
+
+        'void lensIntersect(Ray ray, inout Intersection isect, Lens lens) {\n'              +
+        '    vec2 pos = lens.pos;\n'                                                        +
+        '    float height = lens.height, width = lens.width;\n'                             +
+        '    float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;\n\n'       +
+
+        '    biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0,'  +
+                                                                            ' isect);\n'    +
         '}\n',
 
     'preamble':
@@ -755,12 +792,12 @@ export default {
         'precision highp float;\n',
 
     'scene2':
-        '#include "trace-frag"\n\n'                                                        +
-
+        '#include "trace-frag"\n'                                                          +
         '#include "bsdf"\n'                                                                +
         '#include "intersect"\n\n'                                                         +
 
-        'void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {\n'              +
+        'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
+                                                                    ' lensesLength) {\n'   +
         '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n'                +
         '    sphereIntersect(ray, vec2(-1.424, -0.8), 0.356, 1.0, isect);\n'               +
         '    sphereIntersect(ray, vec2(-0.72,  -0.8), 0.356, 2.0, isect);\n'               +

@@ -1,6 +1,35 @@
+const highp int LENS_BICONVEX = 0;
+const highp int LENS_PLANOCONVEX = 1;
+const highp int LENS_MENISCUS = 2;
+const highp int LENS_PLANOCONCAVE = 3;
+const highp int LENS_BICONCAVE = 4;
+
 struct Segment {
     float tNear, tFar;
     vec2  nNear, nFar;
+};
+
+struct Lens {
+    int type;
+    vec2 pos;
+    float height;
+    float width;
+    float leftRadius;
+    float rightRadius;
+};
+
+struct Intersection {
+    float tMin;
+    float tMax;
+    vec2 n;
+    float mat;
+};
+
+struct Ray {
+    vec2 pos;
+    vec2 dir;
+    vec2 invDir;
+    vec2 dirSign;
 };
 
 Segment segmentIntersection(Segment a, Segment b) {
@@ -124,4 +153,12 @@ void planoConcaveLensIntersect(Ray ray, vec2 center, float h, float d, float r, 
         vertSpanIntersect(ray, center.x - 0.5*r, 0.5*abs(r) + d)),
         sphereSegmentIntersect(ray, center - vec2(r + d, 0.0), abs(r)), isect.tMin
     ), matId, isect);
+}
+
+void lensIntersect(Ray ray, inout Intersection isect, Lens lens) {
+    vec2 pos = lens.pos;
+    float height = lens.height, width = lens.width;
+    float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;
+
+    biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
 }

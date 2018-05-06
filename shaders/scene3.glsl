@@ -1,9 +1,8 @@
 #include "trace-frag"
-
 #include "bsdf"
 #include "intersect"
 
-void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {
+void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength) {
     bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);
     bboxIntersect(ray, vec2(0.0), vec2(1.2,  0.8), 1.0, isect);
     sphereIntersect(ray, vec2(-0.7, -0.45), 0.35, 3.0, isect);

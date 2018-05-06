@@ -1,28 +1,20 @@
 #extension GL_EXT_draw_buffers : require
 #include "preamble"
 #include "rand"
+#include "csg-intersect"
+
+const highp int LENSES_COUNT = 10;
 
 uniform sampler2D PosData;
 uniform sampler2D RngData;
 uniform sampler2D RgbData;
-uniform vec2 lensPos;
+
+uniform int LensLength;
+uniform Lens Lenses[LENSES_COUNT];
 
 varying vec2 vTexCoord;
 
-struct Ray {
-    vec2 pos;
-    vec2 dir;
-    vec2 invDir;
-    vec2 dirSign;
-};
-struct Intersection {
-    float tMin;
-    float tMax;
-    vec2 n;
-    float mat;
-};
-
-void intersect(Ray ray, inout Intersection isect, vec2 lensPos);
+void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength);
 vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput);
 
 Ray unpackRay(vec4 posDir) {
@@ -42,7 +34,8 @@ void main() {
     Intersection isect;
     isect.tMin = 1e-4;
     isect.tMax = 1e30;
-    intersect(ray, isect, lensPos);
+
+    intersect(ray, isect, Lenses, LensLength);
     
     vec2 t = vec2(-isect.n.y, isect.n.x);
     vec2 wiLocal = -vec2(dot(t, ray.dir), dot(isect.n, ray.dir));
@@ -50,7 +43,8 @@ void main() {
     
     if (isect.tMax == 1e30) {
         rgbLambda.rgb = vec3(0.0);
-    } else {
+    } 
+    else {
         posDir.xy = ray.pos + ray.dir*isect.tMax;
         posDir.zw = woLocal.y*isect.n + woLocal.x*t;
     }

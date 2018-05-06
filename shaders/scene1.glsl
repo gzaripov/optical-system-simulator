@@ -1,11 +1,17 @@
 #include "trace-frag"
 #include "bsdf"
 #include "intersect"
-#include "csg-intersect"
 
-void intersect(Ray ray, inout Intersection isect, vec2 lensPos) {
+void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength) {
     bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);
-    biconvexLensIntersect   (ray, lensPos,         0.375, 0.15,   0.75, 0.75, 1.0, isect);
+
+    for (int i = 0; i < LENSES_COUNT; i++) {
+        if (i >= lensesLength) {
+            break;
+        }
+        lensIntersect(ray, isect, lenses[i]);
+    }
+
     // biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75, 1.0, isect);
     // planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,       1.0, isect);
     // meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75, 1.0, isect);

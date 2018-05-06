@@ -3,6 +3,7 @@ import { wavelengthToRgbTable, gasDischargeLines } from "../config";
 import { LAMBDA_MIN, LAMBDA_MAX } from "./constants";
 import shaders from "../shaders";
 import RayState from "./RayState";
+import Lens from "./Lens";
 // import LightEmitter from "./LightEmitter";
 
 class Renderer {
@@ -18,6 +19,41 @@ class Renderer {
   static SPREAD_BEAM = 2;
   static SPREAD_LASER = 3;
   static SPREAD_AREA = 4;
+
+  lenses = [
+    new Lens({
+      type: Lens.TYPE.BICONVEX,
+      pos: [-0.5, 0.0],
+      height: 0.375,
+      width: 0.15,
+      leftRadius: 0.75,
+      rightRadius: 0.75
+    }),
+    new Lens({
+      type: Lens.TYPE.BICONVEX,
+      pos: [0.5, 0.0],
+      height: 0.375,
+      width: 0.15,
+      leftRadius: 0.75,
+      rightRadius: 0.75
+    }),
+    new Lens({
+      type: Lens.TYPE.BICONVEX,
+      pos: [0.0, 0.5],
+      height: 0.375,
+      width: 0.15,
+      leftRadius: 0.75,
+      rightRadius: 0.75
+    }),
+    new Lens({
+      type: Lens.TYPE.BICONVEX,
+      pos: [0.0, -0.5],
+      height: 0.375,
+      width: 0.15,
+      leftRadius: 0.75,
+      rightRadius: 0.75
+    })
+  ];
 
   /*
   static emmiters = [
@@ -549,7 +585,12 @@ class Renderer {
 
     var traceProgram = this.tracePrograms[this.currentScene];
     traceProgram.bind();
-    traceProgram.uniform2F("lensPos", ...this.normalizeEmitterPos());
+    //traceProgram.uniform2F("lensPos", ...this.normalizeEmitterPos());
+
+    this.lenses.forEach((lens, index) => lens.to4fvFormat(traceProgram, index));
+    traceProgram.uniformI("LensLength", this.lenses.length);
+    // raceProgram.uniform4fv("LensData", Renderer.lenses[0].to4fvFormat());
+
     this.rayStates[current].bind(traceProgram);
     this.quadVbo.draw(traceProgram, gl.TRIANGLE_FAN);
 
