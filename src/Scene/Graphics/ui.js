@@ -258,7 +258,7 @@ class MouseListener {
     const rect = this.target.getBoundingClientRect();
     const x = evt.clientX - rect.left;
     const y = evt.clientY - rect.top;
-    return [x / rect.width * 2 - 1, y / rect.height * 2 - 1];
+    return [x / rect.width * 2 - 1, -(y / rect.height * 2 - 1)];
   }
 }
 

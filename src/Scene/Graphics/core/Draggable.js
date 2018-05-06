@@ -10,7 +10,7 @@ export default class {
   move(x, y) {
     console.log(this.pos);
     console.log([x, y]);
-    this.pos = [this.pos[0] + x, this.pos[1] - y];
+    this.pos = [this.pos[0] + x, this.pos[1] + y];
     console.log(this.pos);
     console.log("\n");
   }

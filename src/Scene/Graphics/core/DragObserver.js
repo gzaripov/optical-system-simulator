@@ -1,5 +1,5 @@
 export default class DragObserver {
-  selected = null;
+  selected = -1;
   movables = [];
 
   addMovable(movables) {
@@ -7,18 +7,22 @@ export default class DragObserver {
   }
 
   select(pos) {
-    const { movables } = this;
-    //console.log(pos);
-    this.selected = movables.find(movable => movable.contains(pos)) || null;
+    console.log("select");
+    this.selected = this.movables.findIndex(movable => movable.contains(pos));
+    console.log(this.selected);
   }
 
   move(pos) {
-    const { selected } = this;
-
-    selected && selected.move(pos[0], pos[1]);
+    this.movables[this.selected].move(pos[0], pos[1]);
   }
 
-  unselect() {
-    this.selected = null;
+  hasSelectedElement() {
+    return this.selected !== -1;
+  }
+
+  deselect() {
+    console.log("unselect");
+    this.selected = -1;
+    console.log(this.selected);
   }
 }

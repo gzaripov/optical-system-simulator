@@ -172,7 +172,7 @@ class Graphics extends Component {
     new MouseListener({
       target: canvas,
       mouseMoveCallback: pos => {
-        if (this.dragObserver.selected) {
+        if (this.dragObserver.hasSelectedElement()) {
           this.dragObserver.move(pos);
           this.renderer.reset();
         }
