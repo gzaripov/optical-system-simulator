@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import AddIcon from "mdi-react/PlusIcon";
-import Button from "../ui/Button";
-import Graphics from "./Graphics";
-import RaysTracedProgress from "./RaysTracedProgress";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import AddIcon from 'mdi-react/PlusIcon';
+import Button from '../ui/Button';
+import Graphics from './Graphics';
+import RaysTracedProgress from './RaysTracedProgress';
 
 const AddAction = styled(Button)`
   position: absolute;
@@ -38,7 +38,7 @@ const Info = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: ${p => (p.shown ? "1" : "0")};
+  opacity: ${p => (p.shown ? '1' : '0')};
 `;
 
 class Scene extends Component {
@@ -47,7 +47,8 @@ class Scene extends Component {
     height: 0,
     scale: 1,
     raysTraced: 0,
-    maxRayCount: 1
+    maxRayCount: 1,
+    lenses: [],
   };
 
   componentWillMount() {
@@ -61,12 +62,15 @@ class Scene extends Component {
     this.setState({ raysTraced, maxRayCount });
   };
 
-  addLens = () => {
-    // update state
+  addLens = (lens) => {
+    const { lenses } = this.state;
+    this.setState({ lenses: [...lenses, lens] });
   };
 
   render() {
-    const { width, height, scale, raysTraced, maxRayCount } = this.state;
+    const {
+      width, height, scale, raysTraced, maxRayCount, lenses,
+    } = this.state;
     const progress = raysTraced / maxRayCount * 100;
     const percent = Math.round(progress);
     return (
@@ -75,6 +79,7 @@ class Scene extends Component {
           width={width}
           height={height}
           scale={scale}
+          lenses={lenses}
           onProgressChanged={this.onProgressChanged}
         />
         <Info shown={progress < 100}>
@@ -84,11 +89,7 @@ class Scene extends Component {
             </span>
             <span>Progress: {percent}%</span>
           </ProgressLevel>
-          <RaysTracedProgress
-            percent={progress}
-            showInfo={false}
-            strokeWidth={2}
-          />
+          <RaysTracedProgress percent={progress} showInfo={false} strokeWidth={2} />
         </Info>
         <AddAction onClick={this.addLens}>
           <Add />

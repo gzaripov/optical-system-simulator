@@ -138,9 +138,7 @@ class Graphics extends Component {
     );
 
     /* Let's try and make member variables in JS a little less verbose... */
-    var spectrumRenderer = this.spectrumRenderer;
-    var renderer = this.renderer;
-    var canvas = this.canvas;
+    const { spectrumRenderer, renderer, canvas } = this;
     var resolutionLabels = [];
     for (let i = 0; i < config.resolutions.length; ++i)
       resolutionLabels.push(
@@ -150,7 +148,7 @@ class Graphics extends Component {
     new ButtonGroup("resolution-selector", false, resolutionLabels, function(
       idx
     ) {
-      // renderer.changeResolution(width, height);
+      // .changeResolution(width, height);
     });
     var spreadSelector = new ButtonGroup(
       "spread-selector",
@@ -167,6 +165,7 @@ class Graphics extends Component {
         config.scenes[idx].posB
       );
     }
+    
     new ButtonGroup("scene-selector", true, sceneNames, selectScene);
 
     new MouseListener({
@@ -271,6 +270,10 @@ class Graphics extends Component {
       maxRayCount
     );
   }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    
+  };
 
   render() {
     const { width, height, scale } = this.props;
