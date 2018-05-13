@@ -1,4 +1,4 @@
-import Draggable from "./Draggable";
+import Draggable from './Draggable';
 
 export default class Lens extends Draggable {
   static TYPE = {
@@ -6,7 +6,7 @@ export default class Lens extends Draggable {
     PLANOCONVEX: 1,
     MENISCUS: 2,
     PLANOCONCAVE: 3,
-    BICONCAVE: 4
+    BICONCAVE: 4,
   };
   /**
    * @constructor
@@ -17,7 +17,9 @@ export default class Lens extends Draggable {
    * @param {float} leftRadius Left radius of lens
    * @param {float} rightRadius Right ridius of lens
    */
-  constructor({ type, pos, height, width, leftRadius, rightRadius }) {
+  constructor({
+    type, pos, height, width, leftRadius, rightRadius,
+  }) {
     super(pos);
     this.type = type;
     this.height = height;
@@ -27,7 +29,9 @@ export default class Lens extends Draggable {
   }
 
   to4fvFormat(shader, index) {
-    const { type, pos, height, width, leftRadius, rightRadius } = this;
+    const {
+      type, pos, height, width, leftRadius, rightRadius,
+    } = this;
     shader.uniformI(`Lenses[${index}].type`, type);
     shader.uniform2F(`Lenses[${index}].pos`, ...pos);
     shader.uniformF(`Lenses[${index}].height`, height);

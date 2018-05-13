@@ -1,6 +1,6 @@
 const GasDischargeLines = [
   {
-    name: "Aluminum",
+    name: 'Aluminum',
     wavelengths: [
       390.068,
       393.2,
@@ -46,7 +46,7 @@ const GasDischargeLines = [
       669.602,
       669.867,
       708.397,
-      708.464
+      708.464,
     ],
     strengths: [
       450,
@@ -93,11 +93,11 @@ const GasDischargeLines = [
       360,
       230,
       60,
-      70
-    ]
+      70,
+    ],
   },
   {
-    name: "Argon",
+    name: 'Argon',
     wavelengths: [
       392.572,
       392.862,
@@ -272,7 +272,7 @@ const GasDischargeLines = [
       710.748,
       712.582,
       714.704,
-      715.884
+      715.884,
     ],
     strengths: [
       35,
@@ -448,11 +448,11 @@ const GasDischargeLines = [
       25,
       25,
       1000,
-      15
-    ]
+      15,
+    ],
   },
   {
-    name: "Barium",
+    name: 'Barium',
     wavelengths: [
       405.371,
       408.096,
@@ -569,7 +569,7 @@ const GasDischargeLines = [
       686.791,
       687.408,
       687.408,
-      696.148
+      696.148,
     ],
     strengths: [
       18,
@@ -687,11 +687,11 @@ const GasDischargeLines = [
       8,
       7,
       7,
-      1
-    ]
+      1,
+    ],
   },
   {
-    name: "Calcium",
+    name: 'Calcium',
     wavelengths: [
       362.411,
       363.075,
@@ -850,7 +850,7 @@ const GasDischargeLines = [
       714.815,
       720.219,
       730.869,
-      732.615
+      732.615,
     ],
     strengths: [
       15,
@@ -1010,11 +1010,11 @@ const GasDischargeLines = [
       33,
       31,
       10,
-      33
-    ]
+      33,
+    ],
   },
   {
-    name: "Carbon",
+    name: 'Carbon',
     wavelengths: [
       391.898,
       392.069,
@@ -1049,7 +1049,7 @@ const GasDischargeLines = [
       711.519,
       711.563,
       711.699,
-      711.99
+      711.99,
     ],
     strengths: [
       570,
@@ -1085,11 +1085,11 @@ const GasDischargeLines = [
       250,
       250,
       200,
-      350
-    ]
+      350,
+    ],
   },
   {
-    name: "Helium",
+    name: 'Helium',
     wavelengths: [
       396.473,
       400.927,
@@ -1116,7 +1116,7 @@ const GasDischargeLines = [
       667.815,
       686.748,
       706.519,
-      706.571
+      706.571,
     ],
     strengths: [
       20,
@@ -1144,16 +1144,16 @@ const GasDischargeLines = [
       100,
       3,
       200,
-      30
-    ]
+      30,
+    ],
   },
   {
-    name: "Hydrogen",
+    name: 'Hydrogen',
     wavelengths: [397.007, 410.174, 434.047, 486.133, 656.272, 656.285],
-    strengths: [8, 15, 30, 80, 120, 180]
+    strengths: [8, 15, 30, 80, 120, 180],
   },
   {
-    name: "Iron",
+    name: 'Iron',
     wavelengths: [
       400.524,
       400.971,
@@ -1349,7 +1349,7 @@ const GasDischargeLines = [
       651.605,
       654.624,
       659.291,
-      667.799
+      667.799,
     ],
     strengths: [
       400,
@@ -1546,11 +1546,11 @@ const GasDischargeLines = [
       20,
       20,
       20,
-      40
-    ]
+      40,
+    ],
   },
   {
-    name: "Krypton",
+    name: 'Krypton',
     wavelengths: [
       390.618,
       392.008,
@@ -1630,7 +1630,7 @@ const GasDischargeLines = [
       645.629,
       657.007,
       669.923,
-      690.468
+      690.468,
     ],
     strengths: [
       150,
@@ -1711,11 +1711,11 @@ const GasDischargeLines = [
       200,
       150,
       60,
-      100
-    ]
+      100,
+    ],
   },
   {
-    name: "Magnesium",
+    name: 'Magnesium',
     wavelengths: [
       390.386,
       393.84,
@@ -1775,7 +1775,7 @@ const GasDischargeLines = [
       681.927,
       689.49,
       696.54,
-      706.041
+      706.041,
     ],
     strengths: [
       4,
@@ -1836,11 +1836,11 @@ const GasDischargeLines = [
       8,
       4,
       6,
-      8
-    ]
+      8,
+    ],
   },
   {
-    name: "Mercury",
+    name: 'Mercury',
     wavelengths: [
       404.656,
       407.783,
@@ -1881,7 +1881,7 @@ const GasDischargeLines = [
       671.643,
       690.752,
       708.19,
-      709.186
+      709.186,
     ],
     strengths: [
       1800,
@@ -1923,11 +1923,11 @@ const GasDischargeLines = [
       160,
       250,
       250,
-      200
-    ]
+      200,
+    ],
   },
   {
-    name: "Neon",
+    name: 'Neon',
     wavelengths: [
       421.974,
       423.385,
@@ -2007,7 +2007,7 @@ const GasDischargeLines = [
       702.405,
       703.241,
       705.129,
-      705.911
+      705.911,
     ],
     strengths: [
       150,
@@ -2088,11 +2088,11 @@ const GasDischargeLines = [
       90,
       100,
       50,
-      80
-    ]
+      80,
+    ],
   },
   {
-    name: "Nitrogen",
+    name: 'Nitrogen',
     wavelengths: [
       391.9,
       395.585,
@@ -2180,7 +2180,7 @@ const GasDischargeLines = [
       664.65,
       665.346,
       665.651,
-      672.262
+      672.262,
     ],
     strengths: [
       360,
@@ -2269,11 +2269,11 @@ const GasDischargeLines = [
       185,
       235,
       210,
-      185
-    ]
+      185,
+    ],
   },
   {
-    name: "Oxygen",
+    name: 'Oxygen',
     wavelengths: [
       391.196,
       391.929,
@@ -2359,7 +2359,7 @@ const GasDischargeLines = [
       665.383,
       700.192,
       700.223,
-      715.67
+      715.67,
     ],
     strengths: [
       450,
@@ -2446,11 +2446,11 @@ const GasDischargeLines = [
       100,
       360,
       450,
-      210
-    ]
+      210,
+    ],
   },
   {
-    name: "Potassium",
+    name: 'Potassium',
     wavelengths: [
       360.888,
       361.849,
@@ -2508,7 +2508,7 @@ const GasDischargeLines = [
       624.659,
       630.729,
       642.796,
-      659.5
+      659.5,
     ],
     strengths: [
       5,
@@ -2567,11 +2567,11 @@ const GasDischargeLines = [
       6,
       7,
       5,
-      2
-    ]
+      2,
+    ],
   },
   {
-    name: "Silicon",
+    name: 'Silicon',
     wavelengths: [
       390.552,
       395.574,
@@ -2696,7 +2696,7 @@ const GasDischargeLines = [
       716.555,
       718.489,
       719.358,
-      719.39
+      719.39,
     ],
     strengths: [
       300,
@@ -2822,11 +2822,11 @@ const GasDischargeLines = [
       200,
       70,
       65,
-      30
-    ]
+      30,
+    ],
   },
   {
-    name: "Sodium",
+    name: 'Sodium',
     wavelengths: [
       371.107,
       411.37,
@@ -2926,7 +2926,7 @@ const GasDischargeLines = [
       654.575,
       655.243,
       737.323,
-      737.349
+      737.349,
     ],
     strengths: [
       850,
@@ -3027,11 +3027,11 @@ const GasDischargeLines = [
       130,
       80,
       20,
-      10
-    ]
+      10,
+    ],
   },
   {
-    name: "Strontium",
+    name: 'Strontium',
     wavelengths: [
       403.038,
       403.238,
@@ -3103,7 +3103,7 @@ const GasDischargeLines = [
       664.354,
       679.105,
       687.838,
-      689.259
+      689.259,
     ],
     strengths: [
       1300,
@@ -3176,11 +3176,11 @@ const GasDischargeLines = [
       800,
       1800,
       4800,
-      1200
-    ]
+      1200,
+    ],
   },
   {
-    name: "Sulfur",
+    name: 'Sulfur',
     wavelengths: [
       390.2,
       393.33,
@@ -3223,7 +3223,7 @@ const GasDischargeLines = [
       674.36,
       674.88,
       675.72,
-      757.9
+      757.9,
     ],
     strengths: [
       285,
@@ -3267,11 +3267,11 @@ const GasDischargeLines = [
       160,
       285,
       450,
-      450
-    ]
+      450,
+    ],
   },
   {
-    name: "Xenon",
+    name: 'Xenon',
     wavelengths: [
       390.791,
       403.759,
@@ -3413,7 +3413,7 @@ const GasDischargeLines = [
       694.211,
       697.618,
       699.088,
-      708.215
+      708.215,
     ],
     strengths: [
       100,
@@ -3556,9 +3556,9 @@ const GasDischargeLines = [
       800,
       100,
       2000,
-      150
-    ]
-  }
+      150,
+    ],
+  },
 ];
 
 export default GasDischargeLines;

@@ -1,13 +1,9 @@
 function stripClass(node, className) {
-  node.className = node.className.replace(
-    new RegExp("(?:^|\\s)" + className + "(?!\\S)"),
-    ""
-  );
+  node.className = node.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`), '');
 }
 
 function addClass(node, className) {
-  if (node.className.indexOf(className) === -1)
-    node.className += " " + className;
+  if (node.className.indexOf(className) === -1) node.className += ` ${className}`;
 }
 
 class ButtonGroup {
@@ -15,28 +11,29 @@ class ButtonGroup {
     this.selectionCallback = selectionCallback;
     this.selectedButton = 0;
 
-    var target = document.getElementById(targetId);
-    if (!target)
+    const target = document.getElementById(targetId);
+    if (!target) {
       /* Silently failing is always the best option! I am a good developer! */
       return;
+    }
 
-    this.group = document.createElement(vertical ? "ul" : "div");
-    this.group.className = vertical ? "button-group-vert" : "button-group-horz";
+    this.group = document.createElement(vertical ? 'ul' : 'div');
+    this.group.className = vertical ? 'button-group-vert' : 'button-group-horz';
     this.buttons = [];
 
     for (let i = 0; i < labels.length; ++i) {
-      var button = document.createElement(vertical ? "li" : "div");
-      button.className = vertical ? "button-vert" : "button-horz";
+      const button = document.createElement(vertical ? 'li' : 'div');
+      button.className = vertical ? 'button-vert' : 'button-horz';
       button.appendChild(document.createTextNode(labels[i]));
 
       this.buttons.push(button);
       this.group.appendChild(button);
 
       button.addEventListener(
-        "click",
-        function(idx, event) {
+        'click',
+        function select(idx) {
           this.select(idx);
-        }.bind(this, i)
+        }.bind(this, i),
       );
     }
     this.select(0);
@@ -47,53 +44,52 @@ class ButtonGroup {
   select(idx) {
     if (idx < 0 || idx >= this.buttons.length) return;
 
-    stripClass(this.buttons[this.selectedButton], "active");
-    addClass(this.buttons[idx], "active");
+    stripClass(this.buttons[this.selectedButton], 'active');
+    addClass(this.buttons[idx], 'active');
 
-    if (this.selectedButton !== idx && this.selectionCallback)
-      this.selectionCallback(idx);
+    if (this.selectedButton !== idx && this.selectionCallback) this.selectionCallback(idx);
     this.selectedButton = idx;
   }
 }
 
 class Slider {
   constructor(targetId, minValue, maxValue, hasLabel, callback) {
-    var target = document.getElementById(targetId);
+    const target = document.getElementById(targetId);
     if (!target) return;
 
-    this.sliderBackground = document.createElement("div");
-    this.sliderBackground.className = "slider";
+    this.sliderBackground = document.createElement('div');
+    this.sliderBackground.className = 'slider';
 
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.callback = callback;
 
-    this.sliderBar = document.createElement("div");
-    this.sliderBar.className = "slider-bar";
+    this.sliderBar = document.createElement('div');
+    this.sliderBar.className = 'slider-bar';
     this.sliderBackground.appendChild(this.sliderBar);
 
-    this.sliderHandle = document.createElement("a");
-    this.sliderHandle.className = "slider-handle";
+    this.sliderHandle = document.createElement('a');
+    this.sliderHandle.className = 'slider-handle';
     this.sliderBackground.appendChild(this.sliderHandle);
 
-    var mouseMoveListener = this.mouseMove.bind(this);
-    function mouseUpListener(event) {
-      document.removeEventListener("mousemove", mouseMoveListener);
-      document.removeEventListener("mouseup", mouseUpListener);
+    const mouseMoveListener = this.mouseMove.bind(this);
+    function mouseUpListener() {
+      document.removeEventListener('mousemove', mouseMoveListener);
+      document.removeEventListener('mouseup', mouseUpListener);
     }
 
-    this.sliderHandle.addEventListener("mousedown", function(event) {
+    this.sliderHandle.addEventListener('mousedown', (event) => {
       event.preventDefault();
-      document.addEventListener("mousemove", mouseMoveListener);
-      document.addEventListener("mouseup", mouseUpListener);
+      document.addEventListener('mousemove', mouseMoveListener);
+      document.addEventListener('mouseup', mouseUpListener);
     });
 
-    var parent = target.parentNode;
+    const parent = target.parentNode;
     parent.replaceChild(this.sliderBackground, target);
 
     if (hasLabel) {
-      this.label = document.createElement("p");
-      this.label.className = "slider-label";
+      this.label = document.createElement('p');
+      this.label.className = 'slider-label';
       parent.insertBefore(this.label, this.sliderBackground.nextSibling);
     }
 
@@ -101,7 +97,7 @@ class Slider {
   }
 
   mouseMove(event) {
-    var rect = this.sliderBackground.getBoundingClientRect();
+    const rect = this.sliderBackground.getBoundingClientRect();
     this.setPosition((event.clientX - rect.left) / (rect.right - rect.left));
   }
 
@@ -113,30 +109,26 @@ class Slider {
     value = Math.min(this.maxValue, Math.max(this.minValue, value));
     if (value !== this.value) {
       this.value = value;
-      var percentage = Math.max(
+      const percentage = Math.max(
         Math.min(
-          Math.floor(
-            100.0 * (value - this.minValue) / (this.maxValue - this.minValue)
-          ),
-          100.0
+          Math.floor(100.0 * (value - this.minValue) / (this.maxValue - this.minValue)),
+          100.0,
         ),
-        0.0
+        0.0,
       );
-      this.sliderHandle.style.left = this.sliderBar.style.width =
-        percentage.toString() + "%";
+      this.sliderHandle.style.left = `${percentage}%`;
+      this.sliderBar.style.width = `${percentage}%`;
 
-      if (this.callback) this.callback(value);
+      if (this.callback) this.callback(value, this);
     }
   }
 
   setPosition(position) {
-    this.setValue(
-      Math.floor(this.minValue + position * (this.maxValue - this.minValue))
-    );
+    this.setValue(Math.floor(this.minValue + position * (this.maxValue - this.minValue)));
   }
 
   show(show) {
-    var display = show ? "block" : "none";
+    const display = show ? 'block' : 'none';
     this.sliderBackground.style.display = display;
     if (this.label) this.label.style.display = display;
   }
@@ -144,20 +136,20 @@ class Slider {
 
 class ButtonGrid {
   constructor(targetId, numCols, labels, selectionCallback) {
-    var target = document.getElementById(targetId);
+    const target = document.getElementById(targetId);
     if (!target) return;
 
     this.cols = numCols;
     this.selectionCallback = selectionCallback;
     this.selectedButton = 0;
 
-    this.container = document.createElement("div");
-    this.container.className = "button-grid";
+    this.container = document.createElement('div');
+    this.container.className = 'button-grid';
 
     this.columns = [];
     for (let i = 0; i < this.cols; ++i) {
-      let column = document.createElement("div");
-      column.className = "button-grid-column";
+      const column = document.createElement('div');
+      column.className = 'button-grid-column';
 
       this.container.appendChild(column);
       this.columns.push(column);
@@ -165,24 +157,23 @@ class ButtonGrid {
 
     this.cells = [];
     for (let i = 0; i < labels.length; ++i) {
-      let column = i % this.cols;
-      var cell = document.createElement("div");
-      cell.className = "button stretch-button button-grid-button";
+      const column = i % this.cols;
+      const cell = document.createElement('div');
+      cell.className = 'button stretch-button button-grid-button';
       cell.appendChild(document.createTextNode(labels[i]));
 
-      if (i === 0) addClass(cell, "button-grid-tl");
-      if (i === this.cols - 1) addClass(cell, "button-grid-tr");
+      if (i === 0) addClass(cell, 'button-grid-tl');
+      if (i === this.cols - 1) addClass(cell, 'button-grid-tr');
       if (i + this.cols >= labels.length) {
-        if (column === 0) addClass(cell, "button-grid-bl");
-        if (column === this.cols - 1 || i === labels.length - 1)
-          addClass(cell, "button-grid-br");
+        if (column === 0) addClass(cell, 'button-grid-bl');
+        if (column === this.cols - 1 || i === labels.length - 1) addClass(cell, 'button-grid-br');
       }
 
       cell.addEventListener(
-        "click",
-        function(idx, event) {
+        'click',
+        function selectIdx(idx) {
           this.select(idx);
-        }.bind(this, i)
+        }.bind(this, i),
       );
 
       this.columns[column].appendChild(cell);
@@ -197,16 +188,15 @@ class ButtonGrid {
   select(idx) {
     if (idx < 0 || idx >= this.cells.length) return;
 
-    stripClass(this.cells[this.selectedButton], "active");
-    addClass(this.cells[idx], "active");
+    stripClass(this.cells[this.selectedButton], 'active');
+    addClass(this.cells[idx], 'active');
 
-    if (this.selectedButton !== idx && this.selectionCallback)
-      this.selectionCallback(idx);
+    if (this.selectedButton !== idx && this.selectionCallback) this.selectionCallback(idx);
     this.selectedButton = idx;
   }
 
   show(show) {
-    this.container.style.display = show ? "flex" : "none";
+    this.container.style.display = show ? 'flex' : 'none';
   }
 }
 
@@ -214,11 +204,7 @@ const empty = () => {};
 
 class MouseListener {
   constructor({
-    target,
-    mouseDownCallback,
-    mouseUpCallback,
-    mouseMoveCallback,
-    scale
+    target, mouseDownCallback, mouseUpCallback, mouseMoveCallback, scale,
   }) {
     this.target = target;
     this.mouseDownCallback = mouseDownCallback || empty;
@@ -228,28 +214,26 @@ class MouseListener {
     this.mouseUpHandler = this.mouseUp.bind(this);
     this.mouseMoveHandler = this.mouseMove.bind(this);
 
-    target.addEventListener("mousedown", evt => this.mouseDown(evt));
+    target.addEventListener('mousedown', evt => this.mouseDown(evt));
   }
 
   mouseDown(evt) {
     evt.preventDefault();
     this.mouseStart = this.mapMouseEvent(evt);
     this.mouseDownCallback(this.mouseStart);
-    document.addEventListener("mouseup", this.mouseUpHandler);
-    document.addEventListener("mousemove", this.mouseMoveHandler);
+    document.addEventListener('mouseup', this.mouseUpHandler);
+    document.addEventListener('mousemove', this.mouseMoveHandler);
   }
 
   mouseUp(evt) {
     this.mouseUpCallback(this.mapMouseEvent(evt));
-    document.removeEventListener("mouseup", this.mouseUpHandler);
-    document.removeEventListener("mousemove", this.mouseMoveHandler);
+    document.removeEventListener('mouseup', this.mouseUpHandler);
+    document.removeEventListener('mousemove', this.mouseMoveHandler);
   }
 
   mouseMove(evt) {
     const newPoint = this.mapMouseEvent(evt);
-    const diff = newPoint.map((item, index) => {
-      return item - this.mouseStart[index];
-    });
+    const diff = newPoint.map((item, index) => item - this.mouseStart[index]);
     this.mouseMoveCallback(diff);
     this.mouseStart = newPoint;
   }

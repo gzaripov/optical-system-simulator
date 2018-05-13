@@ -1,4 +1,4 @@
-import Draggable from "./Draggable";
+import Draggable from './Draggable';
 
 export default class LightEmitter extends Draggable {
   /**
@@ -8,7 +8,9 @@ export default class LightEmitter extends Draggable {
    * @param {float} spatialSpread 'Width' of emitter
    * @param {[float, float]} angularSpread Angular spread of emitter
    */
-  constructor({ pos, power, spatialSpread, angularSpread }) {
+  constructor({
+    pos, power, spatialSpread, angularSpread,
+  }) {
     super(pos);
     this.power = power;
     this.spatialSpread = spatialSpread;
@@ -17,17 +19,8 @@ export default class LightEmitter extends Draggable {
 
   to4fvFormat() {
     return [
-      [
-        ...this.pos,
-        Math.cos(this.angularSpread[0]),
-        -Math.sin(this.angularSpread[0])
-      ],
-      [
-        this.emitterPower,
-        this.spatialSpread,
-        -this.angularSpread[0],
-        this.angularSpread[1]
-      ]
+      [...this.pos, Math.cos(this.angularSpread[0]), -Math.sin(this.angularSpread[0])],
+      [this.emitterPower, this.spatialSpread, -this.angularSpread[0], this.angularSpread[1]],
     ];
   }
 }

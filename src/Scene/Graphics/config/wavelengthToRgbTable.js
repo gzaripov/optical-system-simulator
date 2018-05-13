@@ -1023,7 +1023,7 @@ function wavelengthToRgbTable() {
     +0.00326,
     -0.00045,
     -0.00003,
-    0.0
+    0.0,
   ]);
 }
 

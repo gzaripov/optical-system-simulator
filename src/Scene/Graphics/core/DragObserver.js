@@ -7,9 +7,7 @@ export default class DragObserver {
   }
 
   select(pos) {
-    console.log("select");
     this.selected = this.movables.findIndex(movable => movable.contains(pos));
-    console.log(this.selected);
   }
 
   move(pos) {
@@ -21,8 +19,6 @@ export default class DragObserver {
   }
 
   deselect() {
-    console.log("unselect");
     this.selected = -1;
-    console.log(this.selected);
   }
 }

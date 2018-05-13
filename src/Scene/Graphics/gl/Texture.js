@@ -1,15 +1,6 @@
 class Texture {
-  constructor(
-    gl,
-    width,
-    height,
-    channels,
-    isFloat,
-    isLinear,
-    isClamped,
-    texels
-  ) {
-    var coordMode = isClamped ? gl.CLAMP_TO_EDGE : gl.REPEAT;
+  constructor(gl, width, height, channels, isFloat, isLinear, isClamped, texels) {
+    const coordMode = isClamped ? gl.CLAMP_TO_EDGE : gl.REPEAT;
     this.type = isFloat ? gl.FLOAT : gl.UNSIGNED_BYTE;
     this.format = [gl.LUMINANCE, gl.RG, gl.RGB, gl.RGBA][channels - 1];
     this.gl = gl;
@@ -27,7 +18,7 @@ class Texture {
       0,
       this.format,
       this.type,
-      texels
+      texels,
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, coordMode);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, coordMode);
@@ -38,7 +29,7 @@ class Texture {
 
   setSmooth(smooth) {
     const { gl } = this;
-    let interpMode = smooth ? gl.LINEAR : gl.NEAREST;
+    const interpMode = smooth ? gl.LINEAR : gl.NEAREST;
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, interpMode);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, interpMode);
   }
@@ -54,7 +45,7 @@ class Texture {
       0,
       this.format,
       this.type,
-      texels
+      texels,
     );
   }
 
