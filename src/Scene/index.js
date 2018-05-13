@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import AddIcon from 'mdi-react/PlusIcon';
+import { HamburgerSlider } from 'react-animated-burgers';
+// import AddIcon from 'mdi-react/MenuIcon';
 import Button from '../ui/Button';
 import Graphics from './Graphics';
 import RaysTracedProgress from './RaysTracedProgress';
-
-const AddAction = styled(Button)`
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 16px;
-`;
-
-const Add = styled(AddIcon)`
-  fill: white;
-`;
 
 const ProgressLevel = styled.div`
   display: flex;
@@ -41,6 +31,23 @@ const Info = styled.div`
   opacity: ${p => (p.shown ? '1' : '0')};
 `;
 
+const Pane = styled.div`
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: ${p => (p.opened ? '300px' : '0')};
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: 0.5s;
+`;
+
+const HamburgerContainer = styled(Button)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: scale(0.5);
+`;
+
 class Scene extends Component {
   state = {
     width: 0,
@@ -48,6 +55,7 @@ class Scene extends Component {
     scale: 1,
     raysTraced: 0,
     maxRayCount: 1,
+    paneOpened: false,
     lenses: [],
   };
 
@@ -67,9 +75,15 @@ class Scene extends Component {
     this.setState({ lenses: [...lenses, lens] });
   };
 
+  togglePane = () => {
+    const { paneOpened } = this.state;
+    console.log(`toggle ${paneOpened}`);
+    this.setState({ paneOpened: !paneOpened });
+  };
+
   render() {
     const {
-      width, height, scale, raysTraced, maxRayCount, lenses,
+      width, height, scale, raysTraced, maxRayCount, lenses, paneOpened,
     } = this.state;
     const progress = raysTraced / maxRayCount * 100;
     const percent = Math.round(progress);
@@ -91,9 +105,10 @@ class Scene extends Component {
           </ProgressLevel>
           <RaysTracedProgress percent={progress} showInfo={false} strokeWidth={2} />
         </Info>
-        <AddAction onClick={this.addLens}>
-          <Add />
-        </AddAction>
+        <Pane opened={paneOpened} />
+        <HamburgerContainer onClick={this.togglePane}>
+          <HamburgerSlider className="hamburger-slider" isActive={paneOpened} barColor="#fff" />
+        </HamburgerContainer>
       </SceneStyled>
     );
   }
