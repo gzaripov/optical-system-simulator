@@ -8,7 +8,7 @@ addons:
   - gzaripov.com
   apt:
     packages:
-      - libgmp3-dev
+    - libgmp3-dev
 cache:
   yarn: true
   directories:
