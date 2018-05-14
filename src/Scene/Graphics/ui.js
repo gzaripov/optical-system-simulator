@@ -240,9 +240,10 @@ class MouseListener {
 
   mapMouseEvent(evt) {
     const rect = this.target.getBoundingClientRect();
-    const x = evt.clientX - rect.left;
-    const y = evt.clientY - rect.top;
-    return [x / rect.width * 2 - 1, -(y / rect.height * 2 - 1)];
+    const side = Math.min(rect.width, rect.height);
+    const x = evt.clientX / rect.width * 2 - 1;
+    const y = -(evt.clientY / rect.height * 2 - 1);
+    return [x * (rect.width / side), y * (rect.height / side)];
   }
 }
 
