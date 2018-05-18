@@ -17,5 +17,5 @@ void main() {
     float biasCorrection = clamp(length(dir)/max(abs(dir.x), abs(dir.y)), 1.0, 1.414214);
     
     gl_Position = vec4(pos.x/Aspect, pos.y, 0.0, 1.0);
-    vColor = texture2D(RgbData, TexCoord.xy).rgb*biasCorrection;
+    vColor = texture2D(RgbData, TexCoord.xy).rgb * biasCorrection;
 }

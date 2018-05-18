@@ -259,7 +259,6 @@ class Renderer {
     this.width = width;
     this.height = height;
     this.aspect = this.width / this.height;
-
     this.screenBuffer = new Texture(gl, this.width, this.height, 4, true, false, true, null);
 
     this.waveBuffer = new Texture(gl, this.width, this.height, 4, true, false, true, null);
