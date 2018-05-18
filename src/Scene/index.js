@@ -47,6 +47,24 @@ const SideMenu = styled.div`
   padding-top: 60px;
 `;
 
+const MenuItemText = styled.p`
+  margin-left: 56px;
+  margin-bottom: 0;
+  user-select: none;
+  color: #ffffffbd;
+`;
+
+const MenuItemIcon = styled.span`
+  display: flex;
+  position: absolute;
+  left: 24px;
+  margin: auto 24px auto 0;
+
+  & > svg {
+    fill: #ffffffbd;
+  }
+`;
+
 const MenuItemStyled = styled.div`
   display: flex;
   align-items: center;
@@ -57,19 +75,16 @@ const MenuItemStyled = styled.div`
   &:hover {
     background-color: white;
   }
-`;
 
-const MenuItemText = styled.p`
-  margin-left: 56px;
-  margin-bottom: 0;
-  user-select: none;
-`;
+  &:hover ${MenuItemText} {
+    color: black;
+  }
 
-const MenuItemIcon = styled.span`
-  display: flex;
-  position: absolute;
-  left: 24px;
-  margin: auto 24px auto 0;
+  &:hover ${MenuItemIcon} {
+    & > svg {
+      fill: black;
+    }
+  }
 `;
 
 const MenuItem = ({ icon, text, className }) => (
