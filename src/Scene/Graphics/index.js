@@ -2,12 +2,30 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { scene as config, gasDischargeLines } from './config';
-import { Renderer, SpectrumRenderer, DragObserver, Lens, colorBufferFloatTest } from './core';
+import {
+  Renderer,
+  BoundsRenderer,
+  SpectrumRenderer,
+  DragObserver,
+  Lens,
+  colorBufferFloatTest,
+} from './core';
 import { ButtonGroup, Slider, ButtonGrid, MouseListener } from './ui';
 
+const CanvasContainer = styled.div`
+  position: relative;
+`;
+
 const Canvas = styled.canvas`
+  position: absolute;
+  left:0;
+  right:0
   width: ${p => `${p.blockWidth}px`};
   height: ${p => `${p.blockHeight}px`};
+`;
+
+const BoundsCanvas = Canvas.extend`
+  pointer-events: none;
 `;
 
 const lenses = [
@@ -109,6 +127,7 @@ class Graphics extends Component {
     if (!floatBufExt) colorBufferFloatTest(gl, multiBufExt);
 
     this.gl = gl;
+    this.helperCanvas = this.altCanvas.getContext('2d');
     this.multiBufExt = multiBufExt;
   }
 
@@ -127,6 +146,12 @@ class Graphics extends Component {
       this.canvas.width,
       this.canvas.height,
       sceneShaders,
+    );
+
+    this.boundsRenderer = new BoundsRenderer(
+      this.helperCanvas,
+      this.canvas.width,
+      this.canvas.height,
     );
 
     this.renderer.lenses = lenses;
@@ -249,7 +274,11 @@ class Graphics extends Component {
   renderLoop(timestamp) {
     window.requestAnimationFrame(this.boundRenderLoop);
 
-    if (!this.renderer.finished()) this.renderer.render(timestamp);
+    if (!this.renderer.finished()) {
+      this.renderer.render(timestamp);
+      this.boundsRenderer.clear();
+      lenses.forEach(lense => this.boundsRenderer.draw(lense));
+    }
 
     const raysTraced = this.renderer.totalRaysTraced();
     const maxRayCount = this.renderer.maxRayCount();
@@ -264,16 +293,28 @@ class Graphics extends Component {
     const canvasWidth = Math.floor(width * scale);
     const canvasHeight = Math.floor(height * scale);
     return (
-      <Canvas
-        innerRef={(c) => {
-          this.canvas = c;
-          return this.canvas;
-        }}
-        blockWidth={width}
-        blockHeight={height}
-        width={`${canvasWidth}px`}
-        height={`${canvasHeight}px`}
-      />
+      <CanvasContainer>
+        <Canvas
+          innerRef={(c) => {
+            this.canvas = c;
+            return this.canvas;
+          }}
+          blockWidth={width}
+          blockHeight={height}
+          width={`${canvasWidth}px`}
+          height={`${canvasHeight}px`}
+        />
+        <BoundsCanvas
+          innerRef={(c) => {
+            this.altCanvas = c;
+            return this.altCanvas;
+          }}
+          blockWidth={width}
+          blockHeight={height}
+          width={`${canvasWidth}px`}
+          height={`${canvasHeight}px`}
+        />
+      </CanvasContainer>
     );
   }
 }

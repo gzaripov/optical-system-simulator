@@ -1,3 +1,5 @@
+import { normalizeCords } from 'helpers';
+
 function stripClass(node, className) {
   node.className = node.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`), '');
 }
@@ -240,10 +242,8 @@ class MouseListener {
 
   mapMouseEvent(evt) {
     const rect = this.target.getBoundingClientRect();
-    const side = Math.min(rect.width, rect.height);
-    const x = evt.clientX / rect.width * 2 - 1;
-    const y = -(evt.clientY / rect.height * 2 - 1);
-    return [x * (rect.width / side), y * (rect.height / side)];
+    const { clientX, clientY } = evt;
+    return normalizeCords(clientX, clientY, rect.width, rect.height);
   }
 }
 
