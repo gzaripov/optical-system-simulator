@@ -5,7 +5,7 @@ import PlusIcon from 'mdi-react/PlusIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
 
 const SideMenuStyled = styled.div`
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
