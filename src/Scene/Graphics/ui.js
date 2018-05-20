@@ -1,13 +1,5 @@
 import { normalizeCords } from 'helpers';
 
-function stripClass(node, className) {
-  node.className = node.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`), '');
-}
-
-function addClass(node, className) {
-  if (node.className.indexOf(className) === -1) node.className += ` ${className}`;
-}
-
 class ButtonGroup {
   constructor(targetId, vertical, labels, selectionCallback) {
     this.selectionCallback = selectionCallback;
@@ -45,9 +37,6 @@ class ButtonGroup {
 
   select(idx) {
     if (idx < 0 || idx >= this.buttons.length) return;
-
-    stripClass(this.buttons[this.selectedButton], 'active');
-    addClass(this.buttons[idx], 'active');
 
     if (this.selectedButton !== idx && this.selectionCallback) this.selectionCallback(idx);
     this.selectedButton = idx;
@@ -107,8 +96,8 @@ class Slider {
     if (this.label) this.label.textContent = text;
   }
 
-  setValue(value) {
-    value = Math.min(this.maxValue, Math.max(this.minValue, value));
+  setValue(val) {
+    const value = Math.min(this.maxValue, Math.max(this.minValue, val));
     if (value !== this.value) {
       this.value = value;
       const percentage = Math.max(
@@ -164,13 +153,6 @@ class ButtonGrid {
       cell.className = 'button stretch-button button-grid-button';
       cell.appendChild(document.createTextNode(labels[i]));
 
-      if (i === 0) addClass(cell, 'button-grid-tl');
-      if (i === this.cols - 1) addClass(cell, 'button-grid-tr');
-      if (i + this.cols >= labels.length) {
-        if (column === 0) addClass(cell, 'button-grid-bl');
-        if (column === this.cols - 1 || i === labels.length - 1) addClass(cell, 'button-grid-br');
-      }
-
       cell.addEventListener(
         'click',
         function selectIdx(idx) {
@@ -189,9 +171,6 @@ class ButtonGrid {
 
   select(idx) {
     if (idx < 0 || idx >= this.cells.length) return;
-
-    stripClass(this.cells[this.selectedButton], 'active');
-    addClass(this.cells[idx], 'active');
 
     if (this.selectedButton !== idx && this.selectionCallback) this.selectionCallback(idx);
     this.selectedButton = idx;

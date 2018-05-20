@@ -1,18 +1,24 @@
+import set from 'lodash/fp/set';
+
+function checkParams(state, modal) {
+  if (state[modal === undefined]) {
+    // eslint-disable-next-line no-throw-literal
+    throw `${modal} is not specified in the state`;
+  }
+}
+
 const modals = {
   state: {
-    modals: {
-      addLens: false,
-    },
+    addLens: false,
   },
   reducers: {
-    toggleModal(state, payload) {
-      return {
-        ...state,
-        modals: {
-          ...state.modals,
-          addLens: payload.addLens,
-        },
-      };
+    showModal(state, modal) {
+      checkParams(state, modal);
+      return set(modal, true, state);
+    },
+    hideModal(state, modal) {
+      checkParams(state, modal);
+      return set(modal, false, state);
     },
   },
 };

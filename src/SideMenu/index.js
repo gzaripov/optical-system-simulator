@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import PlusIcon from 'mdi-react/PlusIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
+import { connect } from 'react-redux';
 
 const SideMenuStyled = styled.div`
   position: fixed;
@@ -58,8 +59,10 @@ const MenuItemStyled = styled.div`
   }
 `;
 
-const MenuItem = ({ icon, text, className }) => (
-  <MenuItemStyled className={className}>
+const MenuItem = ({
+  icon, text, onClick, className,
+}) => (
+  <MenuItemStyled className={className} onClick={onClick}>
     {icon && <MenuItemIcon>{icon}</MenuItemIcon>}
     <MenuItemText>{text}</MenuItemText>
   </MenuItemStyled>
@@ -68,17 +71,19 @@ const MenuItem = ({ icon, text, className }) => (
 MenuItem.defaultProps = {
   icon: '',
   className: '',
+  onClick: () => {},
 };
 
 MenuItem.propTypes = {
   text: PropTypes.string.isRequired,
   icon: PropTypes.element,
   className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
-const SideMenu = ({ opened }) => (
+const SideMenu = ({ opened, showAddLens }) => (
   <SideMenuStyled opened={opened}>
-    <MenuItem icon={<PlusIcon />} text="Add Lens" />
+    <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" />
     <MenuItem icon={<MinusIcon />} text="Settings" />
     <MenuItem icon={<MinusIcon />} text="Load scene" />
@@ -88,10 +93,16 @@ const SideMenu = ({ opened }) => (
 
 SideMenu.defaultProps = {
   opened: false,
+  showAddLens: () => {},
 };
 
 SideMenu.propTypes = {
   opened: PropTypes.bool,
+  showAddLens: PropTypes.func,
 };
 
-export default SideMenu;
+const mapDispatch = ({ modals }) => ({
+  showAddLens: () => modals.showModal('addLens'),
+});
+
+export default connect(null, mapDispatch)(SideMenu);

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { HamburgerSlider } from 'react-animated-burgers';
-import Button from '../ui/Button';
 import Graphics from './Graphics';
-import SideMenu from './SideMenu';
 import RaysTracedProgress from './RaysTracedProgress';
 
 const ProgressLevel = styled.div`
@@ -18,7 +15,6 @@ const ProgressLevel = styled.div`
 const SceneStyled = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
 `;
 
 const Info = styled.div`
@@ -31,13 +27,6 @@ const Info = styled.div`
   opacity: ${p => (p.shown ? '1' : '0')};
 `;
 
-const HamburgerContainer = styled(Button)`
-  position: absolute;
-  left: 0;
-  top: 2px;
-  transform: scale(0.5);
-`;
-
 class Scene extends Component {
   state = {
     width: 0,
@@ -45,7 +34,6 @@ class Scene extends Component {
     scale: 1,
     raysTraced: 0,
     maxRayCount: 1,
-    paneOpened: false,
     lenses: [],
   };
 
@@ -65,14 +53,9 @@ class Scene extends Component {
     this.setState({ lenses: [...lenses, lens] });
   };
 
-  togglePane = () => {
-    const { paneOpened } = this.state;
-    this.setState({ paneOpened: !paneOpened });
-  };
-
   render() {
     const {
-      width, height, scale, raysTraced, maxRayCount, lenses, paneOpened,
+      width, height, scale, raysTraced, maxRayCount, lenses,
     } = this.state;
     const progress = raysTraced / maxRayCount * 100;
     const percent = Math.round(progress);
@@ -95,12 +78,6 @@ class Scene extends Component {
           </ProgressLevel>
           <RaysTracedProgress percent={progress} showInfo={false} strokeWidth={2} />
         </Info>
-
-        <SideMenu opened={paneOpened} />
-
-        <HamburgerContainer onClick={this.togglePane}>
-          <HamburgerSlider className="hamburger-slider" isActive={paneOpened} barColor="#fff" />
-        </HamburgerContainer>
       </SceneStyled>
     );
   }
