@@ -65,6 +65,7 @@ export default class Lens extends Draggable /* Drawable */ {
     return px >= x1 && px <= x2 && py >= y1 && py <= y2;
   }
 
+  /* eslint-disable no-unused-vars */
   drawToCanvas(ctx, w, h) {
     const [x, y] = denormalizeCords(...this.pos, w, h);
     const { width, height } = this;
@@ -76,7 +77,7 @@ export default class Lens extends Draggable /* Drawable */ {
     ctx.beginPath();
     ctx.lineWidth = '1';
     ctx.strokeStyle = 'white';
-    ctx.rect(x1, y1, w1, h1);
+    // ctx.rect(x1, y1, w1, h1);
     // ctx.arc(x + 280, y, this.leftRadius * width * wt, 0, 2 * Math.PI);
     ctx.stroke();
   }
