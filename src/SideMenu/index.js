@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import PlusIcon from 'mdi-react/PlusIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
 import { connect } from 'react-redux';
+import save from 'save-file';
 
 const SideMenuStyled = styled.div`
   position: fixed;
@@ -81,13 +82,17 @@ MenuItem.propTypes = {
   onClick: PropTypes.func,
 };
 
-const SideMenu = ({ opened, showAddLens }) => (
+function exportScene(scene) {
+  save(JSON.stringify(scene), 'scene.json');
+}
+
+const SideMenu = ({ opened, showAddLens, scene }) => (
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" />
     <MenuItem icon={<MinusIcon />} text="Settings" />
     <MenuItem icon={<MinusIcon />} text="Load scene" />
-    <MenuItem icon={<MinusIcon />} text="Export scene" />
+    <MenuItem icon={<MinusIcon />} text="Export scene" onClick={() => exportScene(scene)} />
   </SideMenuStyled>
 );
 
@@ -101,8 +106,10 @@ SideMenu.propTypes = {
   showAddLens: PropTypes.func,
 };
 
+const mapState = ({ scene }) => ({ scene });
+
 const mapDispatch = ({ modals }) => ({
   showAddLens: () => modals.showModal('addLens'),
 });
 
-export default connect(null, mapDispatch)(SideMenu);
+export default connect(mapState, mapDispatch)(SideMenu);
