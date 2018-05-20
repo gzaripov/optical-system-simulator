@@ -1,4 +1,5 @@
 import { denormalizeCords } from 'helpers';
+import uniqid from 'uniqid';
 import Draggable from './Draggable';
 
 export default class Lens extends Draggable /* Drawable */ {
@@ -22,6 +23,7 @@ export default class Lens extends Draggable /* Drawable */ {
     type, pos, height, width, leftRadius, rightRadius,
   }) {
     super(pos);
+    this.id = uniqid();
     this.type = type;
     this.height = height;
     this.width = width;

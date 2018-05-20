@@ -18,7 +18,8 @@
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.1",
     "redux": "^4.0.0",
-    "styled-components": "^3.2.3"
+    "styled-components": "^3.2.3",
+    "uniqid": "^4.1.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
