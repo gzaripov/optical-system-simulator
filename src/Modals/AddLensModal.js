@@ -121,9 +121,8 @@ class AddLensModal extends Component {
   }
 }
 
-const mapState = ({ modals, scene }) => ({
+const mapState = ({ modals }) => ({
   opened: modals.addLens,
-  sd: console.log(scene.lenses),
 });
 
 const mapDispatch = ({ modals, scene }) => ({

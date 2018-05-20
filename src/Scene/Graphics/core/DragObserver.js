@@ -1,9 +1,13 @@
+function uniqueArray(arrArg) {
+  return arrArg.filter((elem, pos, arr) => arr.indexOf(elem) === pos);
+}
+
 export default class DragObserver {
   selected = -1;
   movables = [];
 
   addMovable(movables) {
-    this.movables.push(...movables);
+    this.movables = uniqueArray(this.movables.concat(movables));
   }
 
   select(pos) {

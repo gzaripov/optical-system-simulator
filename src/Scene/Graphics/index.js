@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { scene as config, gasDischargeLines } from './config';
 import {
   Renderer,
   BoundsRenderer,
   SpectrumRenderer,
   DragObserver,
-  Lens,
+  /* Lens, */
   colorBufferFloatTest,
 } from './core';
 import { ButtonGroup, Slider, ButtonGrid, MouseListener } from './ui';
@@ -28,16 +29,7 @@ const BoundsCanvas = Canvas.extend`
   pointer-events: none;
 `;
 
-const lenses = [
-  new Lens({
-    type: Lens.TYPE.BICONVEX,
-    pos: [-0.5, 0.0],
-    height: 0.375,
-    width: 0.15,
-    leftRadius: 0.75,
-    rightRadius: 0.75,
-  }),
-  /* new Lens({
+/* new Lens({
     type: Lens.TYPE.BICONCAVE,
     pos: [0.5, 0.0],
     height: 0.375,
@@ -61,7 +53,6 @@ const lenses = [
     leftRadius: 0.75,
     rightRadius: 0.75
   }) */
-];
 
 class Graphics extends Component {
   propTypes = {
@@ -69,10 +60,12 @@ class Graphics extends Component {
     height: PropTypes.number,
     scale: PropTypes.number,
     onProgressChanged: PropTypes.func,
+    lenses: PropTypes.arrayOf(PropTypes.shape()),
   };
 
   defaultProps = {
     scale: 1.0,
+    lenses: [],
     onProgressChanged: () => {},
   };
 
@@ -80,7 +73,7 @@ class Graphics extends Component {
     this.dragObserver = new DragObserver();
     this.controls = document.getElementById('controls');
     this.spectrumCanvas = document.getElementById('spectrum-canvas');
-    this.dragObserver.addMovable(lenses);
+    this.dragObserver.addMovable(this.props.lenses);
     this.boundRenderLoop = this.renderLoop.bind(this);
     try {
       this.setupGL();
@@ -153,8 +146,6 @@ class Graphics extends Component {
       this.canvas.width,
       this.canvas.height,
     );
-
-    this.renderer.lenses = lenses;
 
     this.spectrumRenderer = new SpectrumRenderer(
       this.spectrumCanvas,
@@ -275,9 +266,11 @@ class Graphics extends Component {
     window.requestAnimationFrame(this.boundRenderLoop);
 
     if (!this.renderer.finished()) {
+      this.renderer.lenses = this.props.lenses;
+      this.dragObserver.addMovable(this.props.lenses);
       this.renderer.render(timestamp);
       this.boundsRenderer.clear();
-      lenses.forEach(lense => this.boundsRenderer.draw(lense));
+      this.props.lenses.forEach(lense => this.boundsRenderer.draw(lense));
     }
 
     const raysTraced = this.renderer.totalRaysTraced();
@@ -319,4 +312,13 @@ class Graphics extends Component {
   }
 }
 
-export default Graphics;
+const mapState = ({ scene }) => ({
+  lenses: scene.lenses,
+});
+
+const mapDispatch = ({ modals, scene }) => ({
+  onClose: () => modals.hideModal('addLens'),
+  addLens: scene.addLens,
+});
+
+export default connect(mapState, mapDispatch)(Graphics);
