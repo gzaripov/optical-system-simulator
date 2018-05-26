@@ -29,31 +29,6 @@ const BoundsCanvas = Canvas.extend`
   pointer-events: none;
 `;
 
-/* new Lens({
-    type: Lens.TYPE.BICONCAVE,
-    pos: [0.5, 0.0],
-    height: 0.375,
-    width: 0.15,
-    leftDiameter: 0.75,
-    rightDiameter: 0.75
-  }),
-  new Lens({
-    type: Lens.TYPE.BICONVEX,
-    pos: [0.0, 0.5],
-    height: 0.375,
-    width: 0.15,
-    leftDiameter: 0.75,
-    rightDiameter: 0.75
-  }),
-  new Lens({
-    type: Lens.TYPE.BICONVEX,
-    pos: [0.0, -0.5],
-    height: 0.375,
-    width: 0.15,
-    leftDiameter: 0.75,
-    rightDiameter: 0.75
-  }) */
-
 class Graphics extends Component {
   static propTypes = {
     width: PropTypes.number.isRequired,
@@ -215,6 +190,9 @@ class Graphics extends Component {
     const { width, height, scale } = this.props;
     const canvasWidth = Math.floor(width * scale);
     const canvasHeight = Math.floor(height * scale);
+    if (this.renderer) {
+      this.renderer.reset();
+    }
     return (
       <CanvasContainer>
         <Canvas

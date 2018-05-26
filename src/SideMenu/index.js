@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import PlusIcon from 'mdi-react/PlusIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
+import ImportIcon from 'mdi-react/ImportIcon';
+import ExportIcon from 'mdi-react/ExportIcon';
+import SettingsIcon from 'mdi-react/SettingsOutlineIcon';
 import { connect } from 'react-redux';
 import save from 'save-file';
 
@@ -21,7 +24,7 @@ const SideMenuStyled = styled.div`
 `;
 
 const MenuItemText = styled.p`
-  margin-left: 56px;
+  margin-left: 62px;
   margin-bottom: 0;
   user-select: none;
   color: #ffffffbd;
@@ -83,16 +86,17 @@ MenuItem.propTypes = {
 };
 
 function exportScene(scene) {
-  save(JSON.stringify(scene), 'scene.json');
+  const exportedScene = { lenses: scene.lenses.map(lens => ({ ...lens, id: undefined })) };
+  save(JSON.stringify(exportedScene), 'scene.json');
 }
 
 const SideMenu = ({ opened, showAddLens, scene }) => (
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" />
-    <MenuItem icon={<MinusIcon />} text="Settings" />
-    <MenuItem icon={<MinusIcon />} text="Load scene" />
-    <MenuItem icon={<MinusIcon />} text="Export scene" onClick={() => exportScene(scene)} />
+    <MenuItem icon={<ImportIcon />} text="Import scene" />
+    <MenuItem icon={<ExportIcon />} text="Export scene" onClick={() => exportScene(scene)} />
+    <MenuItem icon={<SettingsIcon />} text="Settings" />
   </SideMenuStyled>
 );
 
@@ -103,6 +107,7 @@ SideMenu.defaultProps = {
 
 SideMenu.propTypes = {
   opened: PropTypes.bool,
+  scene: PropTypes.shape({}).isRequired,
   showAddLens: PropTypes.func,
 };
 
