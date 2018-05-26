@@ -50,37 +50,62 @@ export default class Lens extends Draggable /* Drawable */ {
     const y1 = y - this.height;
     const x2 = x + this.width;
     const y2 = y + this.height;
-    return {
-      x1,
-      y1,
-      x2,
-      y2,
-    };
+    return [x1, y1, x2, y2];
+  }
+
+  denormalizedCoords(w, h) {
+    const [x1, y1, x2, y2] = this.coords();
+    const [nx1, ny1] = denormalizeCords(x1, y1, w, h);
+    const [nx2, ny2] = denormalizeCords(x2, y2, w, h);
+    return [nx1, ny1, nx2, ny2];
   }
 
   contains(pos) {
-    const {
-      x1, y1, x2, y2,
-    } = this.coords();
+    const [x1, y1, x2, y2] = this.coords();
     const px = pos[0];
     const py = pos[1];
     return px >= x1 && px <= x2 && py >= y1 && py <= y2;
   }
 
-  /* eslint-disable no-unused-vars */
   drawToCanvas(ctx, w, h) {
     const [x, y] = denormalizeCords(...this.pos, w, h);
-    const { width, height } = this;
+    const { width } = this;
+    const lr = this.leftRadius / 2;
+    const cLeft = lr - width / 2;
+    const leftHeight = Math.sqrt(lr * lr - cLeft * cLeft) * 2;
+    const height = Math.min(this.height, leftHeight || this.height);
     const side = Math.min(w, h);
-    const w1 = width * w / (w / side);
-    const h1 = height * h / (h / side);
-    const x1 = x - w1 / 2;
-    const y1 = y - h1 / 2;
+    const wc = w / (w / side);
+    const leftAng = height / this.leftRadius;
+    const rightAng = height / this.rightRadius;
     ctx.beginPath();
     ctx.lineWidth = '1';
     ctx.strokeStyle = 'white';
-    // ctx.rect(x1, y1, w1, h1);
-    // ctx.arc(x + 280, y, this.leftRadius * width * wt, 0, 2 * Math.PI);
+    ctx.beginPath();
+    ctx.arc(
+      x + (this.leftRadius - width) / 2 * wc,
+      y,
+      this.leftRadius / 2 * wc,
+      Math.PI - leftAng,
+      Math.PI + leftAng,
+    );
+    ctx.arc(
+      x - (this.rightRadius - width) / 2 * wc,
+      y,
+      this.rightRadius / 2 * wc,
+      -rightAng,
+      rightAng,
+    );
+    ctx.closePath();
+    ctx.stroke();
+    this.drawRect(ctx, w, h);
+  }
+
+  drawLensBorders() {}
+
+  drawRect(ctx, w, h) {
+    const [x1, y1, x2, y2] = this.denormalizedCoords(w, h);
+    ctx.rect(x1, y1, x2 - x1, y2 - y1);
     ctx.stroke();
   }
 }
