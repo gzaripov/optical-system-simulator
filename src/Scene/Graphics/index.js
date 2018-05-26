@@ -55,15 +55,15 @@ const BoundsCanvas = Canvas.extend`
   }) */
 
 class Graphics extends Component {
-  propTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number,
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
     scale: PropTypes.number,
     onProgressChanged: PropTypes.func,
     lenses: PropTypes.arrayOf(PropTypes.shape()),
   };
 
-  defaultProps = {
+  static defaultProps = {
     scale: 1.0,
     lenses: [],
     onProgressChanged: () => {},

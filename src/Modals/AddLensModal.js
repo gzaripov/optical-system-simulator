@@ -26,13 +26,13 @@ const LensType = Label.extend`
 `;
 
 class AddLensModal extends Component {
-  propTypes = {
+  static propTypes = {
     opened: PropTypes.bool,
     onClose: PropTypes.func,
     addLens: PropTypes.func,
   };
 
-  defaultProps = {
+  static defaultProps = {
     opened: false,
     onClose: () => {},
     addLens: () => {},

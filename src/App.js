@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { HamburgerSlider } from 'react-animated-burgers';
-import Button from 'ui/Button';
 import Scene from './Scene';
 import SideMenu from './SideMenu';
 import Modals from './Modals';
 
-const HamburgerContainer = styled(Button)`
+const HamburgerContainer = styled.div`
   position: absolute;
   left: 0;
   top: 2px;
