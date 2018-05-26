@@ -19,8 +19,8 @@ const CanvasContainer = styled.div`
 
 const Canvas = styled.canvas`
   position: absolute;
-  left:0;
-  right:0
+  left: 0;
+  right: 0;
   width: ${p => `${p.blockWidth}px`};
   height: ${p => `${p.blockHeight}px`};
 `;
