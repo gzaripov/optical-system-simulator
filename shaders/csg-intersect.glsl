@@ -14,8 +14,8 @@ struct Lens {
     vec2 pos;
     float height;
     float width;
-    float leftRadius;
-    float rightRadius;
+    float leftDiameter;
+    float rightDiameter;
 };
 
 struct Intersection {
@@ -158,22 +158,22 @@ void planoConcaveLensIntersect(Ray ray, vec2 center, float h, float d, float r, 
 void lensIntersect(Ray ray, inout Intersection isect, Lens lens) {
     vec2 pos = lens.pos;
     float height = lens.height, width = lens.width;
-    float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;
+    float leftDiameter = lens.leftDiameter, rightDiameter = lens.rightDiameter;
 
     if (lens.type == LENS_BICONVEX) {
-        biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+        biconvexLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, 1.0, isect);
     }
     else if (lens.type == LENS_PLANOCONVEX) {
-        planoConvexLensIntersect(ray, pos, height, width, leftRadius, 1.0, isect);
+        planoConvexLensIntersect(ray, pos, height, width, leftDiameter, 1.0, isect);
     }
     else if (lens.type == LENS_MENISCUS) {
-        meniscusLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+        meniscusLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, 1.0, isect);
     }
     else if (lens.type == LENS_PLANOCONCAVE) {
-        planoConcaveLensIntersect(ray, pos, height, width, rightRadius, 1.0, isect);
+        planoConcaveLensIntersect(ray, pos, height, width, rightDiameter, 1.0, isect);
     }
     else if (lens.type == LENS_BICONCAVE) {
-        biconcaveLensIntersect(ray, pos, height, width, leftRadius, rightRadius, 1.0, isect);
+        biconcaveLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, 1.0, isect);
     }
     
 }

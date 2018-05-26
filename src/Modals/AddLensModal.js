@@ -42,8 +42,8 @@ class AddLensModal extends Component {
     type: Lens.TYPE.BICONVEX,
     width: 0.15,
     height: 0.375,
-    leftRadius: 0.75,
-    rightRadius: 0.75,
+    leftDiameter: 0.75,
+    rightDiameter: 0.75,
   };
 
   onLensTypeChange = (e) => {
@@ -62,7 +62,7 @@ class AddLensModal extends Component {
   render() {
     const { opened, onClose } = this.props;
     const {
-      type, width, height, leftRadius, rightRadius,
+      type, width, height, leftDiameter, rightDiameter,
     } = this.state;
     const isLensPlane = type === Lens.TYPE.PLANOCONVEX || type === Lens.TYPE.PLANOCONCAVE;
     return (
@@ -102,18 +102,18 @@ class AddLensModal extends Component {
         <SliderInput
           min={0.1}
           max={2}
-          value={leftRadius}
+          value={leftDiameter}
           step={0.01}
-          onChange={this.onNumericalChange('leftRadius')}
+          onChange={this.onNumericalChange('leftDiameter')}
         />
         {!isLensPlane && <Label>Right Radius:</Label>}
         {!isLensPlane && (
           <SliderInput
             min={0.1}
             max={2}
-            value={rightRadius}
+            value={rightDiameter}
             step={0.01}
-            onChange={this.onNumericalChange('rightRadius')}
+            onChange={this.onNumericalChange('rightDiameter')}
           />
         )}
       </Modal>

@@ -403,8 +403,8 @@ export default {
     '    vec2 pos;\n' +
     '    float height;\n' +
     '    float width;\n' +
-    '    float leftRadius;\n' +
-    '    float rightRadius;\n' +
+    '    float leftDiameter;\n' +
+    '    float rightDiameter;\n' +
     '};\n\n' +
     'struct Intersection {\n' +
     '    float tMin;\n' +
@@ -540,25 +540,25 @@ export default {
     'void lensIntersect(Ray ray, inout Intersection isect, Lens lens) {\n' +
     '    vec2 pos = lens.pos;\n' +
     '    float height = lens.height, width = lens.width;\n' +
-    '    float leftRadius = lens.leftRadius, rightRadius = lens.rightRadius;\n\n' +
+    '    float leftDiameter = lens.leftDiameter, rightDiameter = lens.rightDiameter;\n\n' +
     '    if (lens.type == LENS_BICONVEX) {\n' +
-    '        biconvexLensIntersect(ray, pos, height, width, leftRadius, rightRadius, ' +
+    '        biconvexLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, ' +
     '1.0, isect);\n' +
     '    }\n' +
     '    else if (lens.type == LENS_PLANOCONVEX) {\n' +
-    '        planoConvexLensIntersect(ray, pos, height, width, leftRadius, 1.0, isect' +
+    '        planoConvexLensIntersect(ray, pos, height, width, leftDiameter, 1.0, isect' +
     ');\n' +
     '    }\n' +
     '    else if (lens.type == LENS_MENISCUS) {\n' +
-    '        meniscusLensIntersect(ray, pos, height, width, leftRadius, rightRadius, ' +
+    '        meniscusLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, ' +
     '1.0, isect);\n' +
     '    }\n' +
     '    else if (lens.type == LENS_PLANOCONCAVE) {\n' +
-    '        planoConcaveLensIntersect(ray, pos, height, width, rightRadius, 1.0, ise' +
+    '        planoConcaveLensIntersect(ray, pos, height, width, rightDiameter, 1.0, ise' +
     'ct);\n' +
     '    }\n' +
     '    else if (lens.type == LENS_BICONCAVE) {\n' +
-    '        biconcaveLensIntersect(ray, pos, height, width, leftRadius, rightRadius,' +
+    '        biconcaveLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter,' +
     ' 1.0, isect);\n' +
     '    }\n\n' +
     '}\n',

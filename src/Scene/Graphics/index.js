@@ -34,24 +34,24 @@ const BoundsCanvas = Canvas.extend`
     pos: [0.5, 0.0],
     height: 0.375,
     width: 0.15,
-    leftRadius: 0.75,
-    rightRadius: 0.75
+    leftDiameter: 0.75,
+    rightDiameter: 0.75
   }),
   new Lens({
     type: Lens.TYPE.BICONVEX,
     pos: [0.0, 0.5],
     height: 0.375,
     width: 0.15,
-    leftRadius: 0.75,
-    rightRadius: 0.75
+    leftDiameter: 0.75,
+    rightDiameter: 0.75
   }),
   new Lens({
     type: Lens.TYPE.BICONVEX,
     pos: [0.0, -0.5],
     height: 0.375,
     width: 0.15,
-    leftRadius: 0.75,
-    rightRadius: 0.75
+    leftDiameter: 0.75,
+    rightDiameter: 0.75
   }) */
 
 class Graphics extends Component {

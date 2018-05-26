@@ -16,31 +16,31 @@ export default class Lens extends Draggable /* Drawable */ {
    * @param {[float, float]} pos Lens center position
    * @param {float} height Height of lens
    * @param {float} width Width of lens
-   * @param {float} leftRadius Left radius of lens
-   * @param {float} rightRadius Right ridius of lens
+   * @param {float} leftDiameter Left radius of lens
+   * @param {float} rightDiameter Right ridius of lens
    */
   constructor({
-    type, pos, height, width, leftRadius, rightRadius,
+    type, pos, height, width, leftDiameter, rightDiameter,
   }) {
     super(pos);
     this.id = uniqid();
     this.type = type;
     this.height = height;
     this.width = width;
-    this.leftRadius = leftRadius || 0.0;
-    this.rightRadius = rightRadius || 0.0;
+    this.leftDiameter = leftDiameter || 0.0;
+    this.rightDiameter = rightDiameter || 0.0;
   }
 
   to4fvFormat(shader, index) {
     const {
-      type, pos, height, width, leftRadius, rightRadius,
+      type, pos, height, width, leftDiameter, rightDiameter,
     } = this;
     shader.uniformI(`Lenses[${index}].type`, type);
     shader.uniform2F(`Lenses[${index}].pos`, ...pos);
     shader.uniformF(`Lenses[${index}].height`, height);
     shader.uniformF(`Lenses[${index}].width`, width);
-    shader.uniformF(`Lenses[${index}].leftRadius`, leftRadius);
-    shader.uniformF(`Lenses[${index}].rightRadius`, rightRadius);
+    shader.uniformF(`Lenses[${index}].leftDiameter`, leftDiameter);
+    shader.uniformF(`Lenses[${index}].rightDiameter`, rightDiameter);
   }
 
   coords() {
@@ -70,29 +70,29 @@ export default class Lens extends Draggable /* Drawable */ {
   drawToCanvas(ctx, w, h) {
     const [x, y] = denormalizeCords(...this.pos, w, h);
     const { width } = this;
-    const lr = this.leftRadius / 2;
+    const lr = this.leftDiameter / 2;
     const cLeft = lr - width / 2;
     const leftHeight = Math.sqrt(lr * lr - cLeft * cLeft) * 2;
     const height = Math.min(this.height, leftHeight || this.height);
     const side = Math.min(w, h);
     const wc = w / (w / side);
-    const leftAng = height / this.leftRadius;
-    const rightAng = height / this.rightRadius;
+    const leftAng = height / this.leftDiameter;
+    const rightAng = height / this.rightDiameter;
     ctx.beginPath();
     ctx.lineWidth = '1';
     ctx.strokeStyle = 'white';
     ctx.beginPath();
     ctx.arc(
-      x + (this.leftRadius - width) / 2 * wc,
+      x + (this.leftDiameter - width) / 2 * wc,
       y,
-      this.leftRadius / 2 * wc,
+      this.leftDiameter / 2 * wc,
       Math.PI - leftAng,
       Math.PI + leftAng,
     );
     ctx.arc(
-      x - (this.rightRadius - width) / 2 * wc,
+      x - (this.rightDiameter - width) / 2 * wc,
       y,
-      this.rightRadius / 2 * wc,
+      this.rightDiameter / 2 * wc,
       -rightAng,
       rightAng,
     );
