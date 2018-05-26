@@ -1,9 +1,8 @@
 import { Renderer } from '../core';
 
-const map = (a, b) => [a * 0.5 / 1.78 + 0.5, -b * 0.5 + 0.5];
+// const map = (a, b) => [a * 0.5 / 1.78 + 0.5, -b * 0.5 + 0.5];
 
 const config = {
-  resolutions: [[820, 461], [1024, 576], [1280, 720], [1600, 900], [1920, 1080], [4096, 2160]],
   scenes: [
     {
       shader: 'scene1',
@@ -12,7 +11,7 @@ const config = {
       posB: [0.5, 0.5],
       spread: Renderer.SPREAD_POINT,
     },
-    {
+    /* {
       shader: 'scene6',
       name: 'Spheres',
       posA: map(-1.59, 0.65),
@@ -53,7 +52,7 @@ const config = {
       posA: [0.25, 0.125],
       posB: [0.5, 0.66],
       spread: Renderer.SPREAD_LASER,
-    },
+    }, */
   ],
 };
 

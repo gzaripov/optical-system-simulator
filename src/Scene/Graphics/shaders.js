@@ -308,64 +308,6 @@ export default {
     '    gl_Position = vec4(Position, 1.0);\n' +
     '}\n',
 
-  scene7:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(0.0, 0.0), 0.4, 1.0, isect);\n' +
-    '    biconvexLensIntersect(ray, vec2(-0.4, -0.65), 0.3, 0.12, 0.5, 0.5, 1.0, isec' +
-    't);\n' +
-    '    meniscusLensIntersect(ray, vec2(-0.8, -0.65), 0.3, 0.08, -0.5, -0.5, 1.0, is' +
-    'ect);\n' +
-    '    planoConcaveLensIntersect(ray, vec2(1.3, 0.0), 0.3, 0.0, 0.3, 2.0, isect);\n' +
-    '    prismIntersect(ray, vec2(0.8, -0.7), 0.2, 1.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 1.0) {\n' +
-    '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
-    '96, 147.4688), lambda)/1.6; // SF10\n' +
-    '        return sampleDielectric(state, wiLocal, ior);\n' +
-    '    } else if (isect.mat == 2.0) {\n' +
-    '        return sampleMirror(wiLocal);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.25);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
-
-  scene6:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(-0.95,   0.25),    0.4, 1.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(-0.15,  -0.25),    0.2, 1.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(1.11667, 0.18333), 0.2, 1.0, isect);\n' +
-    '    lineIntersect(ray, vec2(0.168689, -0.885424), vec2(1.13131,  -0.614576), 2.0' +
-    ', isect);\n' +
-    '    lineIntersect(ray, vec2(1.71686,   0.310275), vec2(0.983139,  0.989725), 2.0' +
-    ', isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 1.0) {\n' +
-    '        float ior = sqrt(sellmeierIor(vec3(1.0396, 0.2318, 1.0105), vec3(0.0060,' +
-    ' 0.0200, 103.56), lambda));\n' +
-    '        return sampleDielectric(state, wiLocal, ior);\n' +
-    '    } else if (isect.mat == 2.0) {\n' +
-    '        return sampleMirror(wiLocal);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.5);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
-
   bsdf:
     'float sellmeierIor(vec3 b, vec3 c, float lambda) {\n' +
     '    float lSq = (lambda*1e-3)*(lambda*1e-3);\n' +
@@ -444,76 +386,6 @@ export default {
     '        return 2.0*wiDotM*m - wi;\n' +
     '    else\n' +
     '        return (etaM*wiDotM - cosThetaT)*m - etaM*wi;\n' +
-    '}\n',
-
-  scene5:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    planoConcaveLensIntersect(ray, vec2(0.8, 0.0), 0.6, 0.3, 0.6, 1.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 1.0) {\n' +
-    '        return sampleMirror(wiLocal);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.5);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
-
-  scene4:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    prismIntersect(ray, vec2(0.0, 0.0), 0.6, 1.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 1.0) {\n' +
-    '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
-    '96, 17.4688), lambda)/1.8;\n' +
-    '        return sampleRoughDielectric(state, wiLocal, 0.1, ior);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.05);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
-
-  scene3:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.2,  0.8), 1.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(-0.7, -0.45), 0.35, 3.0, isect);\n' +
-    '    sphereIntersect(ray, vec2( 0.7, -0.45), 0.35, 2.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 2.0) {\n' +
-    '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
-    '96, 147.4688), lambda)/1.4;\n' +
-    '        return sampleDielectric(state, wiLocal, ior);\n' +
-    '    } else if (isect.mat == 3.0) {\n' +
-    '        return sampleMirror(wiLocal);\n' +
-    '    } else if (isect.mat == 1.0) {\n' +
-    '             if (isect.n.x == -1.0) throughput *= vec3(0.14,  0.45,  0.091);\n' +
-    '        else if (isect.n.x ==  1.0) throughput *= vec3(0.63,  0.065, 0.05);\n' +
-    '        else                        throughput *= vec3(0.725, 0.71,  0.68);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.5);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
     '}\n',
 
   'csg-intersect':
@@ -695,35 +567,4 @@ export default {
     '#define PI      3.1415926536\n' +
     '#define PI_HALF 1.5707963268\n\n' +
     'precision highp float;\n',
-
-  scene2:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(-1.424, -0.8), 0.356, 1.0, isect);\n' +
-    '    sphereIntersect(ray, vec2(-0.72,  -0.8), 0.356, 2.0, isect);\n' +
-    '    sphereIntersect(ray, vec2( 0.0,   -0.8), 0.356, 3.0, isect);\n' +
-    '    sphereIntersect(ray, vec2( 0.72,  -0.8), 0.356, 4.0, isect);\n' +
-    '    sphereIntersect(ray, vec2( 1.424, -0.8), 0.356, 5.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '           if (isect.mat == 1.0) { return sampleRoughMirror(state, wiLocal, thro' +
-    'ughput, 0.02);\n' +
-    '    } else if (isect.mat == 2.0) { return sampleRoughMirror(state, wiLocal, thro' +
-    'ughput, 0.05);\n' +
-    '    } else if (isect.mat == 3.0) { return sampleRoughMirror(state, wiLocal, thro' +
-    'ughput, 0.1);\n' +
-    '    } else if (isect.mat == 4.0) { return sampleRoughMirror(state, wiLocal, thro' +
-    'ughput, 0.2);\n' +
-    '    } else if (isect.mat == 5.0) { return sampleRoughMirror(state, wiLocal, thro' +
-    'ughput, 0.5);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.5);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
 };

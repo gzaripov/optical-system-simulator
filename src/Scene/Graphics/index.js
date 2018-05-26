@@ -11,7 +11,7 @@ import {
   /* Lens, */
   colorBufferFloatTest,
 } from './core';
-import { ButtonGroup, Slider, ButtonGrid, MouseListener } from './ui';
+import MouseListener from './ui';
 
 const CanvasContainer = styled.div`
   position: relative;
@@ -153,32 +153,9 @@ class Graphics extends Component {
     );
 
     /* Let's try and make member variables in JS a little less verbose... */
-    const { spectrumRenderer, renderer, canvas } = this;
-    const resolutionLabels = [];
-    for (let i = 0; i < config.resolutions.length; ++i) {
-      resolutionLabels.push(`${config.resolutions[i][0]}x${config.resolutions[i][1]}`);
-    }
-
-    new ButtonGroup('resolution-selector', false, resolutionLabels, () => {
-      // .changeResolution(width, height);
-    });
-    const spreadSelector = new ButtonGroup(
-      'spread-selector',
-      true,
-      ['Point', 'Cone', 'Beam', 'Laser', 'Area'],
-      renderer.setSpreadType.bind(renderer),
-    );
-
-    function selectScene(idx) {
-      renderer.changeScene(idx);
-      spreadSelector.select(config.scenes[idx].spread);
-      renderer.setNormalizedEmitterPos(config.scenes[idx].posA, config.scenes[idx].posB);
-    }
-
-    new ButtonGroup('scene-selector', true, sceneNames, selectScene);
 
     new MouseListener({
-      target: canvas,
+      target: this.canvas,
       mouseMoveCallback: (pos) => {
         if (this.dragObserver.hasSelectedElement()) {
           this.dragObserver.move(pos);
@@ -190,55 +167,8 @@ class Graphics extends Component {
       scale: this.props.scale,
     });
 
-    const temperatureSlider = new Slider(
-      'emission-temperature',
-      1000,
-      10000,
-      true,
-      (temperature, slider) => {
-        slider.setLabel(`Temperature: ${temperature}K`);
-        renderer.setEmitterTemperature(temperature);
-        spectrumRenderer.setSpectrum(renderer.getEmissionSpectrum());
-      },
-    );
-
-    const bounceSlider = new Slider('path-length', 1, 20, true, (length, slider) => {
-      slider.setLabel(`${length - 1} light bounces`);
-      renderer.setMaxPathLength(length);
-    });
-    bounceSlider.setValue(12);
-
-    const sampleSlider = new Slider('sample-count', 400, 700, true, (exponent100, slider) => {
-      const sampleCount = Math.floor(10 ** (exponent100 * 0.01));
-      slider.setLabel(`${sampleCount} light paths`);
-      renderer.setMaxSampleCount(sampleCount);
-    });
-    sampleSlider.setValue(600);
-
     const gasOptions = [];
     for (let i = 0; i < gasDischargeLines.length; ++i) gasOptions.push(gasDischargeLines[i].name);
-    const gasGrid = new ButtonGrid('gas-selection', 4, gasOptions, (gasId) => {
-      renderer.setEmitterGas(gasId);
-      spectrumRenderer.setSpectrum(renderer.getEmissionSpectrum());
-    });
-
-    temperatureSlider.show(false);
-    gasGrid.show(false);
-
-    new ButtonGroup(
-      'emission-selector',
-      false,
-      ['White', 'Incandescent', 'Gas Discharge'],
-      (type) => {
-        renderer.setEmissionSpectrumType(type);
-        spectrumRenderer.setSmooth(type !== Renderer.SPECTRUM_GAS_DISCHARGE);
-        spectrumRenderer.setSpectrum(renderer.getEmissionSpectrum());
-        temperatureSlider.show(type === Renderer.SPECTRUM_INCANDESCENT);
-        gasGrid.show(type === Renderer.SPECTRUM_GAS_DISCHARGE);
-      },
-    );
-
-    selectScene(0);
   }
 
   fail(message) {
