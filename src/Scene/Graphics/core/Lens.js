@@ -16,8 +16,8 @@ export default class Lens extends Draggable /* Drawable */ {
    * @param {[float, float]} pos Lens center position
    * @param {float} height Height of lens
    * @param {float} width Width of lens
-   * @param {float} leftDiameter Left radius of lens
-   * @param {float} rightDiameter Right ridius of lens
+   * @param {float} leftDiameter Left diameter of lens
+   * @param {float} rightDiameter Right diameter of lens
    */
   constructor({
     type, pos, height, width, leftDiameter, rightDiameter,
@@ -29,6 +29,8 @@ export default class Lens extends Draggable /* Drawable */ {
     this.width = width;
     this.leftDiameter = leftDiameter || 0.0;
     this.rightDiameter = rightDiameter || 0.0;
+    this.leftRadius = this.leftDiameter / 2;
+    this.rightRadius = this.rightDiameter / 2;
   }
 
   to4fvFormat(shader, index) {
@@ -53,11 +55,31 @@ export default class Lens extends Draggable /* Drawable */ {
     return [x1, y1, x2, y2];
   }
 
-  denormalizedCoords(w, h) {
+  rectAbsCoords(w, h) {
     const [x1, y1, x2, y2] = this.coords();
     const [nx1, ny1] = denormalizeCords(x1, y1, w, h);
     const [nx2, ny2] = denormalizeCords(x2, y2, w, h);
     return [nx1, ny1, nx2, ny2];
+  }
+
+  denormalizeDataWithCtx(ctx) {
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+    const cords = this.rectAbsCoords(canvasWidth, canvasHeight);
+    const [x, y] = denormalizeCords(...this.pos, canvasWidth, canvasHeight);
+    const side = Math.min(canvasWidth, canvasHeight);
+    const abscissaScale = canvasWidth / (canvasWidth / side);
+    return {
+      canvasWidth,
+      canvasHeight,
+      abscissaScale,
+      x,
+      y,
+      x1: cords[0],
+      y1: cords[1],
+      x2: cords[2],
+      y2: cords[3],
+    };
   }
 
   contains(pos) {
@@ -67,44 +89,110 @@ export default class Lens extends Draggable /* Drawable */ {
     return px >= x1 && px <= x2 && py >= y1 && py <= y2;
   }
 
-  drawToCanvas(ctx, w, h) {
-    const [x, y] = denormalizeCords(...this.pos, w, h);
-    const { width } = this;
-    const lr = this.leftDiameter / 2;
-    const cLeft = lr - width / 2;
-    const leftHeight = Math.sqrt(lr * lr - cLeft * cLeft) * 2;
+  drawArc({ ctx, left, right }) {
+    const { abscissaScale, x, y } = this.denormalizeDataWithCtx(ctx);
+    const { width, leftRadius, rightRadius } = this;
+
+    const leftCenter = leftRadius - width / 2;
+    const leftHeight = Math.sqrt(leftRadius * leftRadius - leftCenter * leftCenter) * 2;
     const height = Math.min(this.height, leftHeight || this.height);
-    const side = Math.min(w, h);
-    const wc = w / (w / side);
+
     const leftAng = height / this.leftDiameter;
     const rightAng = height / this.rightDiameter;
-    ctx.beginPath();
+
+    if (left) {
+      if (!left.inner) {
+        ctx.arc(
+          x + (leftRadius - width / 2) * abscissaScale,
+          y,
+          leftRadius * abscissaScale,
+          Math.PI - leftAng,
+          Math.PI + leftAng,
+        );
+      } else {
+        ctx.arc(
+          x - (rightRadius + width / 2) * abscissaScale,
+          y,
+          rightRadius * abscissaScale,
+          rightAng,
+          -rightAng,
+          true,
+        );
+      }
+    }
+
+    if (right) {
+      if (!right.inner) {
+        ctx.arc(
+          x - (rightRadius - width / 2) * abscissaScale,
+          y,
+          rightRadius * abscissaScale,
+          -rightAng,
+          rightAng,
+        );
+      } else {
+        ctx.arc(
+          x + (leftRadius + width / 2) * abscissaScale,
+          y,
+          leftRadius * abscissaScale,
+          Math.PI + leftAng,
+          Math.PI - leftAng,
+          true,
+        );
+      }
+    }
+  }
+
+  drawPlane(ctx, left, right) {
+    const {
+      x1, y1, x2, y2,
+    } = this.denormalizeDataWithCtx(ctx);
+
+    if (left) {
+      ctx.lineTo(x1, y2);
+      ctx.lineTo(x1, y1);
+    }
+
+    if (right) {
+      ctx.lineTo(x2, y2);
+      ctx.lineTo(x2, y1);
+    }
+  }
+
+  drawToCanvas(ctx) {
     ctx.lineWidth = '1';
     ctx.strokeStyle = 'white';
     ctx.beginPath();
-    ctx.arc(
-      x + (this.leftDiameter - width) / 2 * wc,
-      y,
-      this.leftDiameter / 2 * wc,
-      Math.PI - leftAng,
-      Math.PI + leftAng,
-    );
-    ctx.arc(
-      x - (this.rightDiameter - width) / 2 * wc,
-      y,
-      this.rightDiameter / 2 * wc,
-      -rightAng,
-      rightAng,
-    );
+    switch (this.type) {
+      case Lens.TYPE.BICONVEX:
+        this.drawArc({ ctx, left: { inner: false }, right: { inner: false } });
+        break;
+      case Lens.TYPE.PLANOCONVEX:
+        this.drawArc({ ctx, left: { inner: false } });
+        this.drawPlane(ctx, false, true);
+        break;
+      case Lens.TYPE.MENISCUS:
+        this.drawArc({ ctx, left: { inner: false }, right: { inner: true } });
+        break;
+      case Lens.TYPE.PLANOCONCAVE:
+        this.drawArc({ ctx, left: { inner: true } });
+        this.drawPlane(ctx, false, true);
+        break;
+      case Lens.TYPE.BICONCAVE:
+        this.drawArc({ ctx, left: { inner: true }, right: { inner: true } });
+        break;
+      default:
+    }
     ctx.closePath();
     ctx.stroke();
-    this.drawRect(ctx, w, h);
+
+    // this.drawRect(ctx, w, h);
   }
 
   drawLensBorders() {}
 
   drawRect(ctx, w, h) {
-    const [x1, y1, x2, y2] = this.denormalizedCoords(w, h);
+    const [x1, y1, x2, y2] = this.rectAbsCoords(w, h);
     ctx.rect(x1, y1, x2 - x1, y2 - y1);
     ctx.stroke();
   }

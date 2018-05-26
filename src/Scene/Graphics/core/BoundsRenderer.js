@@ -12,6 +12,6 @@ export default class BoundsRenderer {
   }
 
   draw(drawable) {
-    drawable.drawToCanvas(this.ctx, this.width, this.height);
+    drawable.drawToCanvas(this.ctx);
   }
 }
