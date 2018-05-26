@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 const ButtonStyled = styled.button`
   padding: 0;
@@ -10,25 +10,21 @@ const ButtonStyled = styled.button`
 `;
 
 const Button = props => (
-  <ButtonStyled
-    type="button"
-    onClick={props.onClick}
-    className={props.className}
-  >
+  <ButtonStyled type="button" onClick={props.onClick} className={props.className}>
     {props.children}
   </ButtonStyled>
 );
 
 Button.defaultProps = {
   onClick: () => {},
-  className: "",
-  children: null
+  className: '',
+  children: null,
 };
 
 Button.propTypes = {
   onClick: PropTypes.func,
   className: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.element,
 };
 
 export default Button;
