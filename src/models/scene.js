@@ -1,6 +1,17 @@
 // import set from 'lodash/fp/set';
 import Lens from '../Scene/Graphics/core/Lens';
 
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
 const scene = {
   state: {
     lenses: [
@@ -30,8 +41,23 @@ const scene = {
     removeLens(state, id) {
       return { ...state, lenses: state.lenses.filter(lense => lense.id === id) };
     },
-    loadScene(state, importedScene) {
-      return { ...importedScene };
+    selectScene(state, sceneToSelect) {
+      const lenses = sceneToSelect.lenses.map(lense => new Lens(lense));
+      console.log(lenses);
+      return { ...state, lenses: lenses || state.lenses };
+    },
+  },
+  effects: {
+    async loadScene(sceneFile, state) {
+      const sceneText = await readFile(sceneFile);
+      try {
+        const importedScene = JSON.parse(sceneText);
+        this.selectScene(importedScene);
+        return importedScene;
+      } catch (error) {
+        console.err(error);
+        return state;
+      }
     },
   },
 };

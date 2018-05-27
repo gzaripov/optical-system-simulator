@@ -8,6 +8,7 @@ import ExportIcon from 'mdi-react/ExportIcon';
 import SettingsIcon from 'mdi-react/SettingsOutlineIcon';
 import { connect } from 'react-redux';
 import save from 'save-file';
+import FileSelect from 'ui/FileSelect';
 
 const SideMenuStyled = styled.div`
   position: fixed;
@@ -91,12 +92,14 @@ function exportScene(scene) {
 }
 
 const SideMenu = ({
-  opened, showAddLens, showSettings, scene,
+  opened, showAddLens, showSettings, scene, importScene,
 }) => (
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" />
-    <MenuItem icon={<ImportIcon />} text="Import scene" />
+    <FileSelect accept=".json" onSelect={importScene}>
+      <MenuItem icon={<ImportIcon />} text="Import scene" />
+    </FileSelect>
     <MenuItem icon={<ExportIcon />} text="Export scene" onClick={() => exportScene(scene)} />
     <MenuItem icon={<SettingsIcon />} text="Settings" onClick={showSettings} />
   </SideMenuStyled>
@@ -106,6 +109,7 @@ SideMenu.defaultProps = {
   opened: false,
   showAddLens: () => {},
   showSettings: () => {},
+  importScene: () => {},
 };
 
 SideMenu.propTypes = {
@@ -113,13 +117,15 @@ SideMenu.propTypes = {
   scene: PropTypes.shape({}).isRequired,
   showAddLens: PropTypes.func,
   showSettings: PropTypes.func,
+  importScene: PropTypes.func,
 };
 
 const mapState = ({ scene }) => ({ scene });
 
-const mapDispatch = ({ modals }) => ({
+const mapDispatch = ({ modals, scene }) => ({
   showAddLens: () => modals.showModal('addLens'),
   showSettings: () => modals.showModal('settings'),
+  importScene: files => scene.loadScene(files[0]),
 });
 
 export default connect(mapState, mapDispatch)(SideMenu);
