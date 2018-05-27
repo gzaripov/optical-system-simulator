@@ -12,6 +12,7 @@ export default class Lens extends Draggable /* Drawable */ {
   };
   /**
    * @constructor
+   * @param {string} id Lens id
    * @param {float} type Lens type
    * @param {[float, float]} pos Lens center position
    * @param {float} height Height of lens
@@ -20,17 +21,22 @@ export default class Lens extends Draggable /* Drawable */ {
    * @param {float} rightDiameter Right diameter of lens
    */
   constructor({
-    type, pos, height, width, leftDiameter, rightDiameter,
+    id, type, pos, height, width, leftDiameter, rightDiameter, selected,
   }) {
     super(pos);
-    this.id = uniqid();
+    this.id = id || uniqid();
     this.type = type;
     this.height = height;
     this.width = width;
+    this.selected = selected || false;
     this.leftDiameter = leftDiameter || 0.0;
     this.rightDiameter = rightDiameter || 0.0;
     this.leftRadius = this.leftDiameter / 2;
     this.rightRadius = this.rightDiameter / 2;
+  }
+
+  isSelected() {
+    return this.selected;
   }
 
   to4fvFormat(shader, index) {

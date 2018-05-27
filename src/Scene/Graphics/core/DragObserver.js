@@ -1,24 +1,33 @@
+import { dispatch } from '@rematch/core';
+
 export default class DragObserver {
-  selected = -1;
   movables = [];
+  elementSelected = false;
 
   setMovables(movables) {
     this.movables = [...movables];
   }
 
   select(pos) {
-    this.selected = this.movables.findIndex(movable => movable.contains(pos));
+    const selected = this.movables.find(movable => movable.contains(pos));
+    dispatch.scene.selectLens(selected);
+    this.elementSelected = true;
   }
 
   move(pos) {
-    this.movables[this.selected].move(pos[0], pos[1]);
+    if (this.hasSelectedElement()) {
+      dispatch.scene.moveLens(pos);
+    }
   }
 
   hasSelectedElement() {
-    return this.selected !== -1;
+    return this.elementSelected;
   }
 
   deselect() {
-    this.selected = -1;
+    if (!this.hasSelectedElement()) {
+      dispatch.scene.deselect();
+      this.elementSelected = false;
+    }
   }
 }

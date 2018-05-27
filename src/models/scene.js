@@ -25,7 +25,6 @@ const scene = {
       }),
       new Lens({
         pos: [0.46731234866828086, -0.24213075060532685],
-        id: 'jhk75biq',
         type: 0,
         height: 0.376,
         width: 0.302,
@@ -40,6 +39,31 @@ const scene = {
     },
     removeLens(state, id) {
       return { ...state, lenses: state.lenses.filter(lense => lense.id === id) };
+    },
+    selectLens(state, lens) {
+      const id = lens ? lens.id : '';
+      return {
+        ...state,
+        lenses: state.lenses.map(l => new Lens({ ...l, selected: l.id === id })),
+      };
+    },
+    deselect(state) {
+      return {
+        ...state,
+        lenses: state.lenses.map(l => new Lens({ ...l, selected: false })),
+      };
+    },
+    moveLens(state, pos) {
+      return {
+        ...state,
+        lenses: state.lenses.map((l) => {
+          if (l.isSelected()) {
+            const newPos = [pos[0] + l.pos[0], pos[1] + l.pos[1]];
+            return new Lens({ ...l, pos: newPos });
+          }
+          return l;
+        }),
+      };
     },
     selectScene(state, sceneToSelect) {
       const lenses = sceneToSelect.lenses.map(lense => new Lens(lense));

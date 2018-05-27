@@ -1,3 +1,5 @@
+import Lens from './Lens';
+
 export default class BoundsRenderer {
   constructor(ctx, width, height) {
     this.ctx = ctx;
@@ -12,6 +14,8 @@ export default class BoundsRenderer {
   }
 
   draw(drawable) {
-    drawable.drawToCanvas(this.ctx);
+    if (drawable instanceof Lens && drawable.isSelected()) {
+      drawable.drawToCanvas(this.ctx);
+    }
   }
 }
