@@ -186,13 +186,15 @@ export default class Lens extends Draggable /* Drawable */ {
     ctx.closePath();
     ctx.stroke();
 
-    // this.drawRect(ctx, w, h);
+    // this.drawRect(ctx);
   }
 
   drawLensBorders() {}
 
-  drawRect(ctx, w, h) {
-    const [x1, y1, x2, y2] = this.rectAbsCoords(w, h);
+  drawRect(ctx) {
+    const {
+      x1, y1, x2, y2,
+    } = this.denormalizeDataWithCtx(ctx);
     ctx.rect(x1, y1, x2 - x1, y2 - y1);
     ctx.stroke();
   }
