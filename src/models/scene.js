@@ -30,6 +30,9 @@ const scene = {
     removeLens(state, id) {
       return { ...state, lenses: state.lenses.filter(lense => lense.id === id) };
     },
+    loadScene(state, importedScene) {
+      return { ...importedScene };
+    },
   },
 };
 

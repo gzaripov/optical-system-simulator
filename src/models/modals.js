@@ -10,6 +10,7 @@ function checkParams(state, modal) {
 const modals = {
   state: {
     addLens: false,
+    settings: false,
   },
   reducers: {
     showModal(state, modal) {

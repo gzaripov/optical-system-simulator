@@ -90,31 +90,36 @@ function exportScene(scene) {
   save(JSON.stringify(exportedScene), 'scene.json');
 }
 
-const SideMenu = ({ opened, showAddLens, scene }) => (
+const SideMenu = ({
+  opened, showAddLens, showSettings, scene,
+}) => (
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" />
     <MenuItem icon={<ImportIcon />} text="Import scene" />
     <MenuItem icon={<ExportIcon />} text="Export scene" onClick={() => exportScene(scene)} />
-    <MenuItem icon={<SettingsIcon />} text="Settings" />
+    <MenuItem icon={<SettingsIcon />} text="Settings" onClick={showSettings} />
   </SideMenuStyled>
 );
 
 SideMenu.defaultProps = {
   opened: false,
   showAddLens: () => {},
+  showSettings: () => {},
 };
 
 SideMenu.propTypes = {
   opened: PropTypes.bool,
   scene: PropTypes.shape({}).isRequired,
   showAddLens: PropTypes.func,
+  showSettings: PropTypes.func,
 };
 
 const mapState = ({ scene }) => ({ scene });
 
 const mapDispatch = ({ modals }) => ({
   showAddLens: () => modals.showModal('addLens'),
+  showSettings: () => modals.showModal('settings'),
 });
 
 export default connect(mapState, mapDispatch)(SideMenu);
