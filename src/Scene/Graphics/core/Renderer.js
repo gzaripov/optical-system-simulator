@@ -552,6 +552,18 @@ class Renderer {
 
     this.currentState = next;
   }
+
+  updateSettings(settings) {
+    this.setMaxSampleCount(settings.maxSampleCount);
+    this.setMaxPathLength(settings.maxPathLength);
+
+    /* this.spreadType = Renderer.SPREAD_POINT;
+    this.emissionSpectrumType = Renderer.SPECTRUM_WHITE;
+    this.emitterTemperature = 5000.0;
+    this.emitterGas = 0;
+    this.currentScene = 0;
+    this.needsReset = true; */
+  }
 }
 
 export default Renderer;

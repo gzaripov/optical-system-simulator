@@ -14,6 +14,10 @@ function readFile(file) {
 
 const scene = {
   state: {
+    settings: {
+      maxPathLength: 12,
+      maxSampleCount: 100000,
+    },
     lenses: [
       new Lens({
         type: Lens.TYPE.BICONVEX,
@@ -67,8 +71,10 @@ const scene = {
     },
     selectScene(state, sceneToSelect) {
       const lenses = sceneToSelect.lenses.map(lense => new Lens(lense));
-      console.log(lenses);
       return { ...state, lenses: lenses || state.lenses };
+    },
+    updateSettings(state, settings) {
+      return { ...state, settings };
     },
   },
   effects: {

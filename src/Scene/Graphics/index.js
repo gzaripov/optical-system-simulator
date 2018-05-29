@@ -36,6 +36,7 @@ class Graphics extends Component {
     scale: PropTypes.number,
     onProgressChanged: PropTypes.func,
     lenses: PropTypes.arrayOf(PropTypes.shape()),
+    settings: PropTypes.shape().isRequired,
   };
 
   static defaultProps = {
@@ -184,13 +185,12 @@ class Graphics extends Component {
     this.props.onProgressChanged(Math.min(raysTraced, maxRayCount), maxRayCount);
   }
 
-  // shouldComponentUpdate = (nextProps, nextState) => {};
-
   render() {
     const { width, height, scale } = this.props;
     const canvasWidth = Math.floor(width * scale);
     const canvasHeight = Math.floor(height * scale);
     if (this.renderer) {
+      this.renderer.updateSettings(this.props.settings);
       this.renderer.reset();
     }
     return (
@@ -222,6 +222,7 @@ class Graphics extends Component {
 
 const mapState = ({ scene }) => ({
   lenses: scene.lenses,
+  settings: scene.settings,
 });
 
 const mapDispatch = ({ modals, scene }) => ({
