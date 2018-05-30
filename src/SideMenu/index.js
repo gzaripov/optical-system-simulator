@@ -113,6 +113,7 @@ const SideMenu = ({
 SideMenu.defaultProps = {
   opened: false,
   showAddLens: () => {},
+  removeSelectedLens: () => {},
   showSettings: () => {},
   importScene: () => {},
 };
@@ -121,6 +122,7 @@ SideMenu.propTypes = {
   opened: PropTypes.bool,
   scene: PropTypes.shape({}).isRequired,
   showAddLens: PropTypes.func,
+  removeSelectedLens: PropTypes.func,
   showSettings: PropTypes.func,
   importScene: PropTypes.func,
 };
