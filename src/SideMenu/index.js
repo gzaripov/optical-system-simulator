@@ -92,11 +92,16 @@ function exportScene(scene) {
 }
 
 const SideMenu = ({
-  opened, showAddLens, showSettings, scene, importScene,
+  opened,
+  showAddLens,
+  removeSelectedLens,
+  showSettings,
+  scene,
+  importScene,
 }) => (
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
-    <MenuItem icon={<MinusIcon />} text="Remove Lens" />
+    <MenuItem icon={<MinusIcon />} text="Remove Lens" onClick={removeSelectedLens} />
     <FileSelect accept=".json" onSelect={importScene}>
       <MenuItem icon={<ImportIcon />} text="Import scene" />
     </FileSelect>
@@ -124,6 +129,7 @@ const mapState = ({ scene }) => ({ scene });
 
 const mapDispatch = ({ modals, scene }) => ({
   showAddLens: () => modals.showModal('addLens'),
+  removeSelectedLens: scene.removeSelectedLens,
   showSettings: () => modals.showModal('settings'),
   importScene: files => scene.loadScene(files[0]),
 });

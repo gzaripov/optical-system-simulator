@@ -41,8 +41,15 @@ const scene = {
     addLens(state, lens) {
       return { ...state, lenses: [...state.lenses, lens] };
     },
-    removeLens(state, id) {
-      return { ...state, lenses: state.lenses.filter(lense => lense.id === id) };
+    removeLens(state, lens) {
+      return { ...state, lenses: state.lenses.filter(lense => lense.id !== lens.id) };
+    },
+    removeSelectedLens(state) {
+      const lens = state.lenses.find(l => l.selected === true);
+      if (lens) {
+        return { ...state, lenses: state.lenses.filter(lense => lense.id !== lens.id) };
+      }
+      return state;
     },
     selectLens(state, lens) {
       const id = lens ? lens.id : '';
