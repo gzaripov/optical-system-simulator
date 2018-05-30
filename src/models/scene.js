@@ -14,6 +14,8 @@ function readFile(file) {
 
 const scene = {
   state: {
+    lightSourceStartPos: [0.0, 0.0],
+    lightSourceEndPos: [0.0, 0.0],
     settings: {
       maxPathLength: 12,
       maxSampleCount: 100000,
@@ -82,6 +84,9 @@ const scene = {
     },
     updateSettings(state, settings) {
       return { ...state, settings };
+    },
+    moveLightSource(state, startPos, endPos) {
+      return { ...state, lightSourceStartPos: startPos, lightSourceEndPos: endPos };
     },
   },
   effects: {

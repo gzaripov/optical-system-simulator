@@ -19,17 +19,6 @@ class Renderer {
   static SPREAD_LASER = 3;
   static SPREAD_AREA = 4;
 
-  /*
-  static emmiters = [
-    new LightEmitter({
-      pos: [0, 0],
-      power: 0.1,
-      spatialSpread: 0.0,
-      angularSpread: [0.0, Math.PI * 2.0]
-    })
-  ];
-  */
-
   constructor(gl, multiBufExt, width, height, scenes) {
     this.gl = gl;
     this.multiBufExt = multiBufExt;
@@ -99,7 +88,7 @@ class Renderer {
     gl.blendFunc(gl.ONE, gl.ONE);
 
     this.changeResolution(width, height);
-    this.setEmitterPos([width / 2, height / 2], [width / 2, height / 2]);
+    this.setEmitterPos([0, 0], [0, 0]);
     this.computeEmissionSpectrum();
   }
 
@@ -304,6 +293,7 @@ class Renderer {
   }
 
   setEmitterPos(posA, posB) {
+    console.log(posA, posB);
     this.emitterPos = this.spreadType === Renderer.SPREAD_POINT ? posB : posA;
     this.emitterAngle =
       this.spreadType === Renderer.SPREAD_POINT
@@ -415,7 +405,7 @@ class Renderer {
   normalizeEmitterPos() {
     return [
       this.normalize(this.emitterPos[0], this.width) * this.aspect,
-      -this.normalize(this.emitterPos[1], this.height),
+      this.normalize(this.emitterPos[1], this.height),
     ];
   }
 
@@ -448,7 +438,7 @@ class Renderer {
       this.initProgram.uniformTexture('Emission', this.emission);
       this.initProgram.uniformTexture('ICDF', this.emissionIcdf);
       this.initProgram.uniformTexture('PDF', this.emissionPdf);
-      this.initProgram.uniform2F('EmitterPos', 0, 0);
+      this.initProgram.uniform2F('EmitterPos', this.emitterPos[0], this.emitterPos[1]);
       this.initProgram.uniform2F(
         'EmitterDir',
         Math.cos(this.angularSpread[0]),

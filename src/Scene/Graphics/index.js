@@ -186,11 +186,14 @@ class Graphics extends Component {
   }
 
   render() {
-    const { width, height, scale } = this.props;
+    const {
+      width, height, scale, lightSourceStartPos, lightSourceEndPos,
+    } = this.props;
     const canvasWidth = Math.floor(width * scale);
     const canvasHeight = Math.floor(height * scale);
     if (this.renderer) {
       this.renderer.updateSettings(this.props.settings);
+      this.renderer.setEmitterPos(lightSourceStartPos, lightSourceEndPos);
       this.renderer.reset();
     }
     return (
@@ -223,6 +226,8 @@ class Graphics extends Component {
 const mapState = ({ scene }) => ({
   lenses: scene.lenses,
   settings: scene.settings,
+  lightSourceStartPos: scene.lightSourceStartPos,
+  lightSourceEndPos: scene.lightSourceEndPos,
 });
 
 const mapDispatch = ({ modals, scene }) => ({
