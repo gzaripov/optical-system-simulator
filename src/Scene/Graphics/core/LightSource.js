@@ -1,6 +1,14 @@
 import Draggable from './Draggable';
 
-export default class LightEmitter extends Draggable {
+export default class LightSource extends Draggable {
+  static SPREAD = {
+    POINT: 0,
+    CONE: 1,
+    BEAM: 2,
+    LASER: 3,
+    AREA: 4,
+  };
+
   /**
    * @constructor
    * @param {[float, float]} pos Emitter position

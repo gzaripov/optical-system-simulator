@@ -19,6 +19,7 @@ class MouseListener {
   mouseDown(evt) {
     evt.preventDefault();
     this.mouseStart = this.mapMouseEvent(evt);
+    this.mouseLast = this.mouseStart;
     this.mouseDownCallback(this.mouseStart);
     document.addEventListener('mouseup', this.mouseUpHandler);
     document.addEventListener('mousemove', this.mouseMoveHandler);
@@ -32,9 +33,9 @@ class MouseListener {
 
   mouseMove(evt) {
     const newPoint = this.mapMouseEvent(evt);
-    const diff = newPoint.map((item, index) => item - this.mouseStart[index]);
-    this.mouseMoveCallback(diff);
-    this.mouseStart = newPoint;
+    const diff = newPoint.map((item, index) => item - this.mouseLast[index]);
+    this.mouseMoveCallback(diff, newPoint, this.mouseStart);
+    this.mouseLast = newPoint;
   }
 
   mapMouseEvent(evt) {

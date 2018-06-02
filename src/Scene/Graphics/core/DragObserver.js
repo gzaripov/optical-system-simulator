@@ -10,7 +10,7 @@ export default class DragObserver {
   }
 
   select(pos) {
-    this.start = pos;
+    this.start = [...pos];
     this.elementSelected = true;
     const selected = this.movables.find(movable => movable.contains(pos));
     if (selected) {
@@ -22,11 +22,11 @@ export default class DragObserver {
     }
   }
 
-  move(pos) {
+  move(bias, endPos, startPos) {
     if (this.hasSelectedElement()) {
-      dispatch.scene.moveLens(pos);
+      dispatch.scene.moveLens(bias);
     } else {
-      dispatch.scene.moveLightSource(this.start, pos);
+      dispatch.scene.moveLightSource(startPos, endPos);
     }
   }
 

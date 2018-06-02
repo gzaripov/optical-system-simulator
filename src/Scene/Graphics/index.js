@@ -11,7 +11,7 @@ import {
   /* Lens, */
   colorBufferFloatTest,
 } from './core';
-import MouseListener from './ui';
+import MouseListener from './MouseListener';
 
 const CanvasContainer = styled.div`
   position: relative;
@@ -37,11 +37,15 @@ class Graphics extends Component {
     onProgressChanged: PropTypes.func,
     lenses: PropTypes.arrayOf(PropTypes.shape()),
     settings: PropTypes.shape().isRequired,
+    lightSourceStartPos: PropTypes.number,
+    lightSourceEndPos: PropTypes.number,
   };
 
   static defaultProps = {
     scale: 1.0,
     lenses: [],
+    lightSourceStartPos: 0,
+    lightSourceEndPos: 0,
     onProgressChanged: () => {},
   };
 
@@ -132,11 +136,9 @@ class Graphics extends Component {
 
     new MouseListener({
       target: this.canvas,
-      mouseMoveCallback: (pos) => {
-        if (this.dragObserver.hasSelectedElement()) {
-          this.dragObserver.move(pos);
-          this.renderer.reset();
-        }
+      mouseMoveCallback: (bias, endPos, startPos) => {
+        this.dragObserver.move(bias, endPos, startPos);
+        this.renderer.reset();
       },
       mouseDownCallback: pos => this.dragObserver.select(pos),
       mouseUpCallback: () => this.dragObserver.deselect(),

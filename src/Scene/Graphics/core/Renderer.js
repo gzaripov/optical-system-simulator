@@ -3,7 +3,7 @@ import { wavelengthToRgbTable, gasDischargeLines } from '../config';
 import { LAMBDA_MIN, LAMBDA_MAX } from './constants';
 import shaders from '../shaders';
 import RayState from './RayState';
-// import LightEmitter from "./LightEmitter";
+import LightSource from './LightSource';
 
 class Renderer {
   static SPECTRUM_WHITE = 0;
@@ -13,19 +13,13 @@ class Renderer {
   static SPECTRUM_SAMPLES = 256;
   static ICDF_SAMPLES = 1024;
 
-  static SPREAD_POINT = 0;
-  static SPREAD_CONE = 1;
-  static SPREAD_BEAM = 2;
-  static SPREAD_LASER = 3;
-  static SPREAD_AREA = 4;
-
   constructor(gl, multiBufExt, width, height, scenes) {
     this.gl = gl;
     this.multiBufExt = multiBufExt;
     this.quadVbo = this.createQuadVbo();
 
     this.maxSampleCount = 100000;
-    this.spreadType = Renderer.SPREAD_POINT;
+    this.spreadType = LightSource.SPREAD.BEAM;
     this.emissionSpectrumType = Renderer.SPECTRUM_WHITE;
     this.emitterTemperature = 5000.0;
     this.emitterGas = 0;
@@ -294,38 +288,38 @@ class Renderer {
 
   setEmitterPos(posA, posB) {
     console.log(posA, posB);
-    this.emitterPos = this.spreadType === Renderer.SPREAD_POINT ? posB : posA;
+    this.emitterPos = this.spreadType === LightSource.SPREAD.POINT ? posB : posA;
     this.emitterAngle =
-      this.spreadType === Renderer.SPREAD_POINT
+      this.spreadType === LightSource.SPREAD.POINT
         ? 0.0
-        : Math.atan2(posB[1] - posA[1], posB[0] - posA[0]);
+        : Math.atan2(-posB[1] - posA[1], posB[0] - posA[0]);
     this.computeSpread();
     this.reset();
   }
 
   computeSpread() {
     switch (this.spreadType) {
-      case Renderer.SPREAD_POINT:
+      case LightSource.SPREAD.POINT:
         this.emitterPower = 0.1;
         this.spatialSpread = 0.0;
         this.angularSpread = [0.0, Math.PI * 2.0];
         break;
-      case Renderer.SPREAD_CONE:
+      case LightSource.SPREAD.CONE:
         this.emitterPower = 0.03;
         this.spatialSpread = 0.0;
         this.angularSpread = [this.emitterAngle, Math.PI * 0.3];
         break;
-      case Renderer.SPREAD_BEAM:
+      case LightSource.SPREAD.BEAM:
         this.emitterPower = 0.03;
         this.spatialSpread = 0.4;
         this.angularSpread = [this.emitterAngle, 0.0];
         break;
-      case Renderer.SPREAD_LASER:
+      case LightSource.SPREAD.LASER:
         this.emitterPower = 0.05;
         this.spatialSpread = 0.0;
         this.angularSpread = [this.emitterAngle, 0.0];
         break;
-      case Renderer.SPREAD_AREA:
+      case LightSource.SPREAD.AREA:
         this.emitterPower = 0.1;
         this.spatialSpread = 0.4;
         this.angularSpread = [this.emitterAngle, Math.PI];
@@ -547,7 +541,7 @@ class Renderer {
     this.setMaxSampleCount(settings.maxSampleCount);
     this.setMaxPathLength(settings.maxPathLength);
 
-    /* this.spreadType = Renderer.SPREAD_POINT;
+    /* this.spreadType = Renderer.SPREAD.POINT;
     this.emissionSpectrumType = Renderer.SPECTRUM_WHITE;
     this.emitterTemperature = 5000.0;
     this.emitterGas = 0;

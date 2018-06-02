@@ -3,7 +3,7 @@ import Renderer from './Renderer';
 import BoundsRenderer from './BoundsRenderer';
 import DragObserver from './DragObserver';
 import Lens from './Lens';
-import LightEmitter from './LightEmitter';
+import LightSource from './LightSource';
 import colorBufferFloatTest from './colorBufferFloatTest';
 
 export {
@@ -12,6 +12,6 @@ export {
   SpectrumRenderer,
   DragObserver,
   Lens,
-  LightEmitter,
+  LightSource,
   colorBufferFloatTest,
 };

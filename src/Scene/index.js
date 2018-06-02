@@ -40,7 +40,7 @@ class Scene extends Component {
   componentWillMount() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const scale = 1 / window.devicePixelRatio;
+    const scale = this.state.scale / window.devicePixelRatio;
     this.setState({ width, height, scale });
   }
 
