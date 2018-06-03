@@ -271,7 +271,6 @@ class Renderer {
   }
 
   setEmitterPos(posA, posB) {
-    console.log(posA, posB);
     this.emitterPos = this.spreadType === LightSource.SPREAD.POINT ? posB : posA;
     this.emitterAngle =
       this.spreadType === LightSource.SPREAD.POINT
@@ -467,13 +466,6 @@ class Renderer {
   updateSettings(settings) {
     this.setMaxSampleCount(settings.maxSampleCount);
     this.setMaxPathLength(settings.maxPathLength);
-
-    /* this.spreadType = Renderer.SPREAD.POINT;
-    this.emissionSpectrumType = Renderer.SPECTRUM_WHITE;
-    this.emitterTemperature = 5000.0;
-    this.emitterGas = 0;
-    this.currentScene = 0;
-    this.needsReset = true; */
   }
 
   setLightSource(lightSource) {

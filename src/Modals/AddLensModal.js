@@ -73,6 +73,7 @@ class AddLensModal extends Component {
         onCancel={onClose}
         okText="Add"
         width={600}
+        maskClosable={false}
       >
         <LensType>Lens type:</LensType>
         <RadioGroup onChange={this.onLensTypeChange} value={type}>

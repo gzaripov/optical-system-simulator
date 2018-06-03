@@ -151,6 +151,7 @@ class LightSourceModal extends Component {
         onCancel={onClose}
         okText="Select"
         width={600}
+        maskClosable={false}
       >
         <LensType>Spread type:</LensType>
         <RadioGroup onChange={this.onLightSourceTypeChange} value={spreadType}>

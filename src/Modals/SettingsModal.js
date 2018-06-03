@@ -51,6 +51,7 @@ class SettingsModal extends Component {
         onCancel={onClose}
         okText="Save"
         width={600}
+        maskClosable={false}
       >
         <Label>Light Path Length</Label>
         <SliderInput
