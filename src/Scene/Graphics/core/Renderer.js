@@ -68,10 +68,10 @@ class Renderer {
       const u = (i % this.raySize + 0.5) / this.raySize;
       const v = (Math.floor(i / this.raySize) + 0.5) / this.raySize;
       vboData[i * 6 + 0] = u;
-      vboData[i * 6 + 3] = u;
       vboData[i * 6 + 1] = v;
-      vboData[i * 6 + 4] = v;
       vboData[i * 6 + 2] = 0.0;
+      vboData[i * 6 + 3] = u;
+      vboData[i * 6 + 4] = v;
       vboData[i * 6 + 5] = 1.0;
     }
     this.rayVbo.copy(vboData);
@@ -391,18 +391,6 @@ class Renderer {
     this.quadVbo.draw(this.compositeProgram, this.gl.TRIANGLE_FAN);
   }
 
-  // use util
-  normalize(p, max) {
-    return p / max * 2.0 - 1.0;
-  }
-
-  normalizeEmitterPos() {
-    return [
-      this.normalize(this.emitterPos[0], this.width) * this.aspect,
-      this.normalize(this.emitterPos[1], this.height),
-    ];
-  }
-
   render(timestamp) {
     this.needsReset = true;
     this.elapsedTimes.push(timestamp);
@@ -459,11 +447,9 @@ class Renderer {
 
     const traceProgram = this.tracePrograms[this.currentScene];
     traceProgram.bind();
-    // traceProgram.uniform2F("lensPos", ...this.normalizeEmitterPos());
 
     this.lenses.forEach((lens, index) => lens.to4fvFormat(traceProgram, index));
     traceProgram.uniformI('LensLength', this.lenses.length);
-    // raceProgram.uniform4fv("LensData", Renderer.lenses[0].to4fvFormat());
 
     this.rayStates[current].bind(traceProgram);
     this.quadVbo.draw(traceProgram, gl.TRIANGLE_FAN);
