@@ -10,11 +10,18 @@ const SliderStyled = styled(Slider)`
 `;
 
 const DecimalStep = ({
-  min, max, value, step, onChange,
+  min, max, value, step, onChange, disabled,
 }) => (
   <Row>
     <Col span={18}>
-      <SliderStyled min={min} max={max} onChange={onChange} value={value} step={step} />
+      <SliderStyled
+        min={min}
+        max={max}
+        onChange={onChange}
+        value={value}
+        step={step}
+        disabled={disabled}
+      />
     </Col>
     <Col span={4}>
       <InputNumber
@@ -24,6 +31,7 @@ const DecimalStep = ({
         step={step}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       />
     </Col>
   </Row>
@@ -35,11 +43,13 @@ DecimalStep.propTypes = {
   value: PropTypes.number.isRequired,
   step: PropTypes.number,
   onChange: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 DecimalStep.defaultProps = {
   step: 0.1,
   onChange: () => {},
+  disabled: false,
 };
 
 export default DecimalStep;

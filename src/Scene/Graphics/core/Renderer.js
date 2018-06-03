@@ -78,6 +78,10 @@ class Renderer {
 
     this.fbo = new RenderTarget(gl, multiBufExt);
 
+    this.emitterPower = 0.1;
+    this.spatialSpread = 0.0;
+    this.angularSpread = [0, Math.PI * 2.0];
+
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.blendFunc(gl.ONE, gl.ONE);
 
@@ -266,13 +270,6 @@ class Renderer {
     this.fbo.unbind();
   }
 
-  setSpreadType(type) {
-    this.resetActiveBlock();
-    this.spreadType = type;
-    this.computeSpread();
-    this.reset();
-  }
-
   setEmitterPos(posA, posB) {
     console.log(posA, posB);
     this.emitterPos = this.spreadType === LightSource.SPREAD.POINT ? posB : posA;
@@ -280,40 +277,6 @@ class Renderer {
       this.spreadType === LightSource.SPREAD.POINT
         ? 0.0
         : -Math.atan2(posB[1] - posA[1], posB[0] - posA[0]);
-    this.computeSpread();
-    this.reset();
-  }
-
-  computeSpread() {
-    switch (this.spreadType) {
-      case LightSource.SPREAD.POINT:
-        this.emitterPower = 0.1;
-        this.spatialSpread = 0.0;
-        this.angularSpread = [0.0, Math.PI * 2.0];
-        break;
-      case LightSource.SPREAD.CONE:
-        this.emitterPower = 0.03;
-        this.spatialSpread = 0.0;
-        this.angularSpread = [this.emitterAngle, Math.PI * 0.3];
-        break;
-      case LightSource.SPREAD.BEAM:
-        this.emitterPower = 0.03;
-        this.spatialSpread = 0.4;
-        this.angularSpread = [this.emitterAngle, 0.0];
-        break;
-      case LightSource.SPREAD.LASER:
-        this.emitterPower = 0.05;
-        this.spatialSpread = 0.0;
-        this.angularSpread = [this.emitterAngle, 0.0];
-        break;
-      case LightSource.SPREAD.AREA:
-        this.emitterPower = 0.1;
-        this.spatialSpread = 0.4;
-        this.angularSpread = [this.emitterAngle, Math.PI];
-        break;
-      default:
-        throw new Error(`Unknwown Spread type: ${this.spreadType}`);
-    }
   }
 
   createQuadVbo() {
@@ -416,15 +379,6 @@ class Renderer {
       this.initProgram.uniformF('EmitterPower', this.emitterPower);
       this.initProgram.uniformF('SpatialSpread', this.spatialSpread);
       this.initProgram.uniform2F('AngularSpread', -this.angularSpread[0], this.angularSpread[1]);
-      /*
-      this.initProgram.uniformI("EmittersLength", 1);
-      this.initProgram.uniform4fv("EmitterData", [
-        this.emitterPower,
-        this.spatialSpread,
-        -this.angularSpread[0],
-        this.angularSpread[1]
-      ]);
-      */
       this.quadVbo.draw(this.initProgram, gl.TRIANGLE_FAN);
 
       current = 1 - current;
@@ -520,6 +474,16 @@ class Renderer {
     this.emitterGas = 0;
     this.currentScene = 0;
     this.needsReset = true; */
+  }
+
+  setLightSource(lightSource) {
+    this.resetActiveBlock();
+    this.spreadType = lightSource.spreadType;
+    this.emitterPower = lightSource.emitterPower;
+    this.spatialSpread = lightSource.spatialSpread;
+    this.setEmitterPos(lightSource.startPos, lightSource.endPos);
+    this.angularSpread = [this.emitterAngle, lightSource.angularSpread];
+    this.reset();
   }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import LightbulbIcon from 'mdi-react/LightbulbOnOutlineIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
 import ImportIcon from 'mdi-react/ImportIcon';
@@ -96,10 +97,12 @@ const SideMenu = ({
   showAddLens,
   removeSelectedLens,
   showSettings,
+  showLightSource,
   scene,
   importScene,
 }) => (
   <SideMenuStyled opened={opened}>
+    <MenuItem icon={<LightbulbIcon />} text="Light Source" onClick={showLightSource} />
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" onClick={removeSelectedLens} />
     <FileSelect accept=".json" onSelect={importScene}>
@@ -115,6 +118,7 @@ SideMenu.defaultProps = {
   showAddLens: () => {},
   removeSelectedLens: () => {},
   showSettings: () => {},
+  showLightSource: () => {},
   importScene: () => {},
 };
 
@@ -124,6 +128,7 @@ SideMenu.propTypes = {
   showAddLens: PropTypes.func,
   removeSelectedLens: PropTypes.func,
   showSettings: PropTypes.func,
+  showLightSource: PropTypes.func,
   importScene: PropTypes.func,
 };
 
@@ -133,6 +138,7 @@ const mapDispatch = ({ modals, scene }) => ({
   showAddLens: () => modals.showModal('addLens'),
   removeSelectedLens: scene.removeSelectedLens,
   showSettings: () => modals.showModal('settings'),
+  showLightSource: () => modals.showModal('lightSource'),
   importScene: files => scene.loadScene(files[0]),
 });
 

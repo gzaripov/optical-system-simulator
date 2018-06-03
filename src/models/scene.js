@@ -1,5 +1,6 @@
 // import set from 'lodash/fp/set';
 import Lens from '../Scene/Graphics/core/Lens';
+import LightSource from '../Scene/Graphics/core/LightSource';
 
 function readFile(file) {
   return new Promise((resolve, reject) => {
@@ -14,11 +15,17 @@ function readFile(file) {
 
 const scene = {
   state: {
-    lightSourceStartPos: [0.0, 0.0],
-    lightSourceEndPos: [0.0, 0.0],
+    lightSource: {
+      startPos: [0.0, 0.0],
+      endPos: [0.0, 0.0],
+      spreadType: LightSource.SPREAD.POINT,
+      emitterPower: 0.1,
+      spatialSpread: 0.0,
+      angularSpread: Math.PI * 2.0,
+    },
     settings: {
-      maxPathLength: 12,
-      maxSampleCount: 100000,
+      maxPathLength: 11,
+      maxSampleCount: 10000,
       scale: 1,
     },
     lenses: [
@@ -86,8 +93,11 @@ const scene = {
     updateSettings(state, settings) {
       return { ...state, settings };
     },
+    updateLightSource(state, lightSource) {
+      return { ...state, lightSource: { ...state.lightSource, ...lightSource } };
+    },
     moveLightSource(state, startPos, endPos) {
-      return { ...state, lightSourceStartPos: startPos, lightSourceEndPos: endPos };
+      return { ...state, lightSource: { ...state.lightSource, startPos, endPos } };
     },
   },
   effects: {
