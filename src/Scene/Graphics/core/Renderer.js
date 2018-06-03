@@ -250,12 +250,6 @@ class Renderer {
     this.reset();
   }
 
-  changeScene(idx) {
-    this.resetActiveBlock();
-    this.currentScene = idx;
-    this.reset();
-  }
-
   reset() {
     if (!this.needsReset) return;
     this.needsReset = false;
@@ -279,20 +273,13 @@ class Renderer {
     this.reset();
   }
 
-  setNormalizedEmitterPos(posA, posB) {
-    this.setEmitterPos(
-      [posA[0] * this.width, posA[1] * this.height],
-      [posB[0] * this.width, posB[1] * this.height],
-    );
-  }
-
   setEmitterPos(posA, posB) {
     console.log(posA, posB);
     this.emitterPos = this.spreadType === LightSource.SPREAD.POINT ? posB : posA;
     this.emitterAngle =
       this.spreadType === LightSource.SPREAD.POINT
         ? 0.0
-        : Math.atan2(-posB[1] - posA[1], posB[0] - posA[0]);
+        : -Math.atan2(posB[1] - posA[1], posB[0] - posA[0]);
     this.computeSpread();
     this.reset();
   }
