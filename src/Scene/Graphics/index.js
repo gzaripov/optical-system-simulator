@@ -37,8 +37,8 @@ class Graphics extends Component {
     onProgressChanged: PropTypes.func,
     lenses: PropTypes.arrayOf(PropTypes.shape()),
     settings: PropTypes.shape().isRequired,
-    lightSourceStartPos: PropTypes.number,
-    lightSourceEndPos: PropTypes.number,
+    lightSourceStartPos: PropTypes.arrayOf(PropTypes.number),
+    lightSourceEndPos: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
@@ -191,9 +191,13 @@ class Graphics extends Component {
     const {
       width, height, scale, lightSourceStartPos, lightSourceEndPos,
     } = this.props;
-    const canvasWidth = Math.floor(width * scale);
-    const canvasHeight = Math.floor(height * scale);
+    const relativeScale = scale / window.devicePixelRatio;
+    const canvasWidth = Math.floor(width * relativeScale);
+    const canvasHeight = Math.floor(height * relativeScale);
     if (this.renderer) {
+      if (this.canvas.width !== canvasWidth) {
+        this.renderer.changeResolution(canvasWidth, canvasHeight);
+      }
       this.renderer.updateSettings(this.props.settings);
       this.renderer.setEmitterPos(lightSourceStartPos, lightSourceEndPos);
       this.renderer.reset();
@@ -225,11 +229,16 @@ class Graphics extends Component {
   }
 }
 
-const mapState = ({ scene }) => ({
-  lenses: scene.lenses,
-  settings: scene.settings,
-  lightSourceStartPos: scene.lightSourceStartPos,
-  lightSourceEndPos: scene.lightSourceEndPos,
+const mapState = ({
+  scene: {
+    lenses, settings, lightSourceStartPos, lightSourceEndPos,
+  },
+}) => ({
+  lenses,
+  settings,
+  lightSourceStartPos,
+  lightSourceEndPos,
+  scale: settings.scale,
 });
 
 const mapDispatch = ({ modals, scene }) => ({

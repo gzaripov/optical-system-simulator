@@ -27,6 +27,7 @@ class SettingsModal extends Component {
   state = {
     maxPathLength: 12,
     maxSampleCount: 100000,
+    scale: 1,
   };
 
   onNumericalChange = type => (e) => {
@@ -41,7 +42,7 @@ class SettingsModal extends Component {
 
   render() {
     const { opened, onClose } = this.props;
-    const { maxPathLength, maxSampleCount } = this.state;
+    const { maxPathLength, maxSampleCount, scale } = this.state;
     return (
       <Modal
         title="Settings"
@@ -66,6 +67,14 @@ class SettingsModal extends Component {
           value={maxSampleCount}
           step={10}
           onChange={this.onNumericalChange('maxSampleCount')}
+        />
+        <Label>Image quality</Label>
+        <SliderInput
+          min={0.4}
+          max={4}
+          value={scale}
+          step={0.01}
+          onChange={this.onNumericalChange('scale')}
         />
       </Modal>
     );

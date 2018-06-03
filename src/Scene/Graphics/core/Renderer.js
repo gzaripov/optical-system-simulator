@@ -19,7 +19,7 @@ class Renderer {
     this.quadVbo = this.createQuadVbo();
 
     this.maxSampleCount = 100000;
-    this.spreadType = LightSource.SPREAD.BEAM;
+    this.spreadType = LightSource.SPREAD.CONE;
     this.emissionSpectrumType = Renderer.SPECTRUM_WHITE;
     this.emitterTemperature = 5000.0;
     this.emitterGas = 0;

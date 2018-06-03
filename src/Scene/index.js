@@ -31,7 +31,6 @@ class Scene extends Component {
   state = {
     width: 0,
     height: 0,
-    scale: 1,
     raysTraced: 0,
     maxRayCount: 1,
     lenses: [],
@@ -40,8 +39,7 @@ class Scene extends Component {
   componentWillMount() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const scale = this.state.scale / window.devicePixelRatio;
-    this.setState({ width, height, scale });
+    this.setState({ width, height });
   }
 
   onProgressChanged = (raysTraced, maxRayCount) => {

@@ -19,6 +19,7 @@ const scene = {
     settings: {
       maxPathLength: 12,
       maxSampleCount: 100000,
+      scale: 1,
     },
     lenses: [
       new Lens({
