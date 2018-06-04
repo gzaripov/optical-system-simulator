@@ -8,7 +8,7 @@ import {
   BoundsRenderer,
   SpectrumRenderer,
   DragObserver,
-  /* Lens, */
+  Lens,
   colorBufferFloatTest,
 } from './core';
 import MouseListener from './MouseListener';
@@ -227,7 +227,7 @@ class Graphics extends Component {
 }
 
 const mapState = ({ scene: { lenses, settings, lightSource } }) => ({
-  lenses,
+  lenses: lenses.map(lens => new Lens(lens)),
   settings,
   lightSource,
   scale: settings.scale,

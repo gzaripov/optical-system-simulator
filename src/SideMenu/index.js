@@ -88,8 +88,7 @@ MenuItem.propTypes = {
 };
 
 function exportScene(scene) {
-  const exportedScene = { lenses: scene.lenses.map(lens => ({ ...lens, id: undefined })) };
-  save(JSON.stringify(exportedScene), 'scene.json');
+  save(JSON.stringify(scene), 'scene.json');
 }
 
 const SideMenu = ({
