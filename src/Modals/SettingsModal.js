@@ -17,6 +17,9 @@ class SettingsModal extends Component {
     opened: PropTypes.bool,
     onClose: PropTypes.func,
     updateSettings: PropTypes.func.isRequired,
+    maxPathLength: PropTypes.number.isRequired,
+    maxSampleCount: PropTypes.number.isRequired,
+    scale: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -25,9 +28,9 @@ class SettingsModal extends Component {
   };
 
   state = {
-    maxPathLength: 12,
-    maxSampleCount: 100000,
-    scale: 1,
+    maxPathLength: this.props.maxPathLength,
+    maxSampleCount: this.props.maxSampleCount,
+    scale: this.props.scale,
   };
 
   onNumericalChange = type => (e) => {
@@ -82,8 +85,16 @@ class SettingsModal extends Component {
   }
 }
 
-const mapState = ({ modals }) => ({
+const mapState = ({
+  modals,
+  scene: {
+    settings: { maxPathLength, maxSampleCount, scale },
+  },
+}) => ({
   opened: modals.settings,
+  maxPathLength,
+  maxSampleCount,
+  scale,
 });
 
 const mapDispatch = ({ modals, scene }) => ({
