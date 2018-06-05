@@ -23,3 +23,4 @@ yarn-error.log*
 .vscode
 ~*
 Diploma.docx
+yarn.lock
