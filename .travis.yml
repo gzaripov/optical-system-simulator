@@ -21,7 +21,6 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - ssh-add ~/.ssh/id_rsa
 before_deploy:
-- yarn install
 - yarn build
 deploy:
 - provider: script
