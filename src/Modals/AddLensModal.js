@@ -102,7 +102,7 @@ class AddLensModal extends Component {
         <Label>{isLensPlane ? 'Radius:' : 'Left Radius:'}</Label>
         <SliderInput
           min={0.1}
-          max={2}
+          max={4}
           value={leftDiameter}
           step={0.01}
           onChange={this.onNumericalChange('leftDiameter')}
@@ -111,7 +111,7 @@ class AddLensModal extends Component {
         {!isLensPlane && (
           <SliderInput
             min={0.1}
-            max={2}
+            max={4}
             value={rightDiameter}
             step={0.01}
             onChange={this.onNumericalChange('rightDiameter')}
