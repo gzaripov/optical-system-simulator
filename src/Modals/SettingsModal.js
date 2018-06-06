@@ -33,6 +33,11 @@ class SettingsModal extends Component {
     scale: this.props.scale,
   };
 
+  componentWillReceiveProps(nextProps) {
+    const { maxPathLength, maxSampleCount, scale } = nextProps;
+    this.setState({ maxPathLength, maxSampleCount, scale });
+  }
+
   onNumericalChange = type => (e) => {
     this.setState(set(type, e, this.state));
   };
@@ -102,4 +107,7 @@ const mapDispatch = ({ modals, scene }) => ({
   updateSettings: scene.updateSettings,
 });
 
-export default connect(mapState, mapDispatch)(SettingsModal);
+export default connect(
+  mapState,
+  mapDispatch,
+)(SettingsModal);

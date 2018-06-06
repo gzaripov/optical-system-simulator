@@ -26,11 +26,11 @@ const LensType = Label.extend`
 `;
 
 function radiansToDegrees(rad) {
-  return rad * 180 / Math.PI;
+  return (rad * 180) / Math.PI;
 }
 
 function degreesToRadians(deg) {
-  return deg / 180 * Math.PI;
+  return (deg / 180) * Math.PI;
 }
 
 class LightSourceModal extends Component {
@@ -212,4 +212,7 @@ const mapDispatch = ({ modals, scene: { updateLightSource } }) => ({
   updateLightSource,
 });
 
-export default connect(mapState, mapDispatch)(LightSourceModal);
+export default connect(
+  mapState,
+  mapDispatch,
+)(LightSourceModal);

@@ -11,7 +11,6 @@ import models from './models';
 import registerServiceWorker from './registerServiceWorker';
 
 const persistPlugin = rematchPersist({
-  whiteList: ['scene'],
   throttle: 500,
 });
 
