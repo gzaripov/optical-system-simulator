@@ -14,7 +14,7 @@ export default class BoundsRenderer {
   }
 
   draw(drawable) {
-    if (drawable instanceof Lens && drawable.isSelected()) {
+    if (drawable instanceof Lens) {
       drawable.drawToCanvas(this.ctx);
     }
   }
