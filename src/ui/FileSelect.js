@@ -9,18 +9,18 @@ const FileInput = styled.input`
 `;
 
 class FileSelector extends Component {
-  static defaultProps = {
-    onSelect: () => {},
-    className: '',
-    children: null,
-    accept: '',
-  };
-
   static propTypes = {
     onSelect: PropTypes.func,
     className: PropTypes.string,
     children: PropTypes.element,
     accept: PropTypes.string,
+  };
+
+  static defaultProps = {
+    onSelect: () => {},
+    className: '',
+    children: null,
+    accept: '',
   };
 
   onChange = () => {
