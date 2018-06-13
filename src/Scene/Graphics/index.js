@@ -6,7 +6,7 @@ import { scene as config, gasDischargeLines } from './config';
 import {
   Renderer,
   BoundsRenderer,
-  SpectrumRenderer,
+  // SpectrumRenderer,
   DragObserver,
   Lens,
   colorBufferFloatTest,
@@ -48,8 +48,7 @@ class Graphics extends Component {
 
   componentDidMount() {
     this.dragObserver = new DragObserver();
-    this.controls = document.getElementById('controls');
-    this.spectrumCanvas = document.getElementById('spectrum-canvas');
+    // this.spectrumCanvas = document.getElementById('spectrum-canvas');
     this.dragObserver.setMovables(this.props.lenses);
     this.boundRenderLoop = this.renderLoop.bind(this);
     try {
@@ -70,9 +69,6 @@ class Graphics extends Component {
           '<pre>'}${e.message}</pre>`);
       return;
     }
-
-    /* Ok, all seems well. Time to show the controls */
-    this.controls.style.visibility = 'visible';
 
     window.requestAnimationFrame(this.boundRenderLoop);
   }
@@ -124,10 +120,10 @@ class Graphics extends Component {
       this.canvas.height,
     );
 
-    this.spectrumRenderer = new SpectrumRenderer(
-      this.spectrumCanvas,
-      this.renderer.getEmissionSpectrum(),
-    );
+    // this.spectrumRenderer = new SpectrumRenderer(
+    //   this.spectrumCanvas,
+    //   this.renderer.getEmissionSpectrum(),
+    // );
 
     /* Let's try and make member variables in JS a little less verbose... */
 
@@ -238,4 +234,7 @@ const mapDispatch = ({ modals, scene }) => ({
   addLens: scene.addLens,
 });
 
-export default connect(mapState, mapDispatch)(Graphics);
+export default connect(
+  mapState,
+  mapDispatch,
+)(Graphics);

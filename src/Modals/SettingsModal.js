@@ -69,7 +69,7 @@ class SettingsModal extends Component {
           step={1}
           onChange={this.onNumericalChange('maxPathLength')}
         />
-        <Label>Sample Count</Label>
+        <Label>Rays Count</Label>
         <SliderInput
           min={10000}
           max={10000000}
