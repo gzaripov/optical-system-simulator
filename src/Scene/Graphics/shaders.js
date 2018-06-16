@@ -9,38 +9,6 @@ export default {
     '.2)), 1.0);\n' +
     '}\n',
 
-  scene1:
-    '#include "trace-frag"\n' +
-    '#include "bsdf"\n' +
-    '#include "intersect"\n\n' +
-    'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.78, 1.0), 0.0, isect);\n\n' +
-    '    for (int i = 0; i < LENSES_COUNT; i++) {\n' +
-    '        if (i >= lensesLength) {\n' +
-    '            break;\n' +
-    '        }\n' +
-    '        lensIntersect(ray, isect, lenses[i]);\n' +
-    '    }\n\n' +
-    '    // biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75,' +
-    ' 1.0, isect);\n' +
-    '    // planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,      ' +
-    ' 1.0, isect);\n' +
-    '    // meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75,' +
-    ' 1.0, isect);\n' +
-    '}\n\n' +
-    'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput) {\n' +
-    '    if (isect.mat == 1.0) {\n' +
-    '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
-    '96, 147.4688), lambda)/1.4;\n' +
-    '        return sampleDielectric(state, wiLocal, ior);\n' +
-    '    } else {\n' +
-    '        throughput *= vec3(0.5);\n' +
-    '        return sampleDiffuse(state, wiLocal);\n' +
-    '    }\n' +
-    '}\n',
-
   'init-frag':
     '#extension GL_EXT_draw_buffers : require\n' +
     '#include "preamble"\n\n' +
@@ -257,7 +225,9 @@ export default {
     '#extension GL_EXT_draw_buffers : require\n' +
     '#include "preamble"\n' +
     '#include "rand"\n' +
-    '#include "csg-intersect"\n\n' +
+    '#include "csg-intersect"\n' +
+    '#include "bsdf"\n' +
+    '#include "intersect"\n\n' +
     'const highp int LENSES_COUNT = 10;\n\n' +
     'uniform sampler2D PosData;\n' +
     'uniform sampler2D RngData;\n' +
@@ -266,9 +236,32 @@ export default {
     'uniform Lens Lenses[LENSES_COUNT];\n\n' +
     'varying vec2 vTexCoord;\n\n' +
     'void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int' +
-    ' lensesLength);\n' +
+    ' lensesLength) {\n' +
+    '    bboxIntersect(ray, vec2(0.0), vec2(1.0, 1.0), 0.0, isect);\n\n' +
+    '    for (int i = 0; i < LENSES_COUNT; i++) {\n' +
+    '        if (i >= lensesLength) {\n' +
+    '            break;\n' +
+    '        }\n' +
+    '        lensIntersect(ray, isect, lenses[i]);\n' +
+    '    }\n\n' +
+    '    // biconcaveLensIntersect  (ray, vec2( 0.4, 0.5), 0.375, 0.0375, 0.75, 0.75,' +
+    ' 1.0, isect);\n' +
+    '    // planoConvexLensIntersect(ray, vec2(-1.2, 0.0), 0.375, 0.075,  0.75,      ' +
+    ' 1.0, isect);\n' +
+    '    // meniscusLensIntersect   (ray, vec2( 0.8, 0.0), 0.375, 0.15,   0.45, 0.75,' +
+    ' 1.0, isect);\n' +
+    '}\n\n' +
     'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
-    'out vec3 throughput);\n\n' +
+    'out vec3 throughput) {\n' +
+    '    if (isect.mat == 1.0) {\n' +
+    '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05' +
+    '96, 147.4688), lambda)/1.4;\n' +
+    '        return sampleDielectric(state, wiLocal, ior);\n' +
+    '    } else {\n' +
+    '        throughput *= vec3(0.5);\n' +
+    '        return sampleDiffuse(state, wiLocal);\n' +
+    '    }\n' +
+    '}\n\n' +
     'Ray unpackRay(vec4 posDir) {\n' +
     '    vec2 pos = posDir.xy;\n' +
     '    vec2 dir = posDir.zw;\n' +
@@ -542,24 +535,24 @@ export default {
     '    float height = lens.height, width = lens.width;\n' +
     '    float leftDiameter = lens.leftDiameter, rightDiameter = lens.rightDiameter;\n\n' +
     '    if (lens.type == LENS_BICONVEX) {\n' +
-    '        biconvexLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, ' +
-    '1.0, isect);\n' +
+    '        biconvexLensIntersect(ray, pos, height, width, leftDiameter, rightDiamet' +
+    'er, 1.0, isect);\n' +
     '    }\n' +
     '    else if (lens.type == LENS_PLANOCONVEX) {\n' +
-    '        planoConvexLensIntersect(ray, pos, height, width, leftDiameter, 1.0, isect' +
-    ');\n' +
-    '    }\n' +
-    '    else if (lens.type == LENS_MENISCUS) {\n' +
-    '        meniscusLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter, ' +
-    '1.0, isect);\n' +
-    '    }\n' +
-    '    else if (lens.type == LENS_PLANOCONCAVE) {\n' +
-    '        planoConcaveLensIntersect(ray, pos, height, width, rightDiameter, 1.0, ise' +
+    '        planoConvexLensIntersect(ray, pos, height, width, leftDiameter, 1.0, ise' +
     'ct);\n' +
     '    }\n' +
+    '    else if (lens.type == LENS_MENISCUS) {\n' +
+    '        meniscusLensIntersect(ray, pos, height, width, leftDiameter, rightDiamet' +
+    'er, 1.0, isect);\n' +
+    '    }\n' +
+    '    else if (lens.type == LENS_PLANOCONCAVE) {\n' +
+    '        planoConcaveLensIntersect(ray, pos, height, width, rightDiameter, 1.0, i' +
+    'sect);\n' +
+    '    }\n' +
     '    else if (lens.type == LENS_BICONCAVE) {\n' +
-    '        biconcaveLensIntersect(ray, pos, height, width, leftDiameter, rightDiameter,' +
-    ' 1.0, isect);\n' +
+    '        biconcaveLensIntersect(ray, pos, height, width, leftDiameter, rightDiame' +
+    'ter, 1.0, isect);\n' +
     '    }\n\n' +
     '}\n',
 

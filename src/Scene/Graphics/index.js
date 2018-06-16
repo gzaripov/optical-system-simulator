@@ -2,15 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { scene as config, gasDischargeLines } from './config';
-import {
-  Renderer,
-  BoundsRenderer,
-  // SpectrumRenderer,
-  DragObserver,
-  Lens,
-  colorBufferFloatTest,
-} from './core';
+import { gasDischargeLines } from './config';
+import { Renderer, BoundsRenderer, DragObserver, Lens, colorBufferFloatTest } from './core';
 import MouseListener from './MouseListener';
 
 const CanvasContainer = styled.div`
@@ -98,34 +91,13 @@ class Graphics extends Component {
   }
 
   setupUI() {
-    const sceneShaders = [];
-    const sceneNames = [];
-
-    for (let i = 0; i < config.scenes.length; ++i) {
-      sceneShaders.push(config.scenes[i].shader);
-      sceneNames.push(config.scenes[i].name);
-    }
-
-    this.renderer = new Renderer(
-      this.gl,
-      this.multiBufExt,
-      this.canvas.width,
-      this.canvas.height,
-      sceneShaders,
-    );
+    this.renderer = new Renderer(this.gl, this.multiBufExt, this.canvas.width, this.canvas.height);
 
     this.boundsRenderer = new BoundsRenderer(
       this.helperCanvas,
       this.canvas.width,
       this.canvas.height,
     );
-
-    // this.spectrumRenderer = new SpectrumRenderer(
-    //   this.spectrumCanvas,
-    //   this.renderer.getEmissionSpectrum(),
-    // );
-
-    /* Let's try and make member variables in JS a little less verbose... */
 
     new MouseListener({
       target: this.canvas,

@@ -13,7 +13,7 @@ class Renderer {
   static SPECTRUM_SAMPLES = 256;
   static ICDF_SAMPLES = 1024;
 
-  constructor(gl, multiBufExt, width, height, scenes) {
+  constructor(gl, multiBufExt, width, height) {
     this.gl = gl;
     this.multiBufExt = multiBufExt;
     this.quadVbo = this.createQuadVbo();
@@ -31,10 +31,7 @@ class Renderer {
     this.passProgram = new Shader(gl, shaders, 'compose-vert', 'pass-frag');
     this.initProgram = new Shader(gl, shaders, 'init-vert', 'init-frag');
     this.rayProgram = new Shader(gl, shaders, 'ray-vert', 'ray-frag');
-    this.tracePrograms = [];
-    for (let i = 0; i < scenes.length; ++i) {
-      this.tracePrograms.push(new Shader(gl, shaders, 'trace-vert', scenes[i]));
-    }
+    this.traceProgram = new Shader(gl, shaders, 'trace-vert', 'trace-frag');
 
     this.maxPathLength = 12;
 
@@ -65,7 +62,7 @@ class Renderer {
 
     const vboData = new Float32Array(this.rayCount * 2 * 3);
     for (let i = 0; i < this.rayCount; ++i) {
-      const u = (i % this.raySize + 0.5) / this.raySize;
+      const u = ((i % this.raySize) + 0.5) / this.raySize;
       const v = (Math.floor(i / this.raySize) + 0.5) / this.raySize;
       vboData[i * 6 + 0] = u;
       vboData[i * 6 + 1] = v;
@@ -130,11 +127,11 @@ class Renderer {
       case Renderer.SPECTRUM_INCANDESCENT:
         for (let i = 0; i < Renderer.SPECTRUM_SAMPLES; ++i) {
           const l =
-            (LAMBDA_MIN + (LAMBDA_MAX - LAMBDA_MIN) * (i + 0.5) / Renderer.SPECTRUM_SAMPLES) * 1e-9;
+            (LAMBDA_MIN + ((LAMBDA_MAX - LAMBDA_MIN) * (i + 0.5)) / Renderer.SPECTRUM_SAMPLES) *
+            1e-9;
           const power =
-            1e-12 *
-            (2.0 * h * c * c) /
-            (l * l * l * l * l * (Math.exp(h * c / (l * kB * T)) - 1.0));
+            (1e-12 * (2.0 * h * c * c)) /
+            (l * l * l * l * l * (Math.exp((h * c) / (l * kB * T)) - 1.0));
 
           this.emissionSpectrum[i] = power;
         }
@@ -185,14 +182,13 @@ class Renderer {
       /* Also take into account the observer response when distributing samples.
                Otherwise tends to prioritize peaks just barely outside the visible spectrum */
       const observerResponse =
-        1.0 /
-        3.0 *
+        (1.0 / 3.0) *
         (Math.abs(this.spectrumTable[i * 4]) +
           Math.abs(this.spectrumTable[i * 4 + 1]) +
           Math.abs(this.spectrumTable[i * 4 + 2]));
 
       this.pdf[i] =
-        observerResponse * (this.emissionSpectrum[i] + safetyPadding) / (1.0 + safetyPadding);
+        (observerResponse * (this.emissionSpectrum[i] + safetyPadding)) / (1.0 + safetyPadding);
       this.cdf[i + 1] = this.pdf[i] + this.cdf[i];
     }
 
@@ -239,8 +235,8 @@ class Renderer {
     const { gl } = this;
 
     if (this.width && this.height) {
-      this.emitterPos[0] = (this.emitterPos[0] + 0.5) * width / this.width - 0.5;
-      this.emitterPos[1] = (this.emitterPos[1] + 0.5) * height / this.height - 0.5;
+      this.emitterPos[0] = ((this.emitterPos[0] + 0.5) * width) / this.width - 0.5;
+      this.emitterPos[1] = ((this.emitterPos[1] + 0.5) * height) / this.height - 0.5;
     }
 
     this.width = width;
@@ -384,8 +380,7 @@ class Renderer {
       next = 1 - next;
       this.rayStates[next].attach(this.fbo);
     }
-
-    const traceProgram = this.tracePrograms[this.currentScene];
+    const { traceProgram } = this;
     traceProgram.bind();
 
     this.lenses.forEach((lens, index) => lens.to4fvFormat(traceProgram, index));

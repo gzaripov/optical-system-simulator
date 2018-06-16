@@ -2,6 +2,8 @@
 #include "preamble"
 #include "rand"
 #include "csg-intersect"
+#include "bsdf"
+#include "intersect"
 
 const highp int LENSES_COUNT = 10;
 
@@ -14,8 +16,27 @@ uniform Lens Lenses[LENSES_COUNT];
 
 varying vec2 vTexCoord;
 
-void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength);
-vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput);
+void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength) {
+    bboxIntersect(ray, vec2(0.0), vec2(1.0, 1.7), 0.0, isect);
+
+    for (int i = 0; i < LENSES_COUNT; i++) {
+        if (i >= lensesLength) {
+            break;
+        }
+        lensIntersect(ray, isect, lenses[i]);
+    }
+
+}
+
+vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput) {
+    if (isect.mat == 1.0) {
+        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.0596, 147.4688), lambda)/1.4;
+        return sampleDielectric(state, wiLocal, ior);
+    } else {
+        throughput *= vec3(0.5);
+        return sampleDiffuse(state, wiLocal);
+    }
+}
 
 Ray unpackRay(vec4 posDir) {
     vec2 pos = posDir.xy;
