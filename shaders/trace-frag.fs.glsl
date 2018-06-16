@@ -30,13 +30,25 @@ void intersect(Ray ray, inout Intersection isect,
         }
         lensIntersect(ray, isect, lenses[i]);
     }
+
+     for (int i = 0; i < ELEMENT_COUNT; i++) {
+        if (i >= prismsLength) {
+            break;
+        }
+        prismIntersect(ray, isect, prisms[i]);
+    }
+
 }
 
 vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput) {
-    if (isect.mat == 1.0) {
+    if (isect.mat == LENS_ID) {
         float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.0596, 147.4688), lambda)/1.4;
         return sampleDielectric(state, wiLocal, ior);
-    } else {
+    } else if (isect.mat == PRSIM_ID) {
+       float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.0596, 17.4688), lambda)/1.8;
+        return sampleRoughDielectric(state, wiLocal, 0.1, ior);
+    }
+    else {
         throughput *= vec3(0.5);
         return sampleDiffuse(state, wiLocal);
     }

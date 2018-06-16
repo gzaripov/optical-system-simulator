@@ -32,7 +32,7 @@ const scene = {
       scale: 1,
     },
     lenses: [
-      {
+      /* {
         pos: [-0.16464891041162222, 0.6065375302663438],
         id: 'jhzhjxxi',
         type: 0,
@@ -55,9 +55,16 @@ const scene = {
         rightDiameter: 0.75,
         leftRadius: 0.375,
         rightRadius: 0.375,
+      }, */
+    ],
+    prisms: [
+      {
+        pos: [0, 0],
+        id: 'jmz1dxxj',
+        radius: 0.5,
+        selected: false,
       },
     ],
-    prisms: [],
   },
   reducers: {
     addLens(state, lens) {

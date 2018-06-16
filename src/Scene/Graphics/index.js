@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { gasDischargeLines } from './config';
-import { Renderer, BoundsRenderer, DragObserver, Lens, colorBufferFloatTest } from './core';
+import { Renderer, BoundsRenderer, DragObserver, Lens, Prism, colorBufferFloatTest } from './core';
 import MouseListener from './MouseListener';
 
 const CanvasContainer = styled.div`
@@ -197,8 +197,13 @@ class Graphics extends Component {
   }
 }
 
-const mapState = ({ scene: { lenses, settings, lightSource } }) => ({
+const mapState = ({
+  scene: {
+    lenses, prisms, settings, lightSource,
+  },
+}) => ({
   lenses: lenses.map(lens => new Lens(lens)),
+  prisms: prisms.map(prism => new Prism(prism)),
   settings,
   lightSource,
   scale: settings.scale,

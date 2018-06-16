@@ -14,7 +14,12 @@ const persistPlugin = rematchPersist({
   throttle: 500,
 });
 
-const store = init({ models, plugins: [persistPlugin] });
+const store = init({
+  models,
+  plugins: [
+    /* persistPlugin */
+  ],
+});
 
 const Root = () => (
   <Provider store={store}>

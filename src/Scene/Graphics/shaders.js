@@ -299,16 +299,29 @@ export default {
         '            break;\n'                                                              +
         '        }\n'                                                                       +
         '        lensIntersect(ray, isect, lenses[i]);\n'                                   +
-        '    }\n'                                                                           +
+        '    }\n\n'                                                                         +
+
+        '     for (int i = 0; i < ELEMENT_COUNT; i++) {\n'                                  +
+        '        if (i >= prismsLength) {\n'                                                +
+        '            break;\n'                                                              +
+        '        }\n'                                                                       +
+        '        prismIntersect(ray, isect, prisms[i]);\n'                                  +
+        '    }\n\n'                                                                         +
+
         '}\n\n'                                                                             +
 
         'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in'  +
                                                               'out vec3 throughput) {\n'    +
-        '    if (isect.mat == 1.0) {\n'                                                     +
+        '    if (isect.mat == LENS_ID) {\n'                                                 +
         '        float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.05'  +
                                                          '96, 147.4688), lambda)/1.4;\n'    +
         '        return sampleDielectric(state, wiLocal, ior);\n'                           +
-        '    } else {\n'                                                                    +
+        '    } else if (isect.mat == PRSIM_ID) {\n'                                         +
+        '       float ior = sellmeierIor(vec3(1.6215, 0.2563, 1.6445), vec3(0.0122, 0.059'  +
+                                                           '6, 17.4688), lambda)/1.8;\n'    +
+        '        return sampleRoughDielectric(state, wiLocal, 0.1, ior);\n'                 +
+        '    }\n'                                                                           +
+        '    else {\n'                                                                      +
         '        throughput *= vec3(0.5);\n'                                                +
         '        return sampleDiffuse(state, wiLocal);\n'                                   +
         '    }\n'                                                                           +
