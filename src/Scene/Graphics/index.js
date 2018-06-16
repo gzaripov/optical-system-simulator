@@ -29,6 +29,7 @@ class Graphics extends Component {
     scale: PropTypes.number,
     onProgressChanged: PropTypes.func,
     lenses: PropTypes.arrayOf(PropTypes.shape()),
+    prisms: PropTypes.arrayOf(PropTypes.shape()),
     settings: PropTypes.shape().isRequired,
     lightSource: PropTypes.shape({}).isRequired,
   };
@@ -36,6 +37,7 @@ class Graphics extends Component {
   static defaultProps = {
     scale: 1.0,
     lenses: [],
+    prisms: [],
     onProgressChanged: () => {},
   };
 
@@ -140,6 +142,7 @@ class Graphics extends Component {
 
     if (!this.renderer.finished()) {
       this.renderer.lenses = this.props.lenses;
+      this.renderer.prisms = this.props.prisms;
       this.dragObserver.setMovables(this.props.lenses);
       this.renderer.render(timestamp);
       this.boundsRenderer.clear();

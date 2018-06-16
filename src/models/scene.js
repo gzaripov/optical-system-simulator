@@ -57,6 +57,7 @@ const scene = {
         rightRadius: 0.375,
       },
     ],
+    prisms: [],
   },
   reducers: {
     addLens(state, lens) {

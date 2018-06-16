@@ -386,6 +386,9 @@ class Renderer {
     this.lenses.forEach((lens, index) => lens.to4fvFormat(traceProgram, index));
     traceProgram.uniformI('LensLength', this.lenses.length);
 
+    this.prisms.forEach((prism, index) => prism.to4fvFormat(traceProgram, index));
+    traceProgram.uniformI('PrismLength', this.prisms.length);
+
     this.rayStates[current].bind(traceProgram);
     this.quadVbo.draw(traceProgram, gl.TRIANGLE_FAN);
 
