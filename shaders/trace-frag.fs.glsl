@@ -5,27 +5,31 @@
 #include "bsdf"
 #include "intersect"
 
-const highp int LENSES_COUNT = 10;
+const highp int ELEMENT_COUNT = 20;
 
 uniform sampler2D PosData;
 uniform sampler2D RngData;
 uniform sampler2D RgbData;
 
 uniform int LensLength;
-uniform Lens Lenses[LENSES_COUNT];
+uniform int PrismLength;
+uniform Lens Lenses[ELEMENT_COUNT];
+uniform Prism Prisms[ELEMENT_COUNT];
 
 varying vec2 vTexCoord;
 
-void intersect(Ray ray, inout Intersection isect, Lens lenses[LENSES_COUNT], int lensesLength) {
+void intersect(Ray ray, inout Intersection isect, 
+    Lens lenses[ELEMENT_COUNT], int lensesLength,
+    Prism prisms[ELEMENT_COUNT], int prismsLength
+    ) {
     bboxIntersect(ray, vec2(0.0), vec2(1.0, 1.7), 0.0, isect);
 
-    for (int i = 0; i < LENSES_COUNT; i++) {
+    for (int i = 0; i < ELEMENT_COUNT; i++) {
         if (i >= lensesLength) {
             break;
         }
         lensIntersect(ray, isect, lenses[i]);
     }
-
 }
 
 vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput) {
@@ -56,7 +60,7 @@ void main() {
     isect.tMin = 1e-4;
     isect.tMax = 1e30;
 
-    intersect(ray, isect, Lenses, LensLength);
+    intersect(ray, isect, Lenses, LensLength, Prisms, PrismLength);
     
     vec2 t = vec2(-isect.n.y, isect.n.x);
     vec2 wiLocal = -vec2(dot(t, ray.dir), dot(isect.n, ray.dir));

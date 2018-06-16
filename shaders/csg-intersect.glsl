@@ -4,6 +4,9 @@ const highp int LENS_MENISCUS = 2;
 const highp int LENS_PLANOCONCAVE = 3;
 const highp int LENS_BICONCAVE = 4;
 
+const highp float LENS_ID = 1.0;
+const highp float PRSIM_ID = 2.0;
+
 struct Segment {
     float tNear, tFar;
     vec2  nNear, nFar;
@@ -16,6 +19,11 @@ struct Lens {
     float width;
     float leftDiameter;
     float rightDiameter;
+};
+
+struct Prism {
+    vec2 center;
+    float radius;
 };
 
 struct Intersection {

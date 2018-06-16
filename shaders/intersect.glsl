@@ -50,8 +50,11 @@ void lineIntersect(Ray ray, vec2 a, vec2 b, float matId, inout Intersection isec
     isect.mat = matId;
 }
 
-void prismIntersect(Ray ray, vec2 center, float radius, float matId, inout Intersection isect) {
-    lineIntersect(ray, center + vec2(   0.0,  1.0)*radius, center + vec2( 0.866, -0.5)*radius, matId, isect);
-    lineIntersect(ray, center + vec2( 0.866, -0.5)*radius, center + vec2(-0.866, -0.5)*radius, matId, isect);
-    lineIntersect(ray, center + vec2(-0.866, -0.5)*radius, center + vec2(   0.0,  1.0)*radius, matId, isect);
+void prismIntersect(Ray ray, inout Intersection isect, Prism prism) {
+    vec2 center = prism.center;
+    float radius = prism.radius;
+
+    lineIntersect(ray, center + vec2(   0.0,  1.0)*radius, center + vec2( 0.866, -0.5)*radius, PRSIM_ID, isect);
+    lineIntersect(ray, center + vec2( 0.866, -0.5)*radius, center + vec2(-0.866, -0.5)*radius, PRSIM_ID, isect);
+    lineIntersect(ray, center + vec2(-0.866, -0.5)*radius, center + vec2(   0.0,  1.0)*radius, PRSIM_ID, isect);
 }
