@@ -105,7 +105,7 @@ const SideMenu = ({
     <MenuItem icon={<LightbulbIcon />} text="Light Source" onClick={showLightSource} />
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
     <MenuItem icon={<PlusIcon />} text="Add Prism" onClick={showAddPrism} />
-    <MenuItem icon={<MinusIcon />} text="Remove Lens" onClick={removeSelectedLens} />
+    <MenuItem icon={<MinusIcon />} text="Remove selected" onClick={removeSelectedLens} />
     <FileSelect accept=".json" onSelect={importScene}>
       <MenuItem icon={<ImportIcon />} text="Import scene" />
     </FileSelect>

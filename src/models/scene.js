@@ -79,8 +79,11 @@ const scene = {
     },
     removeSelectedLens(state) {
       const lens = state.lenses.find(l => l.selected === true);
+      const prism = state.prisms.find(l => l.selected === true);
       if (lens) {
         return { ...state, lenses: state.lenses.filter(lense => lense.id !== lens.id) };
+      } else if (prism) {
+        return { ...state, prisms: state.prisms.filter(p => p.id !== prism.id) };
       }
       return state;
     },
