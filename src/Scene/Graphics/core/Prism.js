@@ -38,7 +38,7 @@ export default class Prism extends Draggable /* Drawable */ {
 
   to4fvFormat(shader, index) {
     const { pos, radius } = this;
-    shader.uniformI(`Prisms[${index}].pos`, ...pos);
+    shader.uniform2F(`Prisms[${index}].center`, ...pos);
     shader.uniformF(`Prisms[${index}].radius`, radius);
   }
 
@@ -48,8 +48,8 @@ export default class Prism extends Draggable /* Drawable */ {
       radius,
     } = this;
     const v1 = [x, y + radius];
-    const v2 = [0.866 * radius, -0.5 * radius];
-    const v3 = [-v2[0], v2[1]];
+    const v2 = [x + 0.866 * radius, y + -0.5 * radius];
+    const v3 = [x - 0.866 * radius, y + -0.5 * radius];
     return [v1, v2, v3];
   }
 

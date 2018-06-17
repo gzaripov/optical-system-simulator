@@ -1,5 +1,6 @@
 // import set from 'lodash/fp/set';
 import Lens from '../Scene/Graphics/core/Lens';
+import Prism from '../Scene/Graphics/core/Prism';
 // import LightSource from '../Scene/Graphics/core/LightSource';
 
 function readFile(file) {
@@ -85,12 +86,14 @@ const scene = {
       return {
         ...state,
         lenses: state.lenses.map(l => new Lens({ ...l, selected: l.id === id })),
+        prisms: state.prisms.map(l => new Prism({ ...l, selected: l.id === id })),
       };
     },
     deselect(state) {
       return {
         ...state,
         lenses: state.lenses.map(l => new Lens({ ...l, selected: false })),
+        prisms: state.prisms.map(l => new Prism({ ...l, selected: false })),
       };
     },
     moveLens(state, pos) {
@@ -100,6 +103,13 @@ const scene = {
           if (l.isSelected()) {
             const newPos = [pos[0] + l.pos[0], pos[1] + l.pos[1]];
             return new Lens({ ...l, pos: newPos });
+          }
+          return l;
+        }),
+        prisms: state.prisms.map((l) => {
+          if (l.isSelected()) {
+            const newPos = [pos[0] + l.pos[0], pos[1] + l.pos[1]];
+            return new Prism({ ...l, pos: newPos });
           }
           return l;
         }),
