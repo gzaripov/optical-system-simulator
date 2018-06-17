@@ -242,6 +242,15 @@ class Renderer {
     this.width = width;
     this.height = height;
     this.aspect = this.width / this.height;
+
+    if (width > height) {
+      this.widthScale = this.width / this.height;
+      this.heightScale = 1.0;
+    } else {
+      this.widthScale = 1.0;
+      this.heightScale = this.height / this.width;
+    }
+
     this.screenBuffer = new Texture(gl, this.width, this.height, 4, true, false, true, null);
 
     this.waveBuffer = new Texture(gl, this.width, this.height, 4, true, false, true, null);
@@ -382,6 +391,9 @@ class Renderer {
     }
     const { traceProgram } = this;
     traceProgram.bind();
+
+    traceProgram.uniformF('widthScale', this.widthScale);
+    traceProgram.uniformF('heightScale', this.heightScale);
 
     this.lenses.forEach((lens, index) => lens.to4fvFormat(traceProgram, index));
     traceProgram.uniformI('LensLength', this.lenses.length);

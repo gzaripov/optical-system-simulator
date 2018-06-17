@@ -233,6 +233,8 @@ export default {
     'uniform sampler2D PosData;\n' +
     'uniform sampler2D RngData;\n' +
     'uniform sampler2D RgbData;\n\n' +
+    'uniform float widthScale;\n' +
+    'uniform float heightScale;\n\n' +
     'uniform int LensLength;\n' +
     'uniform int PrismLength;\n' +
     'uniform Lens Lenses[ELEMENT_COUNT];\n' +
@@ -242,19 +244,19 @@ export default {
     '    Lens lenses[ELEMENT_COUNT], int lensesLength,\n' +
     '    Prism prisms[ELEMENT_COUNT], int prismsLength\n' +
     '    ) {\n' +
-    '    bboxIntersect(ray, vec2(0.0), vec2(1.0, 1.7), 0.0, isect);\n\n' +
+    '    bboxIntersect(ray, vec2(0.0), vec2(widthScale, heightScale), 0.0, isect);\n\n' +
     '    for (int i = 0; i < ELEMENT_COUNT; i++) {\n' +
     '        if (i >= lensesLength) {\n' +
     '            break;\n' +
     '        }\n' +
     '        lensIntersect(ray, isect, lenses[i]);\n' +
     '    }\n\n' +
-    '     for (int i = 0; i < ELEMENT_COUNT; i++) {\n' +
+    '    for (int i = 0; i < ELEMENT_COUNT; i++) {\n' +
     '        if (i >= prismsLength) {\n' +
     '            break;\n' +
     '        }\n' +
     '        prismIntersect(ray, isect, prisms[i]);\n' +
-    '    }\n\n' +
+    '    }\n' +
     '}\n\n' +
     'vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, in' +
     'out vec3 throughput) {\n' +

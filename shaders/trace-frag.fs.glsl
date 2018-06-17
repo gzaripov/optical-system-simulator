@@ -11,6 +11,9 @@ uniform sampler2D PosData;
 uniform sampler2D RngData;
 uniform sampler2D RgbData;
 
+uniform float widthScale;
+uniform float heightScale;
+
 uniform int LensLength;
 uniform int PrismLength;
 uniform Lens Lenses[ELEMENT_COUNT];
@@ -22,7 +25,7 @@ void intersect(Ray ray, inout Intersection isect,
     Lens lenses[ELEMENT_COUNT], int lensesLength,
     Prism prisms[ELEMENT_COUNT], int prismsLength
     ) {
-    bboxIntersect(ray, vec2(0.0), vec2(1.0, 1.7), 0.0, isect);
+    bboxIntersect(ray, vec2(0.0), vec2(widthScale, heightScale), 0.0, isect);
 
     for (int i = 0; i < ELEMENT_COUNT; i++) {
         if (i >= lensesLength) {
@@ -31,13 +34,12 @@ void intersect(Ray ray, inout Intersection isect,
         lensIntersect(ray, isect, lenses[i]);
     }
 
-     for (int i = 0; i < ELEMENT_COUNT; i++) {
+    for (int i = 0; i < ELEMENT_COUNT; i++) {
         if (i >= prismsLength) {
             break;
         }
         prismIntersect(ray, isect, prisms[i]);
     }
-
 }
 
 vec2 sample(inout vec4 state, Intersection isect, float lambda, vec2 wiLocal, inout vec3 throughput) {
