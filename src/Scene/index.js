@@ -37,10 +37,19 @@ class Scene extends Component {
   };
 
   componentWillMount() {
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  onResize = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     this.setState({ width, height });
-  }
+  };
 
   onProgressChanged = (raysTraced, maxRayCount) => {
     this.setState({ raysTraced, maxRayCount });
@@ -55,7 +64,7 @@ class Scene extends Component {
     const {
       width, height, scale, raysTraced, maxRayCount, lenses,
     } = this.state;
-    const progress = raysTraced / maxRayCount * 100;
+    const progress = (raysTraced / maxRayCount) * 100;
     const percent = Math.round(progress);
     return (
       <SceneStyled>
