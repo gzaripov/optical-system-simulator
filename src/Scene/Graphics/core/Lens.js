@@ -167,7 +167,7 @@ export default class Lens extends Draggable /* Drawable */ {
 
   drawToCanvas(ctx) {
     ctx.lineWidth = '1';
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = this.isSelected() ? 'red' : 'white';
     ctx.beginPath();
     switch (this.type) {
       case Lens.TYPE.BICONVEX:

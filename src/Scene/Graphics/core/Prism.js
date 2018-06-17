@@ -81,22 +81,12 @@ export default class Prism extends Draggable /* Drawable */ {
 
   drawToCanvas(ctx) {
     ctx.lineWidth = '1';
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = this.isSelected() ? 'red' : 'white';
     ctx.beginPath();
     const [p1, p2, p3] = this.absCoordsCtx(ctx);
     this.drawLine(ctx, p1, p2);
     this.drawLine(ctx, p2, p3);
     this.drawLine(ctx, p3, p1);
-    ctx.stroke();
-  }
-
-  drawLensBorders() {}
-
-  drawRect(ctx) {
-    const {
-      x1, y1, x2, y2,
-    } = this.absCoordsCtx(ctx);
-    ctx.rect(x1, y1, x2 - x1, y2 - y1);
     ctx.stroke();
   }
 }

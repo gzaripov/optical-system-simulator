@@ -44,8 +44,7 @@ class Graphics extends Component {
   componentDidMount() {
     this.dragObserver = new DragObserver();
     // this.spectrumCanvas = document.getElementById('spectrum-canvas');
-    this.dragObserver.setMovables(this.props.lenses);
-    this.dragObserver.setMovables(this.props.prisms);
+    this.dragObserver.setMovables([...this.props.lenses, ...this.props.prisms]);
     this.boundRenderLoop = this.renderLoop.bind(this);
     try {
       this.setupGL();
@@ -144,8 +143,7 @@ class Graphics extends Component {
     if (!this.renderer.finished()) {
       this.renderer.lenses = this.props.lenses;
       this.renderer.prisms = this.props.prisms;
-      this.dragObserver.setMovables(this.props.lenses);
-      this.dragObserver.setMovables(this.props.prisms);
+      this.dragObserver.setMovables([...this.props.lenses, ...this.props.prisms]);
       this.renderer.render(timestamp);
       this.boundsRenderer.clear();
       this.props.lenses.forEach(lense => this.boundsRenderer.draw(lense));

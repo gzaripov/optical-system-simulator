@@ -16,9 +16,7 @@ const persistPlugin = rematchPersist({
 
 const store = init({
   models,
-  plugins: [
-    /* persistPlugin */
-  ],
+  plugins: [persistPlugin],
 });
 
 const Root = () => (
