@@ -123,7 +123,8 @@ const scene = {
     },
     selectScene(state, sceneToSelect) {
       const lenses = sceneToSelect.lenses.map(lense => new Lens(lense));
-      return { ...state, lenses: lenses || state.lenses };
+      const prisms = sceneToSelect.prisms.map(prism => new Prism(prism));
+      return { ...state, lenses: lenses || [], prisms: prisms || [] };
     },
     updateSettings(state, settings) {
       return { ...state, settings };
