@@ -1,4 +1,5 @@
 import Lens from './Lens';
+import Prism from './Prism';
 
 export default class BoundsRenderer {
   constructor(ctx, width, height) {
@@ -14,7 +15,7 @@ export default class BoundsRenderer {
   }
 
   draw(drawable) {
-    if (drawable instanceof Lens) {
+    if (drawable instanceof Lens || drawable instanceof Prism) {
       drawable.drawToCanvas(this.ctx);
     }
   }

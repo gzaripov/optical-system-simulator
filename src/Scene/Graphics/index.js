@@ -147,6 +147,7 @@ class Graphics extends Component {
       this.renderer.render(timestamp);
       this.boundsRenderer.clear();
       this.props.lenses.forEach(lense => this.boundsRenderer.draw(lense));
+      this.props.prisms.forEach(prism => this.boundsRenderer.draw(prism));
     }
 
     const raysTraced = this.renderer.totalRaysTraced();

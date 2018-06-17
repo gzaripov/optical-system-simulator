@@ -2,6 +2,20 @@ import { denormalizeCords } from 'helpers';
 import uniqid from 'uniqid';
 import Draggable from './Draggable';
 
+function sign(p1, p2, p3) {
+  const [x1, y1] = p1;
+  const [x2, y2] = p2;
+  const [x3, y3] = p3;
+  return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
+}
+
+function pointInTriangle(p, v1, v2, v3) {
+  const b1 = sign(p, v1, v2) < 0;
+  const b2 = sign(p, v2, v3) < 0;
+  const b3 = sign(p, v3, v1) < 0;
+  return b1 === b2 && b2 === b3;
+}
+
 export default class Prism extends Draggable /* Drawable */ {
   /**
    * @constructor
@@ -29,128 +43,51 @@ export default class Prism extends Draggable /* Drawable */ {
   }
 
   coords() {
-    const x = this.pos[0];
-    const y = this.pos[1];
-    const x1 = x - this.width;
-    const y1 = y - this.height;
-    const x2 = x + this.width;
-    const y2 = y + this.height;
-    return [x1, y1, x2, y2];
+    const {
+      pos: [x, y],
+      radius,
+    } = this;
+    const v1 = [x, y + radius];
+    const v2 = [0.866 * radius, -0.5 * radius];
+    const v3 = [-v2[0], v2[1]];
+    return [v1, v2, v3];
   }
 
-  rectAbsCoords(w, h) {
-    const [x1, y1, x2, y2] = this.coords();
-    const [nx1, ny1] = denormalizeCords(x1, y1, w, h);
-    const [nx2, ny2] = denormalizeCords(x2, y2, w, h);
-    return [nx1, ny1, nx2, ny2];
+  normalizePoint(p, w, h) {
+    return denormalizeCords(p[0], p[1], w, h);
   }
 
-  denormalizeDataWithCtx(ctx) {
+  absCoords(w, h) {
+    return this.coords().map(p => this.normalizePoint(p, w, h));
+  }
+
+  absCoordsCtx(ctx) {
     const canvasWidth = ctx.canvas.width;
     const canvasHeight = ctx.canvas.height;
-    const cords = this.rectAbsCoords(canvasWidth, canvasHeight);
-    const [x, y] = denormalizeCords(...this.pos, canvasWidth, canvasHeight);
-    const side = Math.min(canvasWidth, canvasHeight);
-    const abscissaScale = canvasWidth / (canvasWidth / side);
-    return {
-      canvasWidth,
-      canvasHeight,
-      abscissaScale,
-      x,
-      y,
-      x1: cords[0],
-      y1: cords[1],
-      x2: cords[2],
-      y2: cords[3],
-    };
+    return this.absCoords(canvasWidth, canvasHeight);
   }
 
-  contains(pos) {
-    const [x1, y1, x2, y2] = this.coords();
-    const px = pos[0];
-    const py = pos[1];
-    return px >= x1 && px <= x2 && py >= y1 && py <= y2;
+  contains(point) {
+    const [v1, v2, v3] = this.coords();
+    return pointInTriangle(point, v1, v2, v3);
   }
 
-  drawArc({ ctx, left, right }) {
-    const { abscissaScale, x, y } = this.denormalizeDataWithCtx(ctx);
-    const { width, leftRadius, rightRadius } = this;
-
-    const leftCenter = leftRadius - width / 2;
-    const leftHeight = Math.sqrt(leftRadius * leftRadius - leftCenter * leftCenter) * 2;
-    const height = Math.min(this.height, leftHeight || this.height);
-
-    const leftAng = height / this.leftDiameter;
-    const rightAng = height / this.rightDiameter;
-
-    if (left) {
-      if (!left.inner) {
-        ctx.arc(
-          x + (leftRadius - width / 2) * abscissaScale,
-          y,
-          leftRadius * abscissaScale,
-          Math.PI - leftAng,
-          Math.PI + leftAng,
-        );
-      } else {
-        ctx.arc(
-          x - (rightRadius + width / 2) * abscissaScale,
-          y,
-          rightRadius * abscissaScale,
-          rightAng,
-          -rightAng,
-          true,
-        );
-      }
-    }
-
-    if (right) {
-      if (!right.inner) {
-        ctx.arc(
-          x - (rightRadius - width / 2) * abscissaScale,
-          y,
-          rightRadius * abscissaScale,
-          -rightAng,
-          rightAng,
-        );
-      } else {
-        ctx.arc(
-          x + (leftRadius + width / 2) * abscissaScale,
-          y,
-          leftRadius * abscissaScale,
-          Math.PI + leftAng,
-          Math.PI - leftAng,
-          true,
-        );
-      }
-    }
-  }
-
-  drawPlane(ctx, left, right) {
-    const {
-      x1, y1, x2, y2,
-    } = this.denormalizeDataWithCtx(ctx);
-
-    if (left) {
-      ctx.lineTo(x1, y2);
-      ctx.lineTo(x1, y1);
-    }
-
-    if (right) {
-      ctx.lineTo(x2, y2);
-      ctx.lineTo(x2, y1);
-    }
+  drawLine(ctx, p1, p2) {
+    const [x1, y1] = p1;
+    const [x2, y2] = p2;
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
   }
 
   drawToCanvas(ctx) {
     ctx.lineWidth = '1';
     ctx.strokeStyle = 'white';
     ctx.beginPath();
-
-    ctx.closePath();
+    const [p1, p2, p3] = this.absCoordsCtx(ctx);
+    this.drawLine(ctx, p1, p2);
+    this.drawLine(ctx, p2, p3);
+    this.drawLine(ctx, p3, p1);
     ctx.stroke();
-
-    // this.drawRect(ctx);
   }
 
   drawLensBorders() {}
@@ -158,7 +95,7 @@ export default class Prism extends Draggable /* Drawable */ {
   drawRect(ctx) {
     const {
       x1, y1, x2, y2,
-    } = this.denormalizeDataWithCtx(ctx);
+    } = this.absCoordsCtx(ctx);
     ctx.rect(x1, y1, x2 - x1, y2 - y1);
     ctx.stroke();
   }
