@@ -71,6 +71,9 @@ const scene = {
     addLens(state, lens) {
       return { ...state, lenses: [...state.lenses, lens] };
     },
+    addPrism(state, prism) {
+      return { ...state, prisms: [...state.prisms, prism] };
+    },
     removeLens(state, lens) {
       return { ...state, lenses: state.lenses.filter(lense => lense.id !== lens.id) };
     },

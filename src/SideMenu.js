@@ -94,6 +94,7 @@ function exportScene(scene) {
 const SideMenu = ({
   opened,
   showAddLens,
+  showAddPrism,
   removeSelectedLens,
   showSettings,
   showLightSource,
@@ -103,6 +104,7 @@ const SideMenu = ({
   <SideMenuStyled opened={opened}>
     <MenuItem icon={<LightbulbIcon />} text="Light Source" onClick={showLightSource} />
     <MenuItem icon={<PlusIcon />} text="Add Lens" onClick={showAddLens} />
+    <MenuItem icon={<PlusIcon />} text="Add Prism" onClick={showAddPrism} />
     <MenuItem icon={<MinusIcon />} text="Remove Lens" onClick={removeSelectedLens} />
     <FileSelect accept=".json" onSelect={importScene}>
       <MenuItem icon={<ImportIcon />} text="Import scene" />
@@ -115,6 +117,7 @@ const SideMenu = ({
 SideMenu.defaultProps = {
   opened: false,
   showAddLens: () => {},
+  showAddPrism: () => {},
   removeSelectedLens: () => {},
   showSettings: () => {},
   showLightSource: () => {},
@@ -125,6 +128,7 @@ SideMenu.propTypes = {
   opened: PropTypes.bool,
   scene: PropTypes.shape({}).isRequired,
   showAddLens: PropTypes.func,
+  showAddPrism: PropTypes.func,
   removeSelectedLens: PropTypes.func,
   showSettings: PropTypes.func,
   showLightSource: PropTypes.func,
@@ -135,10 +139,14 @@ const mapState = ({ scene }) => ({ scene });
 
 const mapDispatch = ({ modals, scene }) => ({
   showAddLens: () => modals.showModal('addLens'),
+  showAddPrism: () => modals.showModal('addPrism'),
   removeSelectedLens: scene.removeSelectedLens,
   showSettings: () => modals.showModal('settings'),
   showLightSource: () => modals.showModal('lightSource'),
   importScene: files => scene.loadScene(files[0]),
 });
 
-export default connect(mapState, mapDispatch)(SideMenu);
+export default connect(
+  mapState,
+  mapDispatch,
+)(SideMenu);
