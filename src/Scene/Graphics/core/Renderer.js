@@ -234,11 +234,6 @@ class Renderer {
   changeResolution(width, height) {
     const { gl } = this;
 
-    if (this.width && this.height) {
-      this.emitterPos[0] = ((this.emitterPos[0] + 0.5) * width) / this.width - 0.5;
-      this.emitterPos[1] = ((this.emitterPos[1] + 0.5) * height) / this.height - 0.5;
-    }
-
     this.width = width;
     this.height = height;
     this.aspect = this.width / this.height;

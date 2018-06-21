@@ -62,7 +62,7 @@ class Scene extends Component {
 
   render() {
     const {
-      width, height, scale, raysTraced, maxRayCount, lenses,
+      width, height, raysTraced, maxRayCount, lenses,
     } = this.state;
     const progress = (raysTraced / maxRayCount) * 100;
     const percent = Math.round(progress);
@@ -71,7 +71,6 @@ class Scene extends Component {
         <Graphics
           width={width}
           height={height}
-          scale={scale}
           lenses={lenses}
           onProgressChanged={this.onProgressChanged}
         />
