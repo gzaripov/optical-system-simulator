@@ -19,7 +19,7 @@ const scene = {
     lightSource: {
       startPos: [-0.4418886198547215, -0.18644067796610164],
       endPos: [0.03995157384987892, -0.22276029055690083],
-      spreadType: 1,
+      spreadType: 3,
       emitterPower: 0.03,
       spatialSpread: 0,
       angularSpread: 0.46289622421393606,
@@ -32,40 +32,8 @@ const scene = {
       maxSampleCount: 10000,
       scale: 1,
     },
-    lenses: [
-      /* {
-        pos: [-0.16464891041162222, 0.6065375302663438],
-        id: 'jhzhjxxi',
-        type: 0,
-        height: 0.247,
-        width: 0.5,
-        selected: false,
-        leftDiameter: 0.75,
-        rightDiameter: 0.75,
-        leftRadius: 0.375,
-        rightRadius: 0.375,
-      },
-      {
-        pos: [0.5690072639225182, -0.2832929782082322],
-        id: 'jhzhjxxj',
-        type: 0,
-        height: 0.376,
-        width: 0.302,
-        selected: false,
-        leftDiameter: 0.75,
-        rightDiameter: 0.75,
-        leftRadius: 0.375,
-        rightRadius: 0.375,
-      }, */
-    ],
-    prisms: [
-      {
-        pos: [0, 0],
-        id: 'jmz1dxxj',
-        radius: 0.5,
-        selected: false,
-      },
-    ],
+    lenses: [],
+    prisms: [],
   },
   reducers: {
     addLens(state, lens) {
