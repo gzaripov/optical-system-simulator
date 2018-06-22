@@ -1,0 +1,80 @@
+{
+  "lightSource": {
+    "startPos": [-0.9927360774818401, 0.3171912832929782],
+    "endPos": [-0.774818401937046, 0.3462469733656174],
+    "spreadType": 1,
+    "emitterPower": 0.03,
+    "spatialSpread": 0,
+    "angularSpread": 0.2124763831377897,
+    "angularSpreadDegrees": 12.174,
+    "spatialSpreadSliderEnabled": true,
+    "angularSpreadSliderEnabled": true
+  },
+  "settings": {
+    "maxPathLength": 12,
+    "maxSampleCount": 998970,
+    "scale": 2
+  },
+  "lenses": [
+    {
+      "pos": [-0.29297820823244475, 0.11138014527845042],
+      "id": "ji25ng0w",
+      "type": 4,
+      "height": 0.4,
+      "width": 0.099,
+      "selected": false,
+      "leftDiameter": 1.3,
+      "rightDiameter": 1.3,
+      "leftRadius": 0.65,
+      "rightRadius": 0.65
+    },
+    {
+      "pos": [-0.08958837772397107, 0.10895883777239745],
+      "id": "ji25nwlr",
+      "type": 0,
+      "height": 0.4,
+      "width": 0.099,
+      "selected": false,
+      "leftDiameter": 1.3,
+      "rightDiameter": 1.3,
+      "leftRadius": 0.65,
+      "rightRadius": 0.65
+    },
+    {
+      "pos": [0.7842615012106458, 0.10895883777239734],
+      "id": "ji25ng0w23",
+      "type": 3,
+      "height": 0.32,
+      "width": 0.099,
+      "selected": false,
+      "leftDiameter": 1.3,
+      "rightDiameter": 1.3,
+      "leftRadius": 0.65,
+      "rightRadius": 0.65
+    },
+    {
+      "pos": [0.5803874092009689, 0.10895883777239723],
+      "id": "ji25nwlr98",
+      "type": 0,
+      "height": 0.32,
+      "width": 0.099,
+      "selected": false,
+      "leftDiameter": 1.3,
+      "rightDiameter": 1.3,
+      "leftRadius": 0.65,
+      "rightRadius": 0.65
+    },
+    {
+      "pos": [0.17675544794188847, 0.10411622276029053],
+      "id": "jid9b3dt",
+      "type": 0,
+      "height": 0.4,
+      "width": 0.141,
+      "selected": false,
+      "leftDiameter": 2,
+      "rightDiameter": 2,
+      "leftRadius": 1,
+      "rightRadius": 1
+    }
+  ]
+}
