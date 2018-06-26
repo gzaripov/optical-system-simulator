@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
 import { init } from "@rematch/core";
-import { Provider } from "react-redux";
 import rematchPersist from "@rematch/persist";
 import "flexboxgrid2/flexboxgrid2.css";
 import "normalize.css";
-import "./index.css";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import App from "./App";
+import "./index.css";
 import models from "./models";
 import registerServiceWorker from "./registerServiceWorker";
 
