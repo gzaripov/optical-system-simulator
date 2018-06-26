@@ -1,7 +1,10 @@
-import { Texture, RenderTarget, Shader, VertexBuffer } from '../gl';
-import shaders from '../shaders';
+import { RenderTarget, Shader, Texture, VertexBuffer } from "../gl";
+import shaders from "../shaders";
 
-function colorBufferFloatTest(gl, multiBufExt) {
+function colorBufferFloatTest(
+  gl: WebGLRenderingContext,
+  multiBufExt: WEBGL_draw_buffers
+) {
   /* This one is slightly awkward. The WEBGL_color_buffer_float
        extension is apparently causing a lot of troubles for
        ANGLE, so barely anyone bothers to implement it. On the other
@@ -12,8 +15,13 @@ function colorBufferFloatTest(gl, multiBufExt) {
        and see whether the results come out correct.
        Hurray WebGL! */
 
-  const shader = new Shader(gl, shaders, 'blend-test-vert', 'blend-test-frag');
-  const packShader = new Shader(gl, shaders, 'blend-test-vert', 'blend-test-pack-frag');
+  const shader = new Shader(gl, shaders, "blend-test-vert", "blend-test-frag");
+  const packShader = new Shader(
+    gl,
+    shaders,
+    "blend-test-vert",
+    "blend-test-pack-frag"
+  );
   const target = new Texture(
     gl,
     1,
@@ -22,14 +30,29 @@ function colorBufferFloatTest(gl, multiBufExt) {
     true,
     false,
     false,
-    new Float32Array([-6.0, 10.0, 30.0, 2.0]),
+    new Float32Array([-6.0, 10.0, 30.0, 2.0])
   );
   const fbo = new RenderTarget(gl, multiBufExt);
   const vbo = new VertexBuffer(gl);
   vbo.bind();
-  vbo.addAttribute('Position', 3, gl.FLOAT, false);
+  vbo.addAttribute("Position", 3, gl.FLOAT, false);
   vbo.init(4);
-  vbo.copy(new Float32Array([1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0]));
+  vbo.copy(
+    new Float32Array([
+      1.0,
+      1.0,
+      0.0,
+      -1.0,
+      1.0,
+      0.0,
+      -1.0,
+      -1.0,
+      0.0,
+      1.0,
+      -1.0,
+      0.0
+    ])
+  );
 
   gl.viewport(0, 0, 1, 1);
 
@@ -53,18 +76,30 @@ function colorBufferFloatTest(gl, multiBufExt) {
        Hurray WebGL! */
   packShader.bind();
   target.bind(0);
-  packShader.uniformTexture('Tex', target);
+  packShader.uniformTexture("Tex", target);
   vbo.draw(packShader, gl.TRIANGLE_FAN);
 
   const pixels = new Uint8Array([0, 0, 0, 0]);
   gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
-  if (pixels[0] !== 8 || pixels[1] !== 128 || pixels[2] !== 16 || pixels[3] !== 4) {
-    console.log(`Floating point blending test failed. Result was ${
-      pixels
-    } but should have been ${
-      [8, 128, 16, 4]}`);
-    throw new Error('Your platform does not support floating point attachments');
+  if (
+    pixels[0] !== 8 ||
+    pixels[1] !== 128 ||
+    pixels[2] !== 16 ||
+    pixels[3] !== 4
+  ) {
+    // tslint:disable-next-line:no-console
+    console.log(
+      `Floating point blending test failed. Result was ${pixels} but should have been ${[
+        8,
+        128,
+        16,
+        4
+      ]}`
+    );
+    throw new Error(
+      "Your platform does not support floating point attachments"
+    );
   }
 }
 
