@@ -1,17 +1,15 @@
 export default class {
-  /**
-   * @constructor
-   * @param {[float, float]} pos Emitter position
-   */
-  constructor(pos) {
+  public pos: [number, number];
+
+  constructor(pos: [number, number]) {
     this.pos = pos;
   }
 
-  move(x, y) {
+  public move(x: number, y: number) {
     this.pos = [this.pos[0] + x, this.pos[1] + y];
   }
 
-  contains(pos) {
+  public contains(pos: [number, number]): boolean {
     throw new Error(`You have to implement the method contains(${pos})!`);
   }
 }
