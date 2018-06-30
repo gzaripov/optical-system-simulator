@@ -1,15 +1,17 @@
-export default class {
-  public pos: [number, number];
+import Point from "./Point";
 
-  constructor(pos: [number, number]) {
+export default class {
+  public pos: Point;
+
+  constructor(pos: Point) {
     this.pos = pos;
   }
 
   public move(x: number, y: number) {
-    this.pos = [this.pos[0] + x, this.pos[1] + y];
+    this.pos = this.pos.move(x, y);
   }
 
-  public contains(pos: [number, number]): boolean {
+  public contains(pos: Point): boolean {
     throw new Error(`You have to implement the method contains(${pos})!`);
   }
 }

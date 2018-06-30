@@ -1,4 +1,5 @@
 import Draggable from "./Draggable";
+import Point from "./Point";
 
 export default class DragObserver {
   private movables: Draggable[] = [];
@@ -12,7 +13,9 @@ export default class DragObserver {
   public select(pos: [number, number]) {
     this.start = pos;
     this.elementSelected = true;
-    const selected = this.movables.find(movable => movable.contains(pos));
+    const selected = this.movables.find(movable =>
+      movable.contains(new Point(pos[0], pos[1]))
+    );
     if (selected) {
       // dispatch.scene.selectLens(selected);
     } else {

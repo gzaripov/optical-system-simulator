@@ -2,6 +2,7 @@ import * as uniqid from "uniqid";
 import { denormalizeCords } from "../../../helpers";
 import { Shader } from "../gl";
 import Draggable from "./Draggable";
+import Drawable from "./Drawable";
 import Point from "./Point";
 
 export enum LensType {
@@ -12,7 +13,7 @@ export enum LensType {
   BICONCAVE = 4
 }
 
-export class Lens extends Draggable /* Drawable */ {
+export class Lens extends Draggable implements Drawable {
   public pos: Point;
 
   private id: string;
@@ -91,10 +92,10 @@ export class Lens extends Draggable /* Drawable */ {
     // this.drawRect(ctx);
   }
 
-  public contains(pos: [number, number]) {
+  public contains(pos: Point) {
     const [x1, y1, x2, y2] = this.coords();
-    const px = pos[0];
-    const py = pos[1];
+    const px = pos.x;
+    const py = pos.y;
     return px >= x1 && px <= x2 && py >= y1 && py <= y2;
   }
 
