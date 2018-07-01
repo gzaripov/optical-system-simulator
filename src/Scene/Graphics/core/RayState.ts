@@ -1,7 +1,12 @@
-import { Texture } from '../gl';
+import { RenderTarget, Shader, Texture } from "../gl";
 
 class RayState {
-  constructor(gl, size) {
+  private size: number;
+  private posTex: Texture;
+  private rngTex: Texture;
+  private rgbTex: Texture;
+
+  constructor(gl: WebGLRenderingContext, size: number) {
     this.size = size;
 
     const posData = new Float32Array(size * size * 4);
@@ -29,22 +34,22 @@ class RayState {
     this.rgbTex = new Texture(gl, size, size, 4, true, false, true, rgbData);
   }
 
-  bind(shader) {
+  public bind(shader: Shader) {
     this.posTex.bind(0);
     this.rngTex.bind(1);
     this.rgbTex.bind(2);
-    shader.uniformTexture('PosData', this.posTex);
-    shader.uniformTexture('RngData', this.rngTex);
-    shader.uniformTexture('RgbData', this.rgbTex);
+    shader.uniformTexture("PosData", this.posTex);
+    shader.uniformTexture("RngData", this.rngTex);
+    shader.uniformTexture("RgbData", this.rgbTex);
   }
 
-  attach(fbo) {
+  public attach(fbo: RenderTarget) {
     fbo.attachTexture(this.posTex, 0);
     fbo.attachTexture(this.rngTex, 1);
     fbo.attachTexture(this.rgbTex, 2);
   }
 
-  detach(fbo) {
+  public detach(fbo: RenderTarget) {
     fbo.detachTexture(0);
     fbo.detachTexture(1);
     fbo.detachTexture(2);
