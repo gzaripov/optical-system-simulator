@@ -1,10 +1,11 @@
 class Texture {
+  public glName: WebGLTexture;
+
   private type: number;
   private format: number;
   private gl: WebGLRenderingContext;
   private width: number;
   private height: number;
-  private glName: WebGLTexture;
   private boundUnit: number;
 
   constructor(
