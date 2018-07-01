@@ -1,9 +1,9 @@
 import Texture from "./Texture";
 class Shader {
+  public program: WebGLProgram;
   private gl: WebGLRenderingContext;
   private vertex: WebGLShader;
   private fragment: WebGLShader;
-  private program: WebGLProgram;
   private uniforms: Map<string, number> = new Map();
 
   constructor(
