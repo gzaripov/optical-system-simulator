@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Progress } from 'antd';
+import { Progress } from "antd";
+import styled from "styled-components";
 
 const RaysTracedProgress = styled(Progress)`
   .ant-progress-outer {
