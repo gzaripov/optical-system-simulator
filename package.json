@@ -24,9 +24,9 @@
     "uniqid": "^4.1.1"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom --watchAll",
+    "start": "react-app-rewired start --scripts-version react-scripts-ts",
+    "build": "react-app-rewired build --scripts-version react-scripts-ts",
+    "test": "react-app-rewired test --env=jsdom --watch-all --scripts-version react-scripts-ts",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
@@ -39,6 +39,7 @@
     "babel-eslint": "^8.2.2",
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-styled-components": "^1.5.1",
+    "ts-import-plugin": "^1.5.4",
     "tslint-config-prettier": "^1.13.0",
     "typescript": "^2.9.2"
   }
