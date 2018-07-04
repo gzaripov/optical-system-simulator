@@ -1,7 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { Slider, InputNumber, Row, Col } from 'antd';
+import { Col, InputNumber, Row, Slider } from "antd";
+import * as React from "react";
+import styled from "styled-components";
 
 const SliderStyled = styled(Slider)`
   &.ant-slider {
@@ -9,8 +8,22 @@ const SliderStyled = styled(Slider)`
   }
 `;
 
-const DecimalStep = ({
-  min, max, value, step, onChange, disabled,
+interface Props {
+  min: number;
+  max: number;
+  value: number;
+  step: number;
+  onChange: () => void;
+  disabled: boolean;
+}
+
+const DecimalStep: React.SFC<Props> = ({
+  min,
+  max,
+  value,
+  step,
+  onChange,
+  disabled
 }) => (
   <Row>
     <Col span={18}>
@@ -37,19 +50,10 @@ const DecimalStep = ({
   </Row>
 );
 
-DecimalStep.propTypes = {
-  min: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-  step: PropTypes.number,
-  onChange: PropTypes.func,
-  disabled: PropTypes.bool,
-};
-
 DecimalStep.defaultProps = {
-  step: 0.1,
-  onChange: () => {},
   disabled: false,
+  onChange: () => void 0,
+  step: 0.1
 };
 
 export default DecimalStep;
