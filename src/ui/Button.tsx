@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import DefaultProps from "./DefaultProps";
+import DefaultProps from "../util/DefaultProps";
 
 const ButtonStyled = styled.button`
   padding: 0;
@@ -10,7 +10,7 @@ const ButtonStyled = styled.button`
 `;
 
 interface Props extends DefaultProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Button: React.SFC<Props> = ({ children, onClick, className }) => (
