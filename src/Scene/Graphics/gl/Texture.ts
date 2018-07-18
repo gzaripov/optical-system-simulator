@@ -16,7 +16,7 @@ class Texture {
     isFloat: boolean,
     isLinear: boolean,
     isClamped: boolean,
-    texels: Float32Array
+    texels: Float32Array | null
   ) {
     const coordMode = isClamped ? gl.CLAMP_TO_EDGE : gl.REPEAT;
     this.type = isFloat ? gl.FLOAT : gl.UNSIGNED_BYTE;

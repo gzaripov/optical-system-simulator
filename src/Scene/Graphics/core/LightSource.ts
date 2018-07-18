@@ -1,5 +1,5 @@
+import Point from "../../../Scene/Graphics/core/Point";
 import Draggable from "./Draggable";
-import Point from "./Point";
 
 export enum LightSpread {
   POINT = 0,

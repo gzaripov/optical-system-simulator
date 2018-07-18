@@ -1,5 +1,5 @@
-import Draggable from "./Draggable";
-import Point from "./Point";
+import Draggable from "../../../Scene/Graphics/core/Draggable";
+import Point from "../../../Scene/Graphics/core/Point";
 
 export default class DragObserver {
   private movables: Draggable[] = [];

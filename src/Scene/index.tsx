@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Graphics from './Graphics';
-import RaysTracedProgress from './RaysTracedProgress';
+import * as React from "react";
+import styled from "styled-components";
+import Graphics from "./Graphics";
+import RaysTracedProgress from "./RaysTracedProgress";
 
 const ProgressLevel = styled.div`
   display: flex;
@@ -24,46 +24,29 @@ const Info = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: ${p => (p.shown ? '1' : '0')};
+  opacity: ${p => (p.shown ? "1" : "0")};
 `;
 
-class Scene extends Component {
+class Scene extends React.Component {
   state = {
     width: 0,
     height: 0,
     raysTraced: 0,
     maxRayCount: 1,
-    lenses: [],
+    lenses: []
   };
 
-  componentWillMount() {
+  public componentWillMount() {
     this.onResize();
-    window.addEventListener('resize', this.onResize);
+    window.addEventListener("resize", this.onResize);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
+  public componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize);
   }
 
-  onResize = () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    this.setState({ width, height });
-  };
-
-  onProgressChanged = (raysTraced, maxRayCount) => {
-    this.setState({ raysTraced, maxRayCount });
-  };
-
-  addLens = (lens) => {
-    const { lenses } = this.state;
-    this.setState({ lenses: [...lenses, lens] });
-  };
-
-  render() {
-    const {
-      width, height, raysTraced, maxRayCount, lenses,
-    } = this.state;
+  public render() {
+    const { width, height, raysTraced, maxRayCount, lenses } = this.state;
     const progress = (raysTraced / maxRayCount) * 100;
     const percent = Math.round(progress);
     return (
@@ -82,11 +65,30 @@ class Scene extends Component {
             </span>
             <span>Progress: {percent}%</span>
           </ProgressLevel>
-          <RaysTracedProgress percent={progress} showInfo={false} strokeWidth={2} />
+          <RaysTracedProgress
+            percent={progress}
+            showInfo={false}
+            strokeWidth={2}
+          />
         </Info>
       </SceneStyled>
     );
   }
+
+  private onResize = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    this.setState({ width, height });
+  };
+
+  private onProgressChanged = (raysTraced, maxRayCount) => {
+    this.setState({ raysTraced, maxRayCount });
+  };
+
+  private addLens = lens => {
+    const { lenses } = this.state;
+    this.setState({ lenses: [...lenses, lens] });
+  };
 }
 
 export default Scene;

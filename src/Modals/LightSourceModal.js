@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Modal, Radio } from 'antd';
-import set from 'lodash/fp/set';
-import SliderInput from 'ui/SliderInput';
-import LightSource from '../Scene/Graphics/core/LightSource';
+import React, { Component } from "react";
+import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { Modal, Radio } from "antd";
+import set from "lodash/fp/set";
+import SliderInput from "ui/SliderInput";
+import LightSource from "../Scene/Graphics/core/LightSource";
 
 const RadioButton = Radio.Button;
 const RadioGroup = styled(Radio.Group)`
@@ -41,13 +41,13 @@ class LightSourceModal extends Component {
     spreadType: PropTypes.number.isRequired,
     emitterPower: PropTypes.number.isRequired,
     spatialSpread: PropTypes.number.isRequired,
-    angularSpread: PropTypes.number.isRequired,
+    angularSpread: PropTypes.number.isRequired
   };
 
   static defaultProps = {
     opened: false,
     onClose: () => {},
-    updateLightSource: () => {},
+    updateLightSource: () => {}
   };
 
   state = {
@@ -56,19 +56,19 @@ class LightSourceModal extends Component {
     spatialSpread: this.props.spatialSpread,
     angularSpreadDegrees: radiansToDegrees(this.props.angularSpread),
     spatialSpreadSliderEnabled: true,
-    angularSpreadSliderEnabled: true,
+    angularSpreadSliderEnabled: true
   };
 
   componentWillMount() {
     this.checkType();
   }
 
-  onLightSourceTypeChange = (e) => {
+  onLightSourceTypeChange = e => {
     const { value } = e.target;
     this.setState({ spreadType: value }, () => this.checkType());
   };
 
-  onNumericalChange = type => (e) => {
+  onNumericalChange = type => e => {
     this.setState(set(type, e, this.state));
   };
 
@@ -80,7 +80,7 @@ class LightSourceModal extends Component {
           spatialSpread: 0.0,
           angularSpreadDegrees: radiansToDegrees(Math.PI * 2.0),
           spatialSpreadSliderEnabled: true,
-          angularSpreadSliderEnabled: false,
+          angularSpreadSliderEnabled: false
         });
         break;
       case LightSource.SPREAD.CONE:
@@ -89,7 +89,7 @@ class LightSourceModal extends Component {
           spatialSpread: 0.0,
           angularSpreadDegrees: radiansToDegrees(Math.PI * 0.3),
           spatialSpreadSliderEnabled: true,
-          angularSpreadSliderEnabled: true,
+          angularSpreadSliderEnabled: true
         });
         break;
       case LightSource.SPREAD.BEAM:
@@ -98,7 +98,7 @@ class LightSourceModal extends Component {
           spatialSpread: 0.4,
           angularSpreadDegrees: 0.0,
           spatialSpreadSliderEnabled: true,
-          angularSpreadSliderEnabled: true,
+          angularSpreadSliderEnabled: true
         });
         break;
       case LightSource.SPREAD.LASER:
@@ -107,7 +107,7 @@ class LightSourceModal extends Component {
           spatialSpread: 0.0,
           angularSpreadDegrees: 0.0,
           spatialSpreadSliderEnabled: false,
-          angularSpreadSliderEnabled: false,
+          angularSpreadSliderEnabled: false
         });
         break;
       case LightSource.SPREAD.AREA:
@@ -116,7 +116,7 @@ class LightSourceModal extends Component {
           spatialSpread: 0.4,
           angularSpreadDegrees: radiansToDegrees(Math.PI),
           spatialSpreadSliderEnabled: true,
-          angularSpreadSliderEnabled: false,
+          angularSpreadSliderEnabled: false
         });
         break;
       default:
@@ -128,7 +128,7 @@ class LightSourceModal extends Component {
     const { updateLightSource, onClose } = this.props;
     updateLightSource({
       ...this.state,
-      angularSpread: degreesToRadians(this.state.angularSpreadDegrees),
+      angularSpread: degreesToRadians(this.state.angularSpreadDegrees)
     });
     onClose();
   };
@@ -141,7 +141,7 @@ class LightSourceModal extends Component {
       spatialSpread,
       angularSpreadDegrees,
       spatialSpreadSliderEnabled,
-      angularSpreadSliderEnabled,
+      angularSpreadSliderEnabled
     } = this.state;
     return (
       <Modal
@@ -167,7 +167,7 @@ class LightSourceModal extends Component {
           max={0.3}
           value={emitterPower}
           step={0.001}
-          onChange={this.onNumericalChange('emitterPower')}
+          onChange={this.onNumericalChange("emitterPower")}
         />
         <Label>Spatial Spread:</Label>
         <SliderInput
@@ -176,7 +176,7 @@ class LightSourceModal extends Component {
           value={spatialSpread}
           step={0.001}
           disabled={!spatialSpreadSliderEnabled}
-          onChange={this.onNumericalChange('spatialSpread')}
+          onChange={this.onNumericalChange("spatialSpread")}
         />
         <Label>Angular Spread:</Label>
         <SliderInput
@@ -185,7 +185,7 @@ class LightSourceModal extends Component {
           value={angularSpreadDegrees}
           step={0.001}
           disabled={!angularSpreadSliderEnabled}
-          onChange={this.onNumericalChange('angularSpreadDegrees')}
+          onChange={this.onNumericalChange("angularSpreadDegrees")}
         />
       </Modal>
     );
@@ -195,24 +195,22 @@ class LightSourceModal extends Component {
 const mapState = ({
   modals: { lightSource },
   scene: {
-    lightSource: {
-      spreadType, emitterPower, spatialSpread, angularSpread,
-    },
-  },
+    lightSource: { spreadType, emitterPower, spatialSpread, angularSpread }
+  }
 }) => ({
   opened: lightSource,
   spreadType,
   emitterPower,
   spatialSpread,
-  angularSpread,
+  angularSpread
 });
 
 const mapDispatch = ({ modals, scene: { updateLightSource } }) => ({
-  onClose: () => modals.hideModal('lightSource'),
-  updateLightSource,
+  onClose: () => modals.hideModal("lightSource"),
+  updateLightSource
 });
 
 export default connect(
   mapState,
-  mapDispatch,
+  mapDispatch
 )(LightSourceModal);

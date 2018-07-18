@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Modal } from 'antd';
-import set from 'lodash/fp/set';
-import SliderInput from 'ui/SliderInput';
+import React, { Component } from "react";
+import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { Modal } from "antd";
+import set from "lodash/fp/set";
+import SliderInput from "ui/SliderInput";
 
 const Label = styled.p`
   text-align: left;
@@ -19,18 +19,18 @@ class SettingsModal extends Component {
     updateSettings: PropTypes.func.isRequired,
     maxPathLength: PropTypes.number.isRequired,
     maxSampleCount: PropTypes.number.isRequired,
-    scale: PropTypes.number.isRequired,
+    scale: PropTypes.number.isRequired
   };
 
   static defaultProps = {
     opened: false,
-    onClose: () => {},
+    onClose: () => {}
   };
 
   state = {
     maxPathLength: this.props.maxPathLength,
     maxSampleCount: this.props.maxSampleCount,
-    scale: this.props.scale,
+    scale: this.props.scale
   };
 
   componentWillReceiveProps(nextProps) {
@@ -38,7 +38,7 @@ class SettingsModal extends Component {
     this.setState({ maxPathLength, maxSampleCount, scale });
   }
 
-  onNumericalChange = type => (e) => {
+  onNumericalChange = type => e => {
     this.setState(set(type, e, this.state));
   };
 
@@ -67,7 +67,7 @@ class SettingsModal extends Component {
           max={19}
           value={maxPathLength}
           step={1}
-          onChange={this.onNumericalChange('maxPathLength')}
+          onChange={this.onNumericalChange("maxPathLength")}
         />
         <Label>Rays Count</Label>
         <SliderInput
@@ -75,7 +75,7 @@ class SettingsModal extends Component {
           max={10000000}
           value={maxSampleCount}
           step={10}
-          onChange={this.onNumericalChange('maxSampleCount')}
+          onChange={this.onNumericalChange("maxSampleCount")}
         />
         <Label>Image quality</Label>
         <SliderInput
@@ -83,7 +83,7 @@ class SettingsModal extends Component {
           max={4}
           value={scale}
           step={0.01}
-          onChange={this.onNumericalChange('scale')}
+          onChange={this.onNumericalChange("scale")}
         />
       </Modal>
     );
@@ -93,21 +93,21 @@ class SettingsModal extends Component {
 const mapState = ({
   modals,
   scene: {
-    settings: { maxPathLength, maxSampleCount, scale },
-  },
+    settings: { maxPathLength, maxSampleCount, scale }
+  }
 }) => ({
   opened: modals.settings,
   maxPathLength,
   maxSampleCount,
-  scale,
+  scale
 });
 
 const mapDispatch = ({ modals, scene }) => ({
-  onClose: () => modals.hideModal('settings'),
-  updateSettings: scene.updateSettings,
+  onClose: () => modals.hideModal("settings"),
+  updateSettings: scene.updateSettings
 });
 
 export default connect(
   mapState,
-  mapDispatch,
+  mapDispatch
 )(SettingsModal);

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Modal, Radio } from 'antd';
-import set from 'lodash/fp/set';
-import SliderInput from 'ui/SliderInput';
-import Lens from '../Scene/Graphics/core/Lens';
+import React, { Component } from "react";
+import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { Modal, Radio } from "antd";
+import set from "lodash/fp/set";
+import SliderInput from "ui/SliderInput";
+import Lens from "../Scene/Graphics/core/Lens";
 
 const RadioButton = Radio.Button;
 const RadioGroup = styled(Radio.Group)`
@@ -29,13 +29,13 @@ class AddLensModal extends Component {
   static propTypes = {
     opened: PropTypes.bool,
     onClose: PropTypes.func,
-    addLens: PropTypes.func,
+    addLens: PropTypes.func
   };
 
   static defaultProps = {
     opened: false,
     onClose: () => {},
-    addLens: () => {},
+    addLens: () => {}
   };
 
   state = {
@@ -43,15 +43,15 @@ class AddLensModal extends Component {
     width: 0.15,
     height: 0.375,
     leftDiameter: 0.75,
-    rightDiameter: 0.75,
+    rightDiameter: 0.75
   };
 
-  onLensTypeChange = (e) => {
+  onLensTypeChange = e => {
     const { value } = e.target;
     this.setState({ type: value });
   };
 
-  onNumericalChange = type => (e) => {
+  onNumericalChange = type => e => {
     this.setState(set(type, e, this.state));
   };
 
@@ -61,10 +61,9 @@ class AddLensModal extends Component {
 
   render() {
     const { opened, onClose } = this.props;
-    const {
-      type, width, height, leftDiameter, rightDiameter,
-    } = this.state;
-    const isLensPlane = type === Lens.TYPE.PLANOCONVEX || type === Lens.TYPE.PLANOCONCAVE;
+    const { type, width, height, leftDiameter, rightDiameter } = this.state;
+    const isLensPlane =
+      type === Lens.TYPE.PLANOCONVEX || type === Lens.TYPE.PLANOCONCAVE;
     return (
       <Modal
         title="Add lens"
@@ -89,7 +88,7 @@ class AddLensModal extends Component {
           max={0.5}
           value={width}
           step={0.001}
-          onChange={this.onNumericalChange('width')}
+          onChange={this.onNumericalChange("width")}
         />
         <Label>Height:</Label>
         <SliderInput
@@ -97,15 +96,15 @@ class AddLensModal extends Component {
           max={0.5}
           value={height}
           step={0.001}
-          onChange={this.onNumericalChange('height')}
+          onChange={this.onNumericalChange("height")}
         />
-        <Label>{isLensPlane ? 'Radius:' : 'Left Radius:'}</Label>
+        <Label>{isLensPlane ? "Radius:" : "Left Radius:"}</Label>
         <SliderInput
           min={0.1}
           max={4}
           value={leftDiameter}
           step={0.01}
-          onChange={this.onNumericalChange('leftDiameter')}
+          onChange={this.onNumericalChange("leftDiameter")}
         />
         {!isLensPlane && <Label>Right Radius:</Label>}
         {!isLensPlane && (
@@ -114,7 +113,7 @@ class AddLensModal extends Component {
             max={4}
             value={rightDiameter}
             step={0.01}
-            onChange={this.onNumericalChange('rightDiameter')}
+            onChange={this.onNumericalChange("rightDiameter")}
           />
         )}
       </Modal>
@@ -123,12 +122,15 @@ class AddLensModal extends Component {
 }
 
 const mapState = ({ modals }) => ({
-  opened: modals.addLens,
+  opened: modals.addLens
 });
 
 const mapDispatch = ({ modals, scene }) => ({
-  onClose: () => modals.hideModal('addLens'),
-  addLens: scene.addLens,
+  onClose: () => modals.hideModal("addLens"),
+  addLens: scene.addLens
 });
 
-export default connect(mapState, mapDispatch)(AddLensModal);
+export default connect(
+  mapState,
+  mapDispatch
+)(AddLensModal);

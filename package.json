@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@rematch/core": "^0.6.0",
-    "@rematch/persist": "^0.2.1",
     "antd": "^3.4.3",
     "flexboxgrid2": "^7.2.1",
     "immutable": "^3.8.2",

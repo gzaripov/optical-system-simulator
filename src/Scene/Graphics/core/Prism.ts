@@ -1,5 +1,5 @@
 import * as uniqid from "uniqid";
-import { denormalizeCords } from "../../../helpers";
+import { denormalizeCords } from "../../../util/MathUtils";
 import { Shader } from "../gl";
 import Draggable from "./Draggable";
 import Drawable from "./Drawable";

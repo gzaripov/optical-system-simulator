@@ -578,4 +578,4 @@ export default {
     "#define PI      3.1415926536\n" +
     "#define PI_HALF 1.5707963268\n\n" +
     "precision highp float;\n"
-};
+} as any;

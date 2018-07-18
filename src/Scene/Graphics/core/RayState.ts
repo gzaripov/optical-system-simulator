@@ -1,14 +1,21 @@
 import { RenderTarget, Shader, Texture } from "../gl";
 
 class RayState {
+  public rngTex: Texture;
+  public posTex: Texture;
+  public rgbTex: Texture;
+
   private size: number;
-  private posTex: Texture;
-  private rngTex: Texture;
-  private rgbTex: Texture;
+  private gl: WebGLRenderingContext;
 
   constructor(gl: WebGLRenderingContext, size: number) {
+    this.gl = gl;
     this.size = size;
+    this.initialize();
+  }
 
+  public initialize() {
+    const { gl, size } = this;
     const posData = new Float32Array(size * size * 4);
     const rngData = new Float32Array(size * size * 4);
     const rgbData = new Float32Array(size * size * 4);

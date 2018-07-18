@@ -63,7 +63,7 @@ class VertexBuffer {
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   }
 
-  public draw(shader: Shader, mode: number, length: number) {
+  public draw(shader: Shader, mode: number, length: number = this.length) {
     const { gl } = this;
     this.attributes.forEach(attribute => {
       attribute.index = gl.getAttribLocation(shader.program, attribute.name);
@@ -81,7 +81,7 @@ class VertexBuffer {
       }
     });
 
-    gl.drawArrays(mode, 0, length || this.length);
+    gl.drawArrays(mode, 0, length);
 
     this.attributes.forEach(attribute => {
       if (attribute.index >= 0) {

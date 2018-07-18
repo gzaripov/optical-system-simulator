@@ -1,6 +1,6 @@
-import set from 'lodash/fp/set';
+// import set from "lodash/fp/set";
 
-function checkParams(state, modal) {
+/* function checkParams(state, modal) {
   if (state[modal === undefined]) {
     // eslint-disable-next-line no-throw-literal
     throw `${modal} is not specified in the state`;
@@ -12,7 +12,7 @@ const modals = {
     addLens: false,
     addPrism: false,
     lightSource: false,
-    settings: false,
+    settings: false
   },
   reducers: {
     showModal(state, modal) {
@@ -22,8 +22,8 @@ const modals = {
     hideModal(state, modal) {
       checkParams(state, modal);
       return set(modal, false, state);
-    },
-  },
+    }
+  }
 };
-
-export default modals;
+ */
+// export default modals;

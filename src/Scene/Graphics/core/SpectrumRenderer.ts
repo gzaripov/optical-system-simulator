@@ -1,5 +1,5 @@
+import Point from "../../../Scene/Graphics/core/Point";
 import { LAMBDA_MAX, LAMBDA_MIN } from "./constants";
-import Point from "./Point";
 
 class SpectrumRenderer {
   private context: CanvasRenderingContext2D;

@@ -3,7 +3,7 @@ import { HamburgerSlider } from "react-animated-burgers";
 import styled from "styled-components";
 import Modals from "./Modals";
 import Scene from "./Scene";
-import SideMenu from "./SideMenu";
+import SideMenu from "./SideMenu/SideMenu";
 
 const HamburgerContainer = styled.div`
   position: absolute;

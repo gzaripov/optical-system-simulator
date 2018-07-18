@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Modal } from 'antd';
-import set from 'lodash/fp/set';
-import SliderInput from 'ui/SliderInput';
-import Prism from '../Scene/Graphics/core/Prism';
+import React, { Component } from "react";
+import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { Modal } from "antd";
+import set from "lodash/fp/set";
+import SliderInput from "ui/SliderInput";
+import Prism from "../Scene/Graphics/core/Prism";
 
 const Label = styled.p`
   text-align: left;
@@ -17,20 +17,20 @@ class AddPrismModal extends Component {
   static propTypes = {
     opened: PropTypes.bool,
     onClose: PropTypes.func,
-    onOk: PropTypes.func,
+    onOk: PropTypes.func
   };
 
   static defaultProps = {
     opened: false,
     onClose: () => {},
-    onOk: () => {},
+    onOk: () => {}
   };
 
   state = {
-    radius: 0.5,
+    radius: 0.5
   };
 
-  onNumericalChange = type => (e) => {
+  onNumericalChange = type => e => {
     this.setState(set(type, e, this.state));
   };
 
@@ -57,7 +57,7 @@ class AddPrismModal extends Component {
           max={1}
           value={radius}
           step={0.001}
-          onChange={this.onNumericalChange('radius')}
+          onChange={this.onNumericalChange("radius")}
         />
       </Modal>
     );
@@ -65,15 +65,15 @@ class AddPrismModal extends Component {
 }
 
 const mapState = ({ modals }) => ({
-  opened: modals.addPrism,
+  opened: modals.addPrism
 });
 
 const mapDispatch = ({ modals, scene }) => ({
-  onClose: () => modals.hideModal('addPrism'),
-  onOk: scene.addPrism,
+  onClose: () => modals.hideModal("addPrism"),
+  onOk: scene.addPrism
 });
 
 export default connect(
   mapState,
-  mapDispatch,
+  mapDispatch
 )(AddPrismModal);

@@ -1,4 +1,4 @@
-import Drawable from "./Drawable";
+import Drawable from "../../../Scene/Graphics/core/Drawable";
 
 export default class BoundsRenderer {
   private ctx: CanvasRenderingContext2D;
